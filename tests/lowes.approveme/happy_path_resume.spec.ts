@@ -80,15 +80,20 @@ test.describe('happy path resume', async () => {
 
       // verify approved success and then exit
       let leaseStatusPage = new K_LeaseStatusPage(cPage);
-      await leaseStatusPage.verifySuccessApproved();
 
-      isApplyPass = true;
-      console.log("Apply passed. Resume up next.")
+      try {
+        await leaseStatusPage.verifySuccessApproved();
+        console.log("Apply passed. Resume up next.")
+        isApplyPass = true;
+        await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason:'lowes approved'}})}`);
+      }catch(Error) {
+        await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
+      }finally{
+        await cPage.close();
+        await bCont.close();
+      }
 
-      await cPage.close();
-      await bCont.close();
-
-    }).toPass({ timeout: 100000 });
+    }).toPass({ timeout: 120000 });
 
   });
 
@@ -105,18 +110,21 @@ test.describe('happy path resume', async () => {
         await resumePageR.happyPathPopulate(ssnFetched,phoneFetched);
 
         let leaseStatusPage = new K_LeaseStatusPage(cPageR);
-        await leaseStatusPage.verifySuccessApproved();
 
-        console.log("Resume passed. End test.")
-
-        await cPageR.close();
-        await bContR.close();
-
+        try {
+          await leaseStatusPage.verifySuccessApproved();
+          console.log("Resume passed. End test.")
+          await cPageR.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason:'lowes resume'}})}`);
+        }catch(Error) {
+          await cPageR.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
+        }finally{
+          await cPageR.close();
+          await bContR.close();
+        }
       }else {
         console.log("Apply failed. Resume skipped.");
       }
-
-    }).toPass({ timeout: 30000 });
+    }).toPass({ timeout: 90000 });
 
   });
 

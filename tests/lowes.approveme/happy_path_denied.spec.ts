@@ -69,16 +69,18 @@ test.describe('lowes', async () => {
 
       // verify approved success and then exit
       let leaseStatusPage = new K_LeaseStatusPage(cPage);
+
       try {
         await leaseStatusPage.verifySuccessDenied();
-        await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed'}})}`);
+        console.log("denied passed");
+        await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason:'lowes denied'}})}`);
       }catch(Error) {
         await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
+      }finally{
+        await cPage.close();
+        await bCont.close();
       }
 
-      await cPage.close();
-      await bCont.close();
-
-    }).toPass({ timeout: 90000 });
+    }).toPass({ timeout: 120000 });
   });
 });

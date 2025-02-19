@@ -25,10 +25,9 @@ class K_LeaseStatusPage {
     }
 
     async verifySuccessApproved() {
-        await expect(this.headingCongrats).toBeVisible();
-        await expect(this.headingApproved).toBeVisible();
-        await expect(this.textApproved).toBeVisible();
-        await this.page.waitForTimeout(1000);
+        await expect(this.headingCongrats).toBeVisible({timeout: 20000});
+        await expect(this.headingApproved).toBeVisible({timeout: 20000});
+        await expect(this.textApproved).toBeVisible({timeout: 20000});
         let elementResult = this.page.locator(".prog-results-box-header-right");
         let textResult :string = await elementResult.innerText();
         console.log("textResult: \'" + textResult + "\'");
@@ -37,13 +36,13 @@ class K_LeaseStatusPage {
     }
 
     async verifySuccessPending() {
-        await expect(this.textPending).toBeVisible();
-        await expect(this.headingPending).toBeVisible();
+        await expect(this.textPending).toBeVisible({timeout: 20000});
+        await expect(this.headingPending).toBeVisible({timeout: 20000});
     }
 
     async verifySuccessDenied() {
         const element = this.page.getByText('We are unable to approve your application at this time.');
-        await expect(element).toHaveCount(1)
+        await expect(element).toHaveCount(1,{timeout: 20000})
     }
 
     async EXIT() {

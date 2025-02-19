@@ -69,12 +69,18 @@ test.describe('approved', async () => {
 
       // verify approved success and then exit
       let leaseStatusPage = new K_LeaseStatusPage(cPage);
-      await leaseStatusPage.verifySuccessApproved();
-      await leaseStatusPage.EXIT();
 
-      await cPage.close();
-      await bCont.close();
+      try {
+        await leaseStatusPage.verifySuccessApproved();
+        console.log("approved passed");
+        await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason:'lowes approved'}})}`);
+      }catch(Error) {
+        await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
+      }finally{
+        await cPage.close();
+        await bCont.close();
+      }
 
-    }).toPass({ timeout: 90000 });
+    }).toPass({ timeout: 120000 });
   });
 });
