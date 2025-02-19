@@ -21,7 +21,7 @@ import Q_ResumeApplication from "../../pages/cricket.approveme/Q_ResumeApplicati
 import HappyPathPending from "../../data/cricket.approveme/HappyPathPending";
 import HappyPathDenied from "../../data/cricket.approveme/HappyPathDenied";
 import R_PaymentEstimator from "../../pages/cricket.approveme/R_PaymentEstimator";
-import {PaymentFrequency} from "../../utils/PaymentFrequency";
+import {PaymentFrequency} from "../../data/paymentFrequency";
 
 let isLandingPageLoads: boolean = false;
 

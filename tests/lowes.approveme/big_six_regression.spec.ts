@@ -15,7 +15,7 @@ import M_ResumeApplication from "../../pages/lowes.approveme/M_ResumeApplication
 import HappyPathPending from "../../data/lowes.approveme/HappyPathPending";
 import HappyPathDenied from "../../data/lowes.approveme/HappyPathDenied";
 import N_LeaseEstimator from "../../pages/lowes.approveme/N_LeaseEstimator";
-import {PaymentFrequency} from "../../utils/PaymentFrequency";
+import {PaymentFrequency} from "../../data/paymentFrequency";
 
 let isLandingPageLoads: boolean = false;
 

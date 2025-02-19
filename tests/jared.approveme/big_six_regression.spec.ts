@@ -19,7 +19,7 @@ import P_ConfirmSubmit from "../../pages/jared.approveme/P_ConfirmSubmit";
 import Q_Results from "../../pages/jared.approveme/Q_ResultsPage";
 import R_ResumeApplication from "../../pages/jared.approveme/R_ResumeApplication";
 import Q_ResultsPage from "../../pages/jared.approveme/Q_ResultsPage";
-import {PaymentFrequency} from "../../utils/PaymentFrequency";
+import {PaymentFrequency} from "../../data/paymentFrequency";
 import HappyPathPending from "../../data/jared.approveme/HappyPathPending";
 import HappyPathDenied from "../../data/jared.approveme/HappyPathDenied";
 import S_PaymentEstimator from "../../pages/jared.approveme/S_PaymentEstimator";
