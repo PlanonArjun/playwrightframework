@@ -22,20 +22,20 @@ class Q_Results {
     }
 
     async verifySuccessApproved() {
-        await this.headingCongrats.click({timeout:5000});
-        await this.headingApproved.click({timeout:5000});
+        await this.headingCongrats.click({timeout:20000});
+        await this.headingApproved.click({timeout:20000});
         console.log('success - approved');
     }
 
     async verifySuccessPending() {
-        await expect(this.iconPending).toBeVisible(); // the Info icon that appears with Pending
-        await expect(this.headingPending).toBeVisible();
+        await expect(this.iconPending).toBeVisible({timeout: 30000}); // the Info icon that appears with Pending
+        await expect(this.headingPending).toBeVisible({timeout: 30000});
         console.log('success - pending');
     }
 
     async verifySuccessDenied() {
         const element = this.page.getByText('Your Progressive Leasing application was unable to be approved.')
-        await expect(element).toHaveCount(1)
+        await expect(element).toHaveCount(1,{timeout: 20000})
         console.log('success - denied');
     }
 

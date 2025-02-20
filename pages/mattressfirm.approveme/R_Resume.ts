@@ -1,51 +1,39 @@
-// mattressfirm approve me
 import { type Page, type Locator , expect } from '@playwright/test';
 
 class R_Resume {
 
     readonly page: Page;
-
     readonly linkResume: Locator;
     readonly fieldNameFirst: Locator;
     readonly fieldNameLast: Locator;
-    readonly fieldDOB: Locator;
     readonly fieldSSN: Locator;
     readonly checkboxIHaveRead: Locator;
     readonly buttonPREVIOUS: Locator;
     readonly buttonNEXT: Locator;
-    readonly buttonEXIT: Locator;
-    readonly buttonEXITConfirm: Locator;
 
     constructor(page: Page) {
         this.page = page;
         this.linkResume = page.getByText('Resume');
-        this.fieldNameFirst = page.getByPlaceholder('first');
+        this.fieldNameFirst = page.getByRole('textbox', { name: 'Name:' });
         this.fieldNameLast = page.getByPlaceholder('last');
-        this.fieldDOB = page.getByPlaceholder('MM/DD/YYYY');
-        this.fieldSSN = page.getByPlaceholder('-45-6789');
-        this.checkboxIHaveRead = page.locator('xpath=//label//span[1]');
+        this.fieldSSN = page.getByRole('textbox', { name: 'Social Security number or' });
+        this.checkboxIHaveRead = page.locator('label').filter({ hasText: 'I have read and agree to the' }).locator('span').first();
         this.buttonPREVIOUS = page.getByRole('link', { name: 'Privacy Policy' });
         this.buttonNEXT = page.getByRole('button', { name: 'Next' });
-        this.buttonEXIT = page.getByRole('button', { name: 'Exit' });
-        this.buttonEXITConfirm = page.locator('div').filter({ hasText: /^Exit$/ }).getByRole('button');
     }
 
-   async resume() {
-       await this.linkResume.click(); // marketing page APPLY NOW
-   }
-
     async _enterNameFirst(nameFirstIn: string) {
-        await this.fieldNameFirst.clear();
+        await this.fieldNameFirst.click({timeout:500});
         await this.fieldNameFirst.fill(nameFirstIn);
     }
 
     async _enterNameLast(nameLastIn: string) {
-        await this.fieldNameLast.clear();
+        await this.fieldNameLast.click({timeout:500});
         await this.fieldNameLast.fill(nameLastIn);
     }
 
     async _enterSSN(ssnIn: string) {
-        await this.fieldSSN.clear();
+        await this.fieldSSN.click({timeout:500});
         await this.fieldSSN.fill(ssnIn);
     }
 
@@ -60,13 +48,7 @@ class R_Resume {
         await this.page.waitForTimeout(1000);
     }
 
-    async EXIT() {
-        await this.buttonEXIT.click();
-        await this.buttonEXITConfirm.click();
-    }
-
     async happyPathPopulate(dataIn: string[], SSN: string) {
-        await this.resume();
         await this._enterNameFirst(dataIn[0]);
         await this._enterNameLast(dataIn[1]);
         await this._enterSSN(SSN);

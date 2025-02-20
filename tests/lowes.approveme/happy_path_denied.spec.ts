@@ -64,16 +64,13 @@ test.describe('lowes', async () => {
       await accountDetails.happyPathPopulate(happyPathDenied.getBankInfo1);
 
       // accept and proceed - finish
-      let leaseIdVerification = new J_LeaseIDVerification(cPage);
-      await leaseIdVerification.happyPathAcceptProceed();
+      await (new J_LeaseIDVerification(cPage)).happyPathAcceptProceed();
 
-      // verify approved success and then exit
-      let leaseStatusPage = new K_LeaseStatusPage(cPage);
-
+      // verify success and then exit
       try {
-        await leaseStatusPage.verifySuccessDenied();
+        await (new K_LeaseStatusPage(cPage)).verifySuccessDenied();
         console.log("denied passed");
-        await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason:'lowes denied'}})}`);
+        await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason:'Lowes denied'}})}`);
       }catch(Error) {
         await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
       }finally{

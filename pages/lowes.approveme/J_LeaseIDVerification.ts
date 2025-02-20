@@ -39,7 +39,7 @@ class J_LeaseIDVerification {
         await this._checkAcceptTerms();
         await this.page.waitForTimeout(1000);
         await this._clickSubmit();
-        await this.page.waitForTimeout(10000);
+        await this.page.waitForTimeout(1000);
     }
 }
 export default J_LeaseIDVerification;

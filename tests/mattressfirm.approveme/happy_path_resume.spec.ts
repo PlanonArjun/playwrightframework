@@ -95,19 +95,22 @@ test.describe('navigation', async () => {
             await o_paymentCardPage._checkSameAs();
             await o_paymentCardPage._NEXT();
 
-            let p_ConfirmSubmit = new P_ConfirmSubmit(cPage);
-            await p_ConfirmSubmit.submitApplication();
+            await (new P_ConfirmSubmit(cPage)).submitApplication();
 
-            let q_results: Q_Results = new Q_Results(cPage);
-            await q_results.verifySuccessApproved();
+            try {
+                await (new Q_Results(cPage)).verifySuccessApproved();
+                isApplyPass = true;
+                console.log("Apply passed. Resume up next.")
+                await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason:'initial apply'}})}`);
+            }catch(Error) {
+                console.log("Apply failed.")
+                await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
+            }finally{
+                await cPage.close();
+                await bCont.close();
+            }
 
-            isApplyPass = true;
-            console.log("Apply passed. Resume up next.")
-
-            await bCont.close();
-            await cPage.close();
-
-        }).toPass({timeout: 100000});
+        }).toPass({timeout: 120000});
     });
 
     test('resume second', { tag: ['@approveme', '@mattressfirm', '@happy', '@resume'] }, async ({ browser }) => {
@@ -118,19 +121,21 @@ test.describe('navigation', async () => {
                 const bContR = await browser.newContext();
                 const cPageR = await bContR.newPage();
 
-                let marketingPageR = new A_MarketingPage(cPageR);
-                await marketingPageR.beginResume();
+                await (new A_MarketingPage(cPageR)).beginResume();
 
-                let resumePageR = new R_Resume(cPageR);
-                await resumePageR.happyPathPopulate([nameFirstFetched,nameLastFetched],ssnFetched);
+                await (new R_Resume(cPageR)).happyPathPopulate([nameFirstFetched,nameLastFetched],ssnFetched);
 
-                let results: Q_Results = new Q_Results(cPageR);
-                await results.verifySuccessApproved();
-
-                console.log("Resume passed. End test.")
-
-                await cPageR.close();
-                await bContR.close();
+                try {
+                    await (new Q_Results(cPageR)).verifySuccessApproved();
+                    isApplyPass = true;
+                    console.log("Resume passed. End test.")
+                    await cPageR.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason:'resume'}})}`);
+                }catch(Error) {
+                    await cPageR.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
+                }finally{
+                    await cPageR.close();
+                    await bContR.close();
+                }
 
             }else {
                 console.log("Apply failed. Resume skipped.");

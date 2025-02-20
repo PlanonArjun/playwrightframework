@@ -24,11 +24,8 @@ test.describe('MTFM', async () => {
   test.describe.configure({ mode: 'serial' });
 
   let getStartAppData: string[];
-  let nameFirstFetched:string;
-  let nameLastFetched:string;
-  let ssnFetched:string;
 
-  test('denied', { tag: ['@approveme', '@mattressfirm', '@happy', '@denied'] }, async ({ browser }) => {
+  test('denied', {tag: ['@approveme', '@mattressfirm', '@happy', '@denied']}, async ({browser}) => {
     await expect(async () => {
 
       const bCont = await browser.newContext();
@@ -47,9 +44,6 @@ test.describe('MTFM', async () => {
       let c_startAppPage = new C_StartAppPage(cPage);
 
       getStartAppData = happyPathDenied.getStartAppData;
-      nameFirstFetched  = getStartAppData[0];
-      nameLastFetched   = getStartAppData[1];
-      ssnFetched        = getStartAppData[3]; // ssn is 3
 
       for(let value in getStartAppData) { // optional, helpful
         console.log(getStartAppData[value] + "\t");
@@ -93,21 +87,18 @@ test.describe('MTFM', async () => {
       await o_paymentCardPage._checkSameAs();
       await o_paymentCardPage._NEXT();
 
-      let p_submitConfirm = new P_ConfirmSubmit(cPage);
-      await p_submitConfirm.submitApplication();
-
-      await cPage.waitForTimeout(5000);
-      let q_results = new Q_Results(cPage);
+      await (new P_ConfirmSubmit(cPage)).submitApplication();
 
       try {
-        await q_results.verifySuccessDenied();
-        await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed'}})}`);
+        await (new Q_Results(cPage)).verifySuccessDenied();
+        console.log("denied passed");
+        await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason: 'denied'}})}`);
       }catch(Error) {
         await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
+      }finally {
+        await cPage.close();
+        await bCont.close();
       }
-
-      await cPage.close();
-      await bCont.close();
 
     }).toPass({ timeout: 120000 });
   });

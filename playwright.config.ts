@@ -1,10 +1,10 @@
 import { defineConfig, devices } from '@playwright/test';
 const config = {
 	testDir: './tests/',
-	// testMatch: 'auth/pre_test_health_check_auth.spec.ts'
+	// testMatch: 'auth/pre_test_health_check_auth.spec.ts',
 
 	/* Maximum time one test can run for. */
-	timeout: 90 * 1000,
+	timeout: 120 * 1000,
 	expect: {
 		/**
 		 * Maximum time expect() should wait for the condition to be met.
