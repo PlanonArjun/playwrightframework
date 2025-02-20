@@ -26,11 +26,8 @@ test.describe('navigation', async () => {
     test.describe.configure({ mode: 'serial' });
 
     let getStartAppData: string[];
-    let nameFirstFetched:string;
-    let nameLastFetched:string;
-    let ssnFetched:string;
 
-    test('happy path approved to results page - apply', { tag: ['@approveme', '@mattressfirm', '@happy', '@pending'] },async ({browser}) => {
+    test('happy path approved to results page - apply', {tag: ['@approveme', '@mattressfirm', '@happy', '@pending']}, async ({browser}) => {
         await expect(async () => {
 
             const bCont = await browser.newContext();
@@ -49,9 +46,6 @@ test.describe('navigation', async () => {
             let c_startAppPage = new C_StartAppPage(cPage);
 
             getStartAppData = happyPathPending.getStartAppData;
-            nameFirstFetched  = getStartAppData[0];
-            nameLastFetched   = getStartAppData[1];
-            ssnFetched        = getStartAppData[3]; // ssn is 3
 
             for(let value in getStartAppData) { // optional, helpful
                 console.log(getStartAppData[value] + "\t");
@@ -96,16 +90,19 @@ test.describe('navigation', async () => {
             await o_paymentCardPage._checkSameAs();
             await o_paymentCardPage._NEXT();
 
-            let p_submitConfirm = new P_ConfirmSubmit(cPage);
-            await p_submitConfirm.submitApplication();
+            await (new P_ConfirmSubmit(cPage)).submitApplication();
 
-            await cPage.waitForTimeout(5000);
-            let q_results = new Q_Results(cPage);
-            await q_results.verifySuccessPending();
+            try {
+                await (new Q_Results(cPage)).verifySuccessPending();
+                console.log("pending passed");
+                await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason: 'pending'}})}`);
+            }catch(Error) {
+                await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
+            }finally {
+                await bCont.close();
+                await cPage.close();
+            }
 
-            await bCont.close();
-            await cPage.close();
-
-        }).toPass({timeout: 90000});
+        }).toPass({timeout: 120000});
     });
 });

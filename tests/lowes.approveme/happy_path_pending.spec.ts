@@ -64,16 +64,13 @@ test.describe('pending', async () => {
             await accountDetails.happyPathPopulate(happyPathPending.getBankInfo1);
 
             // accept and proceed - finish
-            let leaseIdVerification = new J_LeaseIDVerification(cPage);
-            await leaseIdVerification.happyPathAcceptProceed();
+            await (new J_LeaseIDVerification(cPage)).happyPathAcceptProceed();
 
             // verify approved success and then exit
-            let leaseStatusPage = new K_LeaseStatusPage(cPage);
-
             try {
-                await leaseStatusPage.verifySuccessPending();
-                console.log("resume passed");
-                await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason:'lowes pending'}})}`);
+                await (new K_LeaseStatusPage(cPage)).verifySuccessPending();
+                console.log("pending passed");
+                await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason:'Lowes pending'}})}`);
             }catch(Error) {
                 await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
             }finally{

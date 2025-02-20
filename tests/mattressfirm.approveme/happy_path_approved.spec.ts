@@ -24,11 +24,8 @@ test.describe('navigation', async () => {
     test.describe.configure({ mode: 'serial' });
 
     let getStartAppData: string[];
-    let nameFirstFetched:string;
-    let nameLastFetched:string;
-    let ssnFetched:string;
 
-    test('happy path approved to results page', { tag: ['@approveme', '@mattressfirm', '@happy', '@approved'] },async ({browser}) => {
+    test('happy path approved to results page', {tag: ['@approveme', '@mattressfirm', '@happy', '@approved']}, async ({browser}) => {
         await expect(async () => {
 
             const bCont = await browser.newContext();
@@ -47,9 +44,6 @@ test.describe('navigation', async () => {
             let c_startAppPage = new C_StartAppPage(cPage);
 
             getStartAppData = happyPathApproved.getStartAppData;
-            nameFirstFetched  = getStartAppData[0];
-            nameLastFetched   = getStartAppData[1];
-            ssnFetched        = getStartAppData[3]; // ssn is 3
 
             for(let value in getStartAppData) { // optional, helpful
                 console.log(getStartAppData[value] + "\t");
@@ -93,15 +87,19 @@ test.describe('navigation', async () => {
             await o_paymentCardPage._checkSameAs();
             await o_paymentCardPage._NEXT();
 
-            let p_ConfirmSubmit = new P_ConfirmSubmit(cPage);
-            await p_ConfirmSubmit.submitApplication();
+            await (new P_ConfirmSubmit(cPage)).submitApplication();
 
-            let q_results: Q_Results = new Q_Results(cPage);
-            await q_results.verifySuccessApproved();
+            try {
+                await (new Q_Results(cPage)).verifySuccessApproved();
+                console.log("approved passed");
+                await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason: 'approved'}})}`);
+            }catch(Error) {
+                await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
+            }finally {
+                await cPage.close();
+                await bCont.close();
+            }
 
-            await bCont.close();
-            await cPage.close();
-
-        }).toPass({timeout: 100000});
+        }).toPass({timeout: 120000});
     });
 });

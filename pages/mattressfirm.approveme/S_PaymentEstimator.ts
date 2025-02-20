@@ -1,7 +1,7 @@
 
 // mattressfirm approve me payment estimator
 import { type Page, type Locator, expect } from '@playwright/test';
-import {PaymentFrequency} from "../../data/paymentFrequency";
+import {PaymentFrequency} from "../../utils/PaymentFrequency";
 
 class S_PaymentEstimator {
 
@@ -21,28 +21,23 @@ class S_PaymentEstimator {
     readonly textHangtag: Locator;
 
     readonly buttonContinueToApply: Locator;
-    readonly buttonCloseEstimatorX: Locator;
 
     constructor(page: Page) {
         this.page = page;
         this.linkPaymentEstimator = page.getByText('Payment Estimator');
-        this.fieldCostOfItems = page.locator('#lce-iframe').contentFrame().getByLabel('Cash price');
+        this.fieldCostOfItems = page.locator('#lce-iframe').contentFrame().getByRole('textbox', { name: 'Cash price' });
 
         this.buttonRadioEveryWeek = page.locator('#lce-iframe').contentFrame().getByLabel('Every week');
         this.buttonRadioEveryOtherWeek = page.locator('#lce-iframe').contentFrame().getByLabel('Every other week');
         this.buttonRadioTwicePerMonth = page.locator('#lce-iframe').contentFrame().getByLabel('Twice per month')
         this.buttonRadioEveryMonth = page.locator('#lce-iframe').contentFrame().getByLabel('Every month')
         this.menuState = page.locator('#lce-iframe').contentFrame().getByLabel('State');
-        this.page.keyboard.press('Tab');
-        this.menuState = page.locator('#lce-iframe').contentFrame().getByLabel('State');
-        this.buttonGetMyEstimate = page.locator('#lce-iframe').contentFrame().getByLabel('Get my estimate');
+        this.buttonGetMyEstimate = page.locator('#lce-iframe').contentFrame().getByRole('button', { name: 'Get my estimate' });
 
         this.heading12MonthLTOSummary = page.locator('#lce-iframe').contentFrame().getByRole('heading', { name: '-month lease-to-own estimate' });
         this.textHangtag = page.locator('#lce-iframe').contentFrame().getByText('This is an estimate of what');
 
         this.buttonContinueToApply = page.locator('#lce-iframe').contentFrame().getByLabel('Continue to apply');
-
-        this.buttonCloseEstimatorX = page.getByText('X', { exact: true });
     }
 
     async launchPaymentEstimator() {
@@ -88,6 +83,9 @@ class S_PaymentEstimator {
         }
     }
 
+    /*
+    Not currently used but don't remove it.
+    */
     async _enterTwoLetterState(state : string) {
         await this.menuState.selectOption(state);
     }
@@ -105,17 +103,17 @@ class S_PaymentEstimator {
         await this.buttonContinueToApply.click();
     }
 
-    async _closeEstimator() {
-        await this.buttonCloseEstimatorX.click();
-    }
-
-    async happyPathEstimate(costOfItemsAsString: string, payFrequencyIn: PaymentFrequency, twoLetterState: string) {
-        await this.launchPaymentEstimator();
-        await this.page.waitForTimeout(4000);
+    async happyPathEstimate(costOfItemsAsString: string, payFrequencyIn: PaymentFrequency) {
+        await this.page.getByText('Payment Estimator').click();
+        await this.page.waitForTimeout(2000);
         await this._enterCostOfItemsAsString(costOfItemsAsString);
         await this._selectPaymentFrequency(payFrequencyIn);
-        await this._enterTwoLetterState(twoLetterState);
-        await this.page.waitForTimeout(4000);
+        await this.page.keyboard.press('Tab');
+        /*
+        On 2025-02-17 I noticed they had removed the state menu from this flow.
+        Leaving this here for when they put it back.
+        */
+        // await this._enterTwoLetterState(twoLetterState);
         await this._getMyEstimate();
         await this._verifyEstimateLaunch();
         await this._continueToApply();

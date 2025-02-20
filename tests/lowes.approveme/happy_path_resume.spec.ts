@@ -23,6 +23,7 @@ test.describe('happy path resume', async () => {
   let phoneFetched:string;
   let isApplyPass: boolean = false;
 
+
   test('approve first', { tag: ['@lowes', '@approveme', '@happypath', '@approved'] }, async ({ browser }) => {
     await expect(async () => {
 
@@ -76,18 +77,17 @@ test.describe('happy path resume', async () => {
       // accept and proceed - finish
       let leaseIdVerification = new J_LeaseIDVerification(cPage);
       await leaseIdVerification.happyPathAcceptProceed();
-      await cPage.waitForTimeout(8000);
 
       // verify approved success and then exit
-      let leaseStatusPage = new K_LeaseStatusPage(cPage);
-
       try {
-        await leaseStatusPage.verifySuccessApproved();
+        await (new K_LeaseStatusPage(cPage)).verifySuccessApproved();
         console.log("Apply passed. Resume up next.")
         isApplyPass = true;
-        await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason:'lowes approved'}})}`);
+        await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason:'Lowes approved before resume'}})}`);
       }catch(Error) {
+        console.log("Apply failed.")
         await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
+        test.fail();
       }finally{
         await cPage.close();
         await bCont.close();
@@ -96,6 +96,7 @@ test.describe('happy path resume', async () => {
     }).toPass({ timeout: 120000 });
 
   });
+
 
   test('resume second', { tag: ['@lowes', '@approveme', '@happypath', '@resume'] }, async ({ browser }) => {
     await expect(async () => {
@@ -109,12 +110,11 @@ test.describe('happy path resume', async () => {
         await resumePageR.navigateResume();
         await resumePageR.happyPathPopulate(ssnFetched,phoneFetched);
 
-        let leaseStatusPage = new K_LeaseStatusPage(cPageR);
-
+        // verify approved success and then exit
         try {
-          await leaseStatusPage.verifySuccessApproved();
+          await (new K_LeaseStatusPage(cPageR)).verifySuccessApproved();
           console.log("Resume passed. End test.")
-          await cPageR.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason:'lowes resume'}})}`);
+          await cPageR.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason:'Lowes resume'}})}`);
         }catch(Error) {
           await cPageR.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
         }finally{
@@ -127,5 +127,6 @@ test.describe('happy path resume', async () => {
     }).toPass({ timeout: 90000 });
 
   });
+
 
 });
