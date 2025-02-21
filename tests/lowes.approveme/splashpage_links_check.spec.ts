@@ -1,53 +1,70 @@
-import {test, expect} from '@playwright/test';
+import {test, expect, Page, BrowserContext} from '@playwright/test';
 import A_MarketingPage from "../../pages/lowes.approveme/A_Marketingpage";
 import B_BeforeStartPage from '../../pages/lowes.approveme/B_BeforeStartPage';
 
+let bCont: BrowserContext;
+let cPage: Page;
+let a_marketingPage: A_MarketingPage;
+
 test.describe('lowes links', async () => {
 
-  test.describe.configure({ retries: 0 });
-  test.describe.configure({ mode: 'parallel' });
+  test.describe.configure({retries: 0});
+  test.describe.configure({mode: 'parallel'});
 
-  test('terms', { tag: ['@lowes', '@approveme', '@happypath', '@links'] },async ({browser}) => {
+  test.beforeEach(async ({browser}) => {
+    bCont = await browser.newContext();
+    cPage = await bCont.newPage();
+    a_marketingPage = new A_MarketingPage(cPage);
+    await a_marketingPage.navigate();
+  });
+
+  test.afterEach(async () => {
+    a_marketingPage = null;
+    await cPage.close();
+    await bCont.close();
+  });
+
+  test('terms', { tag: ['@lowes', '@approveme', '@happypath', '@links'] },async () => {
     await expect(async () => {
-      const bCont = await browser.newContext();
-      const cPage = await bCont.newPage();
-      await (new A_MarketingPage(cPage)).navigate();
-      await (new B_BeforeStartPage(cPage)).checkLinkTerms();
-      await cPage.close();
-      await bCont.close();
+      try {
+        await (new B_BeforeStartPage(cPage)).checkLinkTerms();
+        await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason: 'terms'}})}`);
+      }catch(Error) {
+        await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
+      }
     }).toPass({timeout: 20000});
   });
 
-  test('privacy', { tag: ['@lowes', '@approveme', '@happypath', '@links'] },async ({browser}) => {
+  test('privacy', { tag: ['@lowes', '@approveme', '@happypath', '@links'] },async () => {
     await expect(async () => {
-      const bCont = await browser.newContext();
-      const cPage = await bCont.newPage();
-      await (new A_MarketingPage(cPage)).navigate();
-      await (new B_BeforeStartPage(cPage)).checkLinkPrivacy();
-      await cPage.close();
-      await bCont.close();
+      try {
+        await (new B_BeforeStartPage(cPage)).checkLinkPrivacy();
+        await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason: 'privacy'}})}`);
+      }catch(Error) {
+        await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
+      }
     }).toPass({timeout: 20000});
   });
 
-  test('disclosure', { tag: ['@lowes', '@approveme', '@happypath', '@links'], },async ({browser}) => {
+  test('disclosure', { tag: ['@lowes', '@approveme', '@happypath', '@links'], },async () => {
     await expect(async () => {
-      const bCont = await browser.newContext();
-      const cPage = await bCont.newPage();
-      await (new A_MarketingPage(cPage)).navigate();
-      await (new B_BeforeStartPage(cPage)).checkLinkDisclosure();
-      await cPage.close();
-      await bCont.close();
+      try {
+        await (new B_BeforeStartPage(cPage)).checkLinkDisclosure();
+        await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason: 'disclosure'}})}`);
+      }catch(Error) {
+        await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
+      }
     }).toPass({timeout: 20000});
   });
 
-  test('arbitration', { tag: ['@lowes', '@approveme', '@happypath', '@links'], },async ({browser}) => {
+  test('arbitration', { tag: ['@lowes', '@approveme', '@happypath', '@links'], },async () => {
     await expect(async () => {
-      const bCont = await browser.newContext();
-      const cPage = await bCont.newPage();
-      await (new A_MarketingPage(cPage)).navigate();
-      await (new B_BeforeStartPage(cPage)).checkLinkArbitration();
-      await cPage.close();
-      await bCont.close();
+      try {
+        await (new B_BeforeStartPage(cPage)).checkLinkArbitration();
+        await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason: 'arbitration'}})}`);
+      }catch(Error) {
+        await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
+      }
     }).toPass({timeout: 20000});
 
   });
