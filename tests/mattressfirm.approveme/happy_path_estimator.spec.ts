@@ -1,7 +1,7 @@
 import test, {BrowserContext, Page} from '@playwright/test';
 import A_MarketingPage from '../../pages/mattressfirm.approveme/A_MarketingPage';
 import S_PaymentEstimator from '../../pages/mattressfirm.approveme/S_PaymentEstimator';
-import {PaymentFrequency} from "../../utils/PaymentFrequency";
+import {PaymentFrequency} from "../../data/paymentFrequency";
 
 let bCont: BrowserContext;
 let cPage: Page;
