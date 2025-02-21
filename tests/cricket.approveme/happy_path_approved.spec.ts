@@ -17,7 +17,6 @@ import N_PaymentCardPage from "../../pages/cricket.approveme/N_PaymentCardPage";
 import O_ReviewAndSubmitPage from "../../pages/cricket.approveme/O_ReviewAndSubmitPage";
 import O_ReviewQAndSubmitPage from "../../pages/cricket.approveme/O_ReviewAndSubmitPage";
 import P_ResultsPage from "../../pages/cricket.approveme/P_ResultsPage";
-import {PaymentFrequency} from "../../data/paymentFrequency";
 
 test.describe('cricket', async () => {
 

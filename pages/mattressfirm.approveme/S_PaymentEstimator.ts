@@ -1,7 +1,7 @@
 
 // mattressfirm approve me payment estimator
 import { type Page, type Locator, expect } from '@playwright/test';
-import {PaymentFrequency} from "../../utils/PaymentFrequency";
+import {PaymentFrequency} from "../../data/paymentFrequency";
 
 class S_PaymentEstimator {
 

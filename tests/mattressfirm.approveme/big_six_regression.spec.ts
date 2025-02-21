@@ -26,7 +26,7 @@ import F_RentOwn from "../../pages/mattressfirm.approveme/F_RentOwnPage";
 import G_IDType from "../../pages/mattressfirm.approveme/G_IdTypePage";
 import H_EmployStatus from "../../pages/mattressfirm.approveme/H_EmployeeStatusPage";
 import J_EmployerDuration from "../../pages/mattressfirm.approveme/J_EmployeeDurationPage";
-import {PaymentFrequency} from "../../utils/PaymentFrequency";
+import {PaymentFrequency} from "../../data/paymentFrequency";
 import S_PaymentEstimator from "../../pages/mattressfirm.approveme/S_PaymentEstimator";
 
 
