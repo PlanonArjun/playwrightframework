@@ -27,7 +27,7 @@ test.describe('lowes links', async () => {
   test('terms', { tag: ['@lowes', '@approveme', '@happypath', '@links'] },async () => {
     await expect(async () => {
       try {
-        await (new B_BeforeStartPage(cPage)).checkLinkTerms();
+        await b_beforeStartPage.checkLinkTerms();
         await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason: 'terms'}})}`);
       }catch(Error) {
         await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
@@ -38,7 +38,7 @@ test.describe('lowes links', async () => {
   test('privacy', { tag: ['@lowes', '@approveme', '@happypath', '@links'] },async () => {
     await expect(async () => {
       try {
-        await (new B_BeforeStartPage(cPage)).checkLinkPrivacy();
+        await b_beforeStartPage.checkLinkPrivacy();
         await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason: 'privacy'}})}`);
       }catch(Error) {
         await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
@@ -49,7 +49,7 @@ test.describe('lowes links', async () => {
   test('disclosure', { tag: ['@lowes', '@approveme', '@happypath', '@links'], },async () => {
     await expect(async () => {
       try {
-        await (new B_BeforeStartPage(cPage)).checkLinkDisclosure();
+        await b_beforeStartPage.checkLinkDisclosure();
         await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason: 'disclosure'}})}`);
       }catch(Error) {
         await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
@@ -60,7 +60,7 @@ test.describe('lowes links', async () => {
   test('arbitration', { tag: ['@lowes', '@approveme', '@happypath', '@links'], },async () => {
     await expect(async () => {
       try {
-        await (new B_BeforeStartPage(cPage)).checkLinkArbitration();
+        await b_beforeStartPage.checkLinkArbitration();
         await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason: 'arbitration'}})}`);
       }catch(Error) {
         await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);

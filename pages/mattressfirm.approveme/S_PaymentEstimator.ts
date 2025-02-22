@@ -103,7 +103,7 @@ class S_PaymentEstimator {
         await this.buttonContinueToApply.click();
     }
 
-    async happyPathEstimate(costOfItemsAsString: string, payFrequencyIn: PaymentFrequency) {
+    async happyPathEstimate(costOfItemsAsString: string, payFrequencyIn: PaymentFrequency, twoLetterState: string) {
         await this.page.getByText('Payment Estimator').click();
         await this.page.waitForTimeout(2000);
         await this._enterCostOfItemsAsString(costOfItemsAsString);
@@ -113,7 +113,10 @@ class S_PaymentEstimator {
         On 2025-02-17 I noticed they had removed the state menu from this flow.
         Leaving this here for when they put it back.
         */
-        // await this._enterTwoLetterState(twoLetterState);
+        /*
+        On 2025-02-21 I noticed they put it back....
+         */
+        await this._enterTwoLetterState(twoLetterState);
         await this._getMyEstimate();
         await this._verifyEstimateLaunch();
         await this._continueToApply();
