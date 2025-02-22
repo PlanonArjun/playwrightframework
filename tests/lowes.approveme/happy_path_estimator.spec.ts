@@ -31,7 +31,7 @@ test.describe('estimate', async () => {
     test('weekly', { tag: ['@lowes', '@approveme', '@happypath', '@estimate'] }, async () => {
         try {
             await n_estimator.happyPathEstimate('3000', PaymentFrequency.Weekly);
-            await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed'}})}`);
+            await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason:'weekly'}})}`);
         }catch(Error) {
             await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
         }
@@ -40,7 +40,7 @@ test.describe('estimate', async () => {
     test('biweekly', { tag: ['@lowes', '@approveme', '@happypath', '@estimate'] }, async () => {
         try {
             await n_estimator.happyPathEstimate('3000', PaymentFrequency.BiWeekly);
-            await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed'}})}`);
+            await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason:'biweekly'}})}`);
         }catch(Error) {
             await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
         }
@@ -49,7 +49,7 @@ test.describe('estimate', async () => {
     test('semimonthly', { tag: ['@lowes', '@approveme', '@happypath', '@estimate'] }, async () => {
         try {
             await n_estimator.happyPathEstimate('3000', PaymentFrequency.SemiMonthly);
-            await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed'}})}`);
+            await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason:'semimonthly'}})}`);
         }catch(Error) {
             await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
         }
@@ -58,7 +58,7 @@ test.describe('estimate', async () => {
     test('monthly', { tag: ['@lowes', '@approveme', '@happypath', '@estimate'] }, async () => {
         try {
             await n_estimator.happyPathEstimate('3000', PaymentFrequency.Monthly);
-            await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed'}})}`);
+            await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason:'monthly'}})}`);
         }catch(Error) {
             await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
         }
