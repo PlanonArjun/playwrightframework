@@ -2,15 +2,11 @@
 Test Repo for all things e2e, will be using this for our e2e project initiative
 
 First time setup:
-1. Set registry: npm config set registry https://art.proginternal.net/artifactory/api/npm/nmpjs.org/
+1. Set registry: npm config set registry https://art.proginternal.net/artifactory/api/npm/npm-release/
 2. npm login (if you get an error about a certificate you can disable certs with this command: (npm config set strict-ssl false)
-3. Enter username and password
-4. Remove playwright-qe-core from package.json
-5. Run npm install
-6. Set registry: npm config set registry https://art.proginternal.net/artifactory/api/npm/npm-release/
-7. Add playwright-qe-core back in to package.json
-8. Run npm install
-9. Run a test and make sure it executes.
+3. Enter username (format firstname.lastname) and LDAP password
+4. Run npm install
+5. Run a test and make sure it executes.
 
 
 Run tests in BrowserStack cloud, or locally.
