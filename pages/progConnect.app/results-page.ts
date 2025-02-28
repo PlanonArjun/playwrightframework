@@ -1,7 +1,7 @@
 import { Locator, Page, Response, expect } from '@playwright/test';
 import { StorybookPage } from './storybook-page';
 import { NavPage } from './nav-page';
-import { TIMEOUTS } from '$utils/timeouts';
+import { TIMEOUTS } from '$utils/progConnect.utils/timeouts';
 import { RESPONSES } from '$utils/network-responses';
 
 const leaseIdLocator = 'div.lease div.value';

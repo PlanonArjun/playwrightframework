@@ -1,8 +1,8 @@
-import { IAddressInformation } from '$pages/address-info-page';
-import { IContactInformation } from '$pages/contact-info-page';
-import { IPersonalInformation } from '$pages/personal-info-page';
-import { ICustomerLeaseApplication } from '$utils/lease-application-builder';
-import { getRandomSSN } from '$utils/random-ssn';
+import { IAddressInformation } from '$pages/progConnect.app/address-info-page';
+import { IContactInformation } from '$pages/progConnect.app/contact-info-page';
+import { IPersonalInformation } from '$pages/progConnect.app/personal-info-page';
+import { ICustomerLeaseApplication } from '$utils/progConnect.utils/lease-application-builder';
+import { getRandomSSN } from "$utils/progConnect.utils/random-ssn";
 import { expect } from '@playwright/test';
 
 export async function prefillAndValidate(

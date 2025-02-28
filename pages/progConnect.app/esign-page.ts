@@ -1,7 +1,7 @@
 import { FrameLocator, Locator, Page, expect } from '@playwright/test';
-import { RESPONSES } from '$utils/network-responses';
-import { TIMEOUTS } from '$utils/timeouts';
-import { getCustomerState } from 'tests/connect/default-object-builder';
+import { RESPONSES } from '$utils/progConnect.utils/network-responses';
+import { TIMEOUTS } from '$utils/progConnect.utils/timeouts';
+import { getCustomerState } from '../../data/progconnect/default-object-builder';
 
 let eboPercent;
 export class EsignPage {

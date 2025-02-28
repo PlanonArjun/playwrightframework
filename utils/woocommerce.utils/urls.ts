@@ -18,6 +18,9 @@ export default {
     cart: {
         cart: landing + 'cart/',
     },
+    addToCart: {
+        addToCart: landing + '?add-to-cart=',
+    },
     product: {
         comfyGrey: landing + 'product/comfy-gray/',
         marimba: landing + 'product/marimba-hero',

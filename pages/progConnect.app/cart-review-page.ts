@@ -1,9 +1,9 @@
 import { Locator, Page, expect } from '@playwright/test';
 import { StorybookPage } from './storybook-page';
 import { NavPage } from './nav-page';
-import { isNonDeliveryState } from 'tests/connect/default-object-builder';
-import { TIMEOUTS } from '$utils/timeouts';
-import { RESPONSES } from '$utils/network-responses';
+import { isNonDeliveryState } from '../../data/progconnect/default-object-builder';
+import { TIMEOUTS } from '$utils/progConnect.utils/timeouts';
+import { RESPONSES } from '$utils/progConnect.utils/network-responses';
 
 let taxFree = false;
 let salesTaxPrice: string;

@@ -1,6 +1,6 @@
 import { Locator, Page } from '@playwright/test';
 import { NavPage } from './nav-page';
-import { ICustomerLeaseApplication } from '$utils/lease-application-builder';
+import { ICustomerLeaseApplication } from '$utils/progConnect.utils/lease-application-builder';
 
 export class TestHarnessPage extends NavPage {
   readonly page: Page;

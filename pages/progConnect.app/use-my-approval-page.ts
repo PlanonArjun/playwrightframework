@@ -1,9 +1,9 @@
 import { Locator, Page, expect } from '@playwright/test';
 import { NavPage } from './nav-page';
 import { StorybookPage } from './storybook-page';
-import { ICustomerLeaseApplication } from '$utils/lease-application-builder';
-import { DefaultObjectBuilder } from 'tests/connect/default-object-builder';
-import { TIMEOUTS } from '$utils/timeouts';
+import { ICustomerLeaseApplication } from '$utils/progConnect.utils/lease-application-builder';
+import { DefaultObjectBuilder } from '../../data/progconnect/default-object-builder';
+import { TIMEOUTS } from '$utils/progConnect.utils/timeouts';
 import { RESPONSES } from '$utils/network-responses';
 
 export interface IUseMyApproval {
