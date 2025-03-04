@@ -21,7 +21,22 @@ class B_ApplyWidget {
     readonly homeAddressStateField:Locator;
     readonly homeAddressZipField:Locator;
     readonly homeAddressContinueButton:Locator;
-
+    readonly incomeInfoMonthlyIncomeField:Locator;
+    readonly incomeInfoLastPayDayField:Locator;
+    readonly incomeInfonextPayDayField:Locator;
+    readonly incomeInfoPayFrequencyDropDown:Locator;
+    readonly incomeInfoContinueButton:Locator;
+    readonly cardInfoFirstNameField:Locator;
+    readonly cardInfoLastNameField:Locator;
+    readonly cardInfoCardNumberField:Locator;
+    readonly cardInfoExpDateField:Locator;
+    readonly cardInfoCvv:Locator;
+    readonly cardInfoContinueButton:Locator;
+    readonly bankInfoRoutingField:Locator;
+    readonly bankInfoAccountField:Locator;
+    readonly bankInfoContinueButton:Locator;
+    readonly reviewYourInfoContinueButton:Locator;
+    readonly submitApplicationButton:Locator;
 
     constructor(page: Page) {
         this.page = page;
@@ -43,6 +58,22 @@ class B_ApplyWidget {
         this.homeAddressStateField = this.page.locator('');
         this.homeAddressZipField = this.page.locator('');
         this.homeAddressContinueButton = this.page.locator('');
+        this.incomeInfoMonthlyIncomeField = this.page.locator('');
+        this.incomeInfoLastPayDayField = this.page.locator('');
+        this.incomeInfonextPayDayField = this.page.locator('');
+        this.incomeInfoPayFrequencyDropDown = this.page.locator('');
+        this.incomeInfoContinueButton = this.page.locator('');
+        this.cardInfoFirstNameField = this.page.locator('');
+        this.cardInfoLastNameField = this.page.locator('');
+        this.cardInfoCardNumberField = this.page.locator('');
+        this.cardInfoExpDateField = this.page.locator('');
+        this.cardInfoCvv = this.page.locator('');
+        this.cardInfoContinueButton = this.page.locator('');
+        this.bankInfoRoutingField = this.page.locator('');
+        this.bankInfoAccountField = this.page.locator('');
+        this.bankInfoContinueButton = this.page.locator('');
+        this.reviewYourInfoContinueButton = this.page.locator('');
+        this.submitApplicationButton = this.page.locator('');
     }
 
     async clickApplyButton() {
@@ -113,19 +144,69 @@ class B_ApplyWidget {
         await this.homeAddressContinueButton.click();
     }
 
+    async fillIncomeInfoMonthlyIncome() {
+        await this.incomeInfoMonthlyIncomeField.fill('1100');
+    }
 
+    async fillIncomeInfoLastPayDay() {
+        await this.incomeInfoLastPayDayField.fill('03/01/2025');
+    }
 
+    async fillIncomeInfonextPayDayField() {
+        await this.incomeInfonextPayDayField.fill('03/15/2025');
+    }
 
+    async enterIncomeInfoPayFrequencyDropDown() {
+        await this.incomeInfoPayFrequencyDropDown.selectOption('Biweekly');
+    }
 
+    async clickIncomeInfoContinueButton() {
+        await this.incomeInfoContinueButton.click();
+    }
 
+    async fillCardInfoFirstNameField() {
+        await this.cardInfoFirstNameField.fill('Firstname');
+    }
 
+    async fillCardInfoLastNameField() {
+        await this.cardInfoLastNameField.fill('Lastname')
+    }
 
+    async fillCardInfoCardNumberField() {
+        await this.cardInfoCardNumberField.fill('4200000000000000')
+    }
 
+    async fillCardInfoExpDateField() {
+        await this.cardInfoExpDateField.fill("01/29")
+    }
 
+    async fillCardInfoCvv() {
+        await this.cardInfoCvv.fill('123')
+    }
 
+    async clickCardInfoContinueButton() {
+        await this.cardInfoContinueButton.click()
+    }
 
+    async fillBankInfoRoutingField() {
+        await this.bankInfoRoutingField.fill('123456789')
+    }
 
+    async fillBankInfoAccountField() {
+        await this.bankInfoAccountField.fill('12345678890')
+    }
 
+    async clickBankInfoContinueButton() {
+        await this.bankInfoContinueButton.click();
+    }
+
+    async clickReviewYourInfoContinueButton() {
+        await this.reviewYourInfoContinueButton.click();
+    }
+
+    async clickSubmitApplicationButton() {
+        await this.submitApplicationButton.click();
+    }
 
 }
 export default B_ApplyWidget;
