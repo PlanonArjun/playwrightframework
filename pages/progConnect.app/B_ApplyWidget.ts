@@ -46,34 +46,34 @@ class B_ApplyWidget {
         this.startMyApplicationButton = this.page.locator('div > pc-dark-button');
         this.contactInfoEmailField = this.page.locator('#email-input');
         this.contactInfoMobilePhoneField = this.page.locator('#phone-number');
-        this.contactInfoContinueButton = this.page.locator('');
+        this.contactInfoContinueButton = this.page.locator('pc-primary-button.hydrated');
         this.personalInfoFirstNameField = this.page.locator('#First\\[object\\ Object\\]');
         this.personalInfoLastNameField = this.page.locator('#Last\\[object\\ Object\\]');
         this.personalInfoDobField = this.page.locator('#date-of-birth');
         this.personalInfoSsnField = this.page.locator('#ssn-input');
-        this.personalInfoContinueButton = this.page.locator('span > button > span');
-        this.homeAddressStreetAddressField = this.page.locator('');
-        this.homeAddressAptField = this.page.locator('');
-        this.homeAddressCityField = this.page.locator('');
-        this.homeAddressStateField = this.page.locator('');
-        this.homeAddressZipField = this.page.locator('');
-        this.homeAddressContinueButton = this.page.locator('');
-        this.incomeInfoMonthlyIncomeField = this.page.locator('');
-        this.incomeInfoLastPayDayField = this.page.locator('');
-        this.incomeInfonextPayDayField = this.page.locator('');
-        this.incomeInfoPayFrequencyDropDown = this.page.locator('');
-        this.incomeInfoContinueButton = this.page.locator('');
-        this.cardInfoFirstNameField = this.page.locator('');
-        this.cardInfoLastNameField = this.page.locator('');
-        this.cardInfoCardNumberField = this.page.locator('');
-        this.cardInfoExpDateField = this.page.locator('');
-        this.cardInfoCvv = this.page.locator('');
-        this.cardInfoContinueButton = this.page.locator('');
-        this.bankInfoRoutingField = this.page.locator('');
-        this.bankInfoAccountField = this.page.locator('');
-        this.bankInfoContinueButton = this.page.locator('');
-        this.reviewYourInfoContinueButton = this.page.locator('');
-        this.submitApplicationButton = this.page.locator('');
+        this.personalInfoContinueButton = this.page.locator('pc-primary-button.hydrated');
+        this.homeAddressStreetAddressField = this.page.locator('#address1-input');
+        this.homeAddressAptField = this.page.locator('#address2-input');
+        this.homeAddressCityField = this.page.locator('#city-input');
+        this.homeAddressStateField = this.page.locator('#state-input');
+        this.homeAddressZipField = this.page.locator('#zipcode-input');
+        this.homeAddressContinueButton = this.page.locator('pc-primary-button.hydrated');
+        this.incomeInfoMonthlyIncomeField = this.page.locator('#currency-input');
+        this.incomeInfoLastPayDayField = this.page.locator('#last-pay-day-input');
+        this.incomeInfonextPayDayField = this.page.locator('#next-pay-day-input');
+        this.incomeInfoPayFrequencyDropDown = this.page.locator('#select-input');
+        this.incomeInfoContinueButton = this.page.locator('pc-primary-button.hydrated');
+        this.cardInfoFirstNameField = this.page.locator('#First\\[object\\ Object\\]');
+        this.cardInfoLastNameField = this.page.locator('#Last\\[object\\ Object\\]');
+        this.cardInfoCardNumberField = this.page.locator('#card-input');
+        this.cardInfoExpDateField = this.page.locator('#cc-exp-date-input');
+        this.cardInfoCvv = this.page.locator('#cc-cvv-input');
+        this.cardInfoContinueButton = this.page.locator('pc-primary-button.hydrated');
+        this.bankInfoRoutingField = this.page.locator('#routing-number-input');
+        this.bankInfoAccountField = this.page.locator('#checking-account-input');
+        this.bankInfoContinueButton = this.page.locator('pc-primary-button.hydrated');
+        this.reviewYourInfoContinueButton = this.page.locator('pc-primary-button.hydrated');
+        this.submitApplicationButton = this.page.locator('pc-primary-button.hydrated');
     }
 
     async clickApplyButton() {
@@ -157,7 +157,7 @@ class B_ApplyWidget {
     }
 
     async enterIncomeInfoPayFrequencyDropDown() {
-        await this.incomeInfoPayFrequencyDropDown.selectOption('Biweekly');
+        await this.incomeInfoPayFrequencyDropDown.selectOption('Weekly');
     }
 
     async clickIncomeInfoContinueButton() {
@@ -173,11 +173,11 @@ class B_ApplyWidget {
     }
 
     async fillCardInfoCardNumberField() {
-        await this.cardInfoCardNumberField.fill('4200000000000000')
+        await this.cardInfoCardNumberField.fill('373953192351004')
     }
 
     async fillCardInfoExpDateField() {
-        await this.cardInfoExpDateField.fill("01/29")
+        await this.cardInfoExpDateField.fill("01/27")
     }
 
     async fillCardInfoCvv() {
