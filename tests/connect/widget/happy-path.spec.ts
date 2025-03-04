@@ -73,6 +73,14 @@ test.describe('happy-path', async () => {
         await b_ApplyWidget.clickBankInfoContinueButton();
         await b_ApplyWidget.clickReviewYourInfoContinueButton();
         await b_ApplyWidget.clickSubmitApplicationButton();
+        await b_ApplyWidget.clickYourApprovedContinueButton();
+        await b_ApplyWidget.clickLeaseOverviewContinueButton();
+        await b_ApplyWidget.clickDueTodayVerifyPaymentButton();
+        await b_ApplyWidget.checkReviewAndSignPaymentDueCheckbox();
+        await b_ApplyWidget.checkReviewAndSignRecurringPaymentCheckbox();
+        await b_ApplyWidget.clickReviewAndSignAgreeAndContinueButton();
+        await b_ApplyWidget.clickReviewAndSignSignAndContinueButton();
+        await b_ApplyWidget.clickCheckoutPlaceOrderWithLowesButton();
         console.debug("for a debug endpoint to stop the test on the last screen if needed.");
 
 

@@ -37,6 +37,15 @@ class B_ApplyWidget {
     readonly bankInfoContinueButton:Locator;
     readonly reviewYourInfoContinueButton:Locator;
     readonly submitApplicationButton:Locator;
+    readonly yourApprovedContinueButton:Locator;
+    readonly leaseOverviewContinueButton:Locator;
+    readonly dueTodayVerifyPaymentButton:Locator;
+    readonly reviewAndSignPaymentDueCheckbox:Locator;
+    readonly reviewAndSignRecurringPaymentCheckbox:Locator;
+    readonly reviewAndSignAgreeAndContinueButton:Locator;
+    readonly reviewAndSignSignAndContinueButton:Locator;
+    readonly checkoutPlaceOrderWithLowesButton:Locator;
+
 
     constructor(page: Page) {
         this.page = page;
@@ -74,6 +83,14 @@ class B_ApplyWidget {
         this.bankInfoContinueButton = this.page.locator('pc-primary-button.hydrated');
         this.reviewYourInfoContinueButton = this.page.locator('pc-primary-button.hydrated');
         this.submitApplicationButton = this.page.locator('pc-primary-button.hydrated');
+        this.yourApprovedContinueButton = this.page.locator('pc-primary-button.hydrated');
+        this.leaseOverviewContinueButton = this.page.locator('pc-primary-button.hydrated');
+        this.dueTodayVerifyPaymentButton = this.page.locator('pc-primary-button.hydrated');
+        this.reviewAndSignPaymentDueCheckbox = this.page.locator('#-control-checkbox_xudwh');
+        this.reviewAndSignRecurringPaymentCheckbox = this.page.locator('#-control-checkbox_hmwhq');
+        this.reviewAndSignAgreeAndContinueButton = this.page.locator('span.grit-component.grit-button button.grit-button-primary.grit-button-md');
+        this.reviewAndSignSignAndContinueButton = this.page.locator('span#continue-button-loading.grit-component.grit-button button#continue-button-button-element.grit-button-primary.grit-button-md');
+        this.checkoutPlaceOrderWithLowesButton = this.page.locator('pc-primary-button.hydrated');
     }
 
     async clickApplyButton() {
@@ -206,6 +223,38 @@ class B_ApplyWidget {
 
     async clickSubmitApplicationButton() {
         await this.submitApplicationButton.click();
+    }
+
+    async clickYourApprovedContinueButton() {
+        await this.yourApprovedContinueButton.click();
+    }
+
+    async clickLeaseOverviewContinueButton() {
+        await this.leaseOverviewContinueButton.click();
+    }
+
+    async clickDueTodayVerifyPaymentButton() {
+        await this.dueTodayVerifyPaymentButton.click();
+    }
+
+    async checkReviewAndSignPaymentDueCheckbox() {
+        await this.reviewAndSignPaymentDueCheckbox.check();
+    }
+
+    async checkReviewAndSignRecurringPaymentCheckbox() {
+        await this.reviewAndSignRecurringPaymentCheckbox.check();
+    }
+
+    async clickReviewAndSignAgreeAndContinueButton() {
+        await this.reviewAndSignAgreeAndContinueButton.click();
+    }
+
+    async clickReviewAndSignSignAndContinueButton() {
+        await this.reviewAndSignSignAndContinueButton.click();
+    }
+
+    async clickCheckoutPlaceOrderWithLowesButton() {
+        await this.checkoutPlaceOrderWithLowesButton.click();
     }
 
 }
