@@ -80,17 +80,32 @@ class B_ApplyWidget {
         this.cardInfoContinueButton = this.page.locator('pc-primary-button.hydrated');
         this.bankInfoRoutingField = this.page.locator('#routing-number-input');
         this.bankInfoAccountField = this.page.locator('#checking-account-input');
-        this.bankInfoContinueButton = this.page.locator('pc-primary-button.hydrated');
-        this.reviewYourInfoContinueButton = this.page.locator('pc-primary-button.hydrated');
-        this.submitApplicationButton = this.page.locator('pc-primary-button.hydrated');
-        this.yourApprovedContinueButton = this.page.locator('pc-primary-button.hydrated');
-        this.leaseOverviewContinueButton = this.page.locator('pc-primary-button.hydrated');
-        this.dueTodayVerifyPaymentButton = this.page.locator('pc-primary-button.hydrated');
-        this.reviewAndSignPaymentDueCheckbox = this.page.locator('#-control-checkbox_xudwh');
-        this.reviewAndSignRecurringPaymentCheckbox = this.page.locator('#-control-checkbox_hmwhq');
+
+        /* I updated locators below this line and to the closing brace. */
+        this.bankInfoContinueButton = this.page.locator('pc-primary-button');
+        this.reviewYourInfoContinueButton = this.page.locator('pc-primary-button');
+        this.submitApplicationButton = this.page.locator('pc-primary-button');
+        this.yourApprovedContinueButton = this.page.locator('pc-primary-button');
+        this.leaseOverviewContinueButton = this.page.locator('div > pc-primary-button');
+        this.dueTodayVerifyPaymentButton = this.page.locator('pc-primary-button');
+        this.reviewAndSignPaymentDueCheckbox = this.page.locator('#-control-checkbox_nejhr');
+        this.reviewAndSignRecurringPaymentCheckbox = this.page.locator('#-control-checkbox_jefcg');
         this.reviewAndSignAgreeAndContinueButton = this.page.locator('span.grit-component.grit-button button.grit-button-primary.grit-button-md');
-        this.reviewAndSignSignAndContinueButton = this.page.locator('span#continue-button-loading.grit-component.grit-button button#continue-button-button-element.grit-button-primary.grit-button-md');
-        this.checkoutPlaceOrderWithLowesButton = this.page.locator('pc-primary-button.hydrated');
+        this.reviewAndSignSignAndContinueButton = this.page.locator('#continue-button');
+        this.checkoutPlaceOrderWithLowesButton = this.page.locator('pc-primary-button');
+
+        /* originals.... */
+        // this.bankInfoContinueButton = this.page.locator('pc-primary-button.hydrated');
+        // this.reviewYourInfoContinueButton = this.page.locator('pc-primary-button.hydrated');
+        // this.submitApplicationButton = this.page.locator('pc-primary-button.hydrated');
+        // this.yourApprovedContinueButton = this.page.locator('pc-primary-button.hydrated');
+        // this.leaseOverviewContinueButton = this.page.locator('pc-primary-button.hydrated');
+        // this.dueTodayVerifyPaymentButton = this.page.locator('pc-primary-button.hydrated');
+        // this.reviewAndSignPaymentDueCheckbox = this.page.locator('#-control-checkbox_xudwh');
+        // this.reviewAndSignRecurringPaymentCheckbox = this.page.locator('#-control-checkbox_hmwhq');
+        // this.reviewAndSignAgreeAndContinueButton = this.page.locator('span.grit-component.grit-button button.grit-button-primary.grit-button-md');
+        // this.reviewAndSignSignAndContinueButton = this.page.locator('span#continue-button-loading.grit-component.grit-button button#continue-button-button-element.grit-button-primary.grit-button-md');
+        // this.checkoutPlaceOrderWithLowesButton = this.page.locator('pc-primary-button.hydrated');
     }
 
     async clickApplyButton() {
