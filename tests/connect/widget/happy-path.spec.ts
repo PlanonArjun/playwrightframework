@@ -51,8 +51,29 @@ test.describe('happy-path', async () => {
         await b_ApplyWidget.personalInfoDob();
         await b_ApplyWidget.personalInfoSsn();
         await b_ApplyWidget.personalInfoContinue();
-        // await b_ApplyWidget.();
-        console.debug("for a debug endpoint.");
+        await b_ApplyWidget.fillHomeAddressStreetAddress();
+        await b_ApplyWidget.fillHomeAddressApt();
+        await b_ApplyWidget.fillHomeAddressCity();
+        await b_ApplyWidget.fillHomeAddressState();
+        await b_ApplyWidget.fillHomeAddressZip();
+        await b_ApplyWidget.clickHomeAddressContinueButton();
+        await b_ApplyWidget.fillIncomeInfoMonthlyIncome();
+        await b_ApplyWidget.fillIncomeInfoLastPayDay();
+        await b_ApplyWidget.fillIncomeInfonextPayDayField();
+        await b_ApplyWidget.enterIncomeInfoPayFrequencyDropDown();
+        await b_ApplyWidget.clickIncomeInfoContinueButton();
+        await b_ApplyWidget.fillCardInfoFirstNameField();
+        await b_ApplyWidget.fillCardInfoLastNameField();
+        await b_ApplyWidget.fillCardInfoCardNumberField();
+        await b_ApplyWidget.fillCardInfoExpDateField();
+        await b_ApplyWidget.fillCardInfoCvv();
+        await b_ApplyWidget.clickCardInfoContinueButton();
+        await b_ApplyWidget.fillBankInfoRoutingField();
+        await b_ApplyWidget.fillBankInfoAccountField();
+        await b_ApplyWidget.clickBankInfoContinueButton();
+        await b_ApplyWidget.clickReviewYourInfoContinueButton();
+        await b_ApplyWidget.clickSubmitApplicationButton();
+        console.debug("for a debug endpoint to stop the test on the last screen if needed.");
 
 
       //TODO:Might want to implement this API code later down the road, started to go down this road when I was running into the UI site hanging, and found
