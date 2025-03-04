@@ -1,5 +1,5 @@
 // urls.ts
-let landing: string = 'http://10.146.147.90/';
+let landing: string = 'https://10.146.147.90/';
 export default {
     landing: {
         landing: landing,

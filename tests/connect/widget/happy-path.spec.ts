@@ -1,20 +1,25 @@
 import { setTaxFreeStatus } from "$pages/progConnect.app/cart-review-page";
-import test, {BrowserContext, Page} from "@playwright/test";
-import { DefaultObjectBuilder, setCustomerState } from "../../../data/progconnect/default-object-builder";
-import { ITEM_SKU } from "../../../data/progconnect/item-skus";
-import { ICustomerLeaseApplication } from "$utils/progConnect.utils/lease-application-builder";
-import { LEASE_STATUS } from "$utils/progConnect.utils/lease-status";
+import test, {BrowserContext, expect, Page} from "@playwright/test";
+import { setCustomerState } from "../../../data/progconnect/default-object-builder";
 import {WooShoppingPage} from "$pages/progConnect.app/woo-shopping-page";
+// import {postRequestRestWithHeader, getRequestRest, postRequestRestWithBody} from "playwright-qe-core/dist/utils/httpCallManager";
+// import {UriBuilder} from "playwright-qe-core/dist/utils/uriBuilder";
+// import {HttpStatus} from "@nestjs/common";
+import A_SwaggerPage from "$pages/progConnect.app/A_SwaggerPage"
+import {ITEM_SKU} from "../../../data/progconnect/item-skus";
+import B_ApplyWidget from "$pages/progConnect.app/B_ApplyWidget";
 
 let bCont: BrowserContext;
 let cPage: Page;
+// let swaggerPage: A_SwaggerPage;
 let wooShoppingPage: WooShoppingPage;
+let b_ApplyWidget: B_ApplyWidget;
 
 test.describe('happy-path', async () => {
 
     test.describe.configure({ retries: 0 });
     test.describe.configure({ mode: 'parallel' });
-    test.setTimeout(240000);
+    test.setTimeout(360000);
 
       test.beforeAll(() => {
         setTaxFreeStatus(false);
@@ -32,14 +37,55 @@ test.describe('happy-path', async () => {
         await wooShoppingPage.startApplyOnlyFlow();
       });
 
-      test('Happy path to virtual Card @Tier1 @Woo', async ({  }) => {
-        // const customer: ICustomerLeaseApplication = new DefaultObjectBuilder(
-        //   LEASE_STATUS.APPROVED
-        // ).leaseApplication;
+      test('Happy path to virtual Card @Tier1 @Woo', async () => {
 
-        // await buildLease.submitTo6VCard(customer);
-        console.log('placeholder for debugging purposes');
+        b_ApplyWidget = await new B_ApplyWidget(cPage);
+        await b_ApplyWidget.clickApplyButton();
+        await b_ApplyWidget.clickIAgreeCheckbox();
+        await b_ApplyWidget.clickStartMyApplicationButton();
+        await b_ApplyWidget.contactInfoEmailAddress();
+        await b_ApplyWidget.contactInfoMobilePhone();
+        await b_ApplyWidget.clickContactInfoContinueButton();
+        await b_ApplyWidget.personalInfoFirstName();
+        await b_ApplyWidget.personalInfoLastName();
+        await b_ApplyWidget.personalInfoDob();
+        await b_ApplyWidget.personalInfoSsn();
+        await b_ApplyWidget.personalInfoContinue();
+        // await b_ApplyWidget.();
+        console.debug("for a debug endpoint.");
 
+
+      //TODO:Might want to implement this API code later down the road, started to go down this road when I was running into the UI site hanging, and found
+      // out it needs to be https not http to connect to the Woo Commerce site.
+      ////Get site key
+      //   const getSiteKeyResponse = await getRequestRest({ request}, new UriBuilder("https://connect.eks.stage.aws.proginternal.com/progconnect/api/site-key"));
+      //   expect(getSiteKeyResponse.status(), {
+      //     message: `Invalid code ${getSiteKeyResponse.status()} - ${await getSiteKeyResponse.text()}]`,
+      //   }).toEqual(HttpStatus.OK);
+      //
+      //   let siteKey = await getSiteKeyResponse.text();
+      //
+      //   //Navigate to swagger page
+      //   swaggerPage = new A_SwaggerPage(cPage);
+      //   await swaggerPage.navigate();
+      //
+      //   //Load token on page
+      //   await swaggerPage.loadRecaptchaToken(siteKey);
+      //
+      //   //Retrieve token
+      //   let recaptchaToken = await swaggerPage.getRecaptchaToken(siteKey);
+      //
+      //   //Authorize
+      //   const response = await postRequestRestWithHeader({ request }, new UriBuilder("https://connect.eks.stage.aws.proginternal.com/progconnect/api/v1/authorize"),
+      //       "{" +
+      //       "  \"key\": \"4e1ed8e2-f401-11ed-b141-040300000000\"," +
+      //       "  \"domain\": \"http://slc-devcent01.stormwind.local/lightweight/qa/harness.html\"" +
+      //       "}",
+      //       'X-PL-Token=' + recaptchaToken, 'Bearer X-PL-Token=' + recaptchaToken);
+      //   expect(response.status(), {
+      //     message: `Invalid code ${response.status()} - ${await response.text()}]`,
+      //   }).toEqual(HttpStatus.OK);
+      //
       });
 
 });
