@@ -1,28 +1,25 @@
-import {test, expect, BrowserContext, Page} from '@playwright/test';
+import {test, expect, Page, BrowserContext} from '@playwright/test';
 import A_MarketingPage from "../../pages/lowes.approveme/A_Marketingpage";
 import B_BeforeStartPage from '../../pages/lowes.approveme/B_BeforeStartPage';
 
+let bCont: BrowserContext;
+let cPage: Page;
+let a_marketingPage: A_MarketingPage;
+
 test.describe('lowes links', async () => {
 
-  test.describe.configure({ retries: 0 });
-  test.describe.configure({ mode: 'parallel' });
-
-  let bCont: BrowserContext;
-  let cPage: Page;
-  let a_marketingPage: A_MarketingPage;
-  let b_beforeStartPage: B_BeforeStartPage;
+  test.describe.configure({retries: 0});
+  test.describe.configure({mode: 'parallel'});
 
   test.beforeEach(async ({browser}) => {
     bCont = await browser.newContext();
     cPage = await bCont.newPage();
     a_marketingPage = new A_MarketingPage(cPage);
-    b_beforeStartPage = new B_BeforeStartPage(cPage);
     await a_marketingPage.navigate();
   });
 
   test.afterEach(async () => {
     a_marketingPage = null;
-    b_beforeStartPage = null;
     await cPage.close();
     await bCont.close();
   });

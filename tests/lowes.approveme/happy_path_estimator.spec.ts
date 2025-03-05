@@ -23,6 +23,8 @@ test.describe('estimate', async () => {
     });
 
     test.afterEach(async () => {
+        a_marketingPage = null;
+        n_estimator = null;
         await cPage.close();
         await bCont.close();
     });
