@@ -1,0 +1,6 @@
+export enum LEASE_STATUS {
+  APPROVED = 'APP_APPROVED',
+  DENIED = 'APP_DENIED',
+  PENDING = 'APP_PENDING',
+  ERROR = '',
+}
