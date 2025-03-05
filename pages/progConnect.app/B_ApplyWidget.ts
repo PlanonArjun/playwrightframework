@@ -77,13 +77,13 @@ class B_ApplyWidget {
         this.cardInfoCardNumberField = this.page.locator('#card-input');
         this.cardInfoExpDateField = this.page.locator('#cc-exp-date-input');
         this.cardInfoCvv = this.page.locator('#cc-cvv-input');
-        this.cardInfoContinueButton = this.page.getByRole('button', { name: 'Continue' })
+        this.cardInfoContinueButton = this.page.getByRole('button', { name: 'Continue' });
         this.bankInfoRoutingField = this.page.locator('#routing-number-input');
         this.bankInfoAccountField = this.page.locator('#checking-account-input');
 
         /* I updated locators below this line and to the closing brace. */
-        this.bankInfoContinueButton = this.page.locator('pc-primary-button');
-        this.reviewYourInfoContinueButton = this.page.locator('pc-primary-button');
+        this.bankInfoContinueButton = this.page.getByRole('button', { name: 'Continue' });
+        this.reviewYourInfoContinueButton = this.page.locator('#pc-primary-button');
         this.submitApplicationButton = this.page.locator('pc-primary-button');
         this.yourApprovedContinueButton = this.page.locator('pc-primary-button');
         this.leaseOverviewContinueButton = this.page.locator('div > pc-primary-button');
