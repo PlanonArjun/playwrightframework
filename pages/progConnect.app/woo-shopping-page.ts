@@ -98,7 +98,7 @@ export class WooShoppingPage {
 
   async startApplyOnlyFlow() {
     // await this.page.goto(urls.checkout.checkout_1_BillingDetails);
-    await this.page.goto(urls.cart.cart, { waitUntil: 'domcontentloaded' });
+    await this.page.goto(urls.checkout.checkout_1_BillingDetails, { waitUntil: 'domcontentloaded' });
     await this.leaseWithProgressiveButton.isEnabled();
     await this.leaseWithProgressiveButton.click();
   }

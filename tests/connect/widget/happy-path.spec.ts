@@ -40,9 +40,11 @@ test.describe('happy-path', async () => {
       test('Happy path to virtual Card @Tier1 @Woo', async () => {
 
         b_ApplyWidget = await new B_ApplyWidget(cPage);
-        await b_ApplyWidget.clickApplyButton();
+        await b_ApplyWidget.clickLeaseWithContinueButton(); //This is used for the checkout flow
+        // await b_ApplyWidget.clickApplyButton();  //This is used for the cart flow
         await b_ApplyWidget.clickIAgreeCheckbox();
-        await b_ApplyWidget.clickStartMyApplicationButton();
+        await b_ApplyWidget.clickStartApplicationButton();
+        //await b_ApplyWidget.clickStartMyApplicationButton();  //This is used for the cart flow
         await b_ApplyWidget.contactInfoEmailAddress();
         await b_ApplyWidget.contactInfoMobilePhone();
         await b_ApplyWidget.clickContactInfoContinueButton();

@@ -1,11 +1,14 @@
 import {Locator, type Page} from '@playwright/test';
+import {FetchSSN} from "playwright-qe-core/dist/utils/fetchSSN";
 
 class B_ApplyWidget {
     readonly page: Page;
     readonly parent: string = 'pc-mobile-view';
+    readonly leaseWithContinueButton:Locator;
     readonly applyButton: Locator;
     readonly estimatePaymentsButton: Locator;
     readonly iAgreeCheckbox: Locator;
+    readonly startApplicationButton: Locator;
     readonly startMyApplicationButton: Locator;
     readonly contactInfoEmailField: Locator;
     readonly contactInfoMobilePhoneField: Locator;
@@ -49,10 +52,12 @@ class B_ApplyWidget {
 
     constructor(page: Page) {
         this.page = page;
+        this.leaseWithContinueButton = this.page.getByRole('button', { name: 'Continue' })
         this.applyButton = this.page.locator('span.grit-component.pc-dark-button button.pc-dark-button-primary.pc-dark-button-md');
         this.estimatePaymentsButton = this.page.locator('pc-estimate-button');
         this.iAgreeCheckbox = this.page.getByLabel('', { exact: true });
         this.startMyApplicationButton = this.page.locator('div > pc-dark-button');
+        this.startApplicationButton = this.page.getByRole('button', { name: 'Start Application' })
         this.contactInfoEmailField = this.page.locator('#email-input');
         this.contactInfoMobilePhoneField = this.page.locator('#phone-number');
         this.contactInfoContinueButton = this.page.getByRole('button', { name: 'Continue' })
@@ -83,16 +88,16 @@ class B_ApplyWidget {
 
         /* I updated locators below this line and to the closing brace. */
         this.bankInfoContinueButton = this.page.getByRole('button', { name: 'Continue' });
-        this.reviewYourInfoContinueButton = this.page.locator('#pc-primary-button');
-        this.submitApplicationButton = this.page.locator('pc-primary-button');
-        this.yourApprovedContinueButton = this.page.locator('pc-primary-button');
-        this.leaseOverviewContinueButton = this.page.locator('div > pc-primary-button');
-        this.dueTodayVerifyPaymentButton = this.page.locator('pc-primary-button');
-        this.reviewAndSignPaymentDueCheckbox = this.page.locator('#-control-checkbox_nejhr');
-        this.reviewAndSignRecurringPaymentCheckbox = this.page.locator('#-control-checkbox_jefcg');
-        this.reviewAndSignAgreeAndContinueButton = this.page.locator('span.grit-component.grit-button button.grit-button-primary.grit-button-md');
+        this.reviewYourInfoContinueButton = this.page.getByRole('button', { name: 'Continue' });
+        this.submitApplicationButton = this.page.getByRole('button', { name: 'Submit Application' });
+        this.yourApprovedContinueButton = this.page.getByRole('button', { name: 'Continue' });
+        this.leaseOverviewContinueButton = this.page.getByRole('button', { name: 'Continue' });
+        this.dueTodayVerifyPaymentButton = this.page.getByRole('button', { name: 'Verify Payment' });
+        this.reviewAndSignPaymentDueCheckbox = this.page.getByRole('checkbox', { level:0})
+        this.reviewAndSignRecurringPaymentCheckbox = this.page.getByRole('checkbox', { level:1})
+        this.reviewAndSignAgreeAndContinueButton = this.page.getByRole('button', { name: 'Agree And Continue' });
         this.reviewAndSignSignAndContinueButton = this.page.locator('#continue-button');
-        this.checkoutPlaceOrderWithLowesButton = this.page.locator('pc-primary-button');
+        this.checkoutPlaceOrderWithLowesButton = this.page.getByRole('button', { name: 'Place Order With Lowes' });
 
         /* originals.... */
         // this.bankInfoContinueButton = this.page.locator('pc-primary-button.hydrated');
@@ -108,6 +113,10 @@ class B_ApplyWidget {
         // this.checkoutPlaceOrderWithLowesButton = this.page.locator('pc-primary-button.hydrated');
     }
 
+    async clickLeaseWithContinueButton() {
+        await this.leaseWithContinueButton.click();
+    }
+
     async clickApplyButton() {
         await this.applyButton.click();
     }
@@ -118,6 +127,10 @@ class B_ApplyWidget {
 
     async clickStartMyApplicationButton() {
         await this.startMyApplicationButton.click();
+    }
+
+    async clickStartApplicationButton() {
+        await this.startApplicationButton.click();
     }
 
     async contactInfoEmailAddress() {
@@ -145,7 +158,7 @@ class B_ApplyWidget {
     }
 
     async personalInfoSsn() {
-        await this.personalInfoSsnField.fill('5555431234')
+        await this.personalInfoSsnField.fill(new FetchSSN(5).getRandomSSN())
     }
 
     async personalInfoContinue() {
