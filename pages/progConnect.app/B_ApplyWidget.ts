@@ -93,8 +93,9 @@ class B_ApplyWidget {
         this.yourApprovedContinueButton = this.page.getByRole('button', { name: 'Continue' });
         this.leaseOverviewContinueButton = this.page.getByRole('button', { name: 'Continue' });
         this.dueTodayVerifyPaymentButton = this.page.getByRole('button', { name: 'Verify Payment' });
-        this.reviewAndSignPaymentDueCheckbox = this.page.getByRole('checkbox', { level:0})
-        this.reviewAndSignRecurringPaymentCheckbox = this.page.getByRole('checkbox', { level:1})
+        //TODO:Need to get working ids for the checkboxes, currently the page isn't loading so we can't retrieve them.
+        this.reviewAndSignPaymentDueCheckbox = this.page.getByLabel('checkbox')
+        this.reviewAndSignRecurringPaymentCheckbox = this.page.getByLabel('checkbox')
         this.reviewAndSignAgreeAndContinueButton = this.page.getByRole('button', { name: 'Agree And Continue' });
         this.reviewAndSignSignAndContinueButton = this.page.locator('#continue-button');
         this.checkoutPlaceOrderWithLowesButton = this.page.getByRole('button', { name: 'Place Order With Lowes' });
