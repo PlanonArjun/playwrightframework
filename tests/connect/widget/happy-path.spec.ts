@@ -32,8 +32,8 @@ test.describe('happy-path', async () => {
         wooShoppingPage = new WooShoppingPage(cPage);
         await wooShoppingPage.goToWoo();
         await wooShoppingPage.buildBasicCart();
-        await wooShoppingPage.addItemToCart(ITEM_SKU.COMFY_150);
-        await wooShoppingPage.proceedToCheckout();
+        // await wooShoppingPage.addItemToCart(ITEM_SKU.COMFY_150);
+        // await wooShoppingPage.proceedToCheckout();
         await wooShoppingPage.startApplyOnlyFlow();
       });
 

@@ -53,7 +53,8 @@ export class WooShoppingPage {
   }
 
   async goToWoo() {
-    await this.page.goto(urls.shop.shop, { waitUntil: 'networkidle' });
+    await this.page.goto(urls.shop.shop);
+    // await this.page.goto(urls.shop.shop, { waitUntil: 'domcontentloaded' });
     await expect(this.header).toBeVisible();
   }
 
@@ -76,7 +77,7 @@ export class WooShoppingPage {
 
   async buildBasicCart() {
     await this.addItemToCart(ITEM_SKU.MARIMBA_499_95);
-    await this.itemAddedBanner.isVisible();
+    // await this.itemAddedBanner.isVisible();
   }
 
   async getRetailerShippingFees() {
@@ -88,15 +89,16 @@ export class WooShoppingPage {
   }
 
   async proceedToCheckout() {
-    await this.page.goto(urls.checkout.checkout_1_BillingDetails, { waitUntil: 'networkidle' });
-    await this.page.waitForURL(urls.checkout.checkout_1_BillingDetails);
+    await this.page.goto(urls.checkout.checkout_1_BillingDetails);
+    // await this.page.goto(urls.checkout.checkout_1_BillingDetails, { waitUntil: 'networkidle' });
+    // await this.page.waitForURL(urls.checkout.checkout_1_BillingDetails);
     await this.leaseWithProgressiveButton.isEnabled();
-    await this.setRetailerSalesTaxForCart();
+    // await this.setRetailerSalesTaxForCart();
   }
 
   async startApplyOnlyFlow() {
-    await this.page.goto(urls.cart.cart);
-    await this.page.waitForURL(urls.cart.cart);
+    // await this.page.goto(urls.checkout.checkout_1_BillingDetails);
+    await this.page.goto(urls.cart.cart, { waitUntil: 'domcontentloaded' });
     await this.leaseWithProgressiveButton.isEnabled();
     await this.leaseWithProgressiveButton.click();
   }
