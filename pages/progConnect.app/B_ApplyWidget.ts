@@ -181,11 +181,13 @@ class B_ApplyWidget {
     }
 
     async fillIncomeInfoLastPayDay() {
-        await this.incomeInfoLastPayDayField.fill('03/01/2025');
+        // await this.incomeInfoLastPayDayField.fill('03/01/2025');
+        await this.incomeInfoLastPayDayField.fill('2025-03-01');
     }
 
     async fillIncomeInfonextPayDayField() {
-        await this.incomeInfonextPayDayField.fill('03/15/2025');
+        // await this.incomeInfonextPayDayField.fill('03/15/2025');
+        await this.incomeInfonextPayDayField.fill('2025-03-15');
     }
 
     async enterIncomeInfoPayFrequencyDropDown() {
