@@ -40,7 +40,7 @@ class HappyPathDenied{
         cardNumber:   '4653584876987657',
         //expiration: '12/2025',
         // monthExpiration: '01 - January',
-        monthExpiration: '02 - February',
+        monthExpiration: '12 - December',
         yearExpiration: '2025',
         cardNameFirst: 'Preapproved',
         cardNameLast: 'RiskHigh'
