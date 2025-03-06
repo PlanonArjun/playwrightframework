@@ -35,11 +35,11 @@ class HappyPathApproved {
         monthsOpen: 5,
         isDirectDeposit: true,
         cardNumber: '4653584876987657',
-        monthExpiration: '02 - February',
+        monthExpiration: '12 - December',
         yearExpiration: '2025',
         cardNameFirst: 'Preapproved',
         cardNameLast: 'RiskLow',
-        expirationDate: '0225',
+        expirationDate: '1225',
     }
     private _loginData: Array<string> = [
         this.approvedDatasetFull.userEmail,

@@ -35,7 +35,7 @@ class HappyPathApproved {
         monthsOpen: 5,
         isDirectDeposit: true,
         cardNumber: '4653584876987657',
-        monthExpiration: '02 - February',
+        monthExpiration: '12 - December',
         yearExpiration: '2025',
         cardNameFirst: 'Preapproved',
         cardNameLast: 'RiskLow'
