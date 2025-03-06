@@ -24,8 +24,8 @@ class HappyPathApproved {
         // payFrequency:   'string:BiWeekly',
         // payFrequency:   'string:SemiMonthly',
         payFrequency: 'Monthly',
-        lastPayDate: '02012025',
-        nextPayDate: '03012025',
+        lastPayDate: '03012025',
+        nextPayDate: '04012025',
         /* G_BankInfo1Page */
         routingNumber: '000000000',
         accountNumber: 123765098,
