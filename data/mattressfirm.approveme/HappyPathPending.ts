@@ -43,7 +43,7 @@ class HappyPathPending {
         monthExpiration: '12 - December',
         yearExpiration: '2025',
         cardNameFirst: 'Preapproved',
-        cardNameLast: 'riskLow'
+        cardNameLast: 'RiskMedium'
         // assume default checked Same as home address
     }
 
