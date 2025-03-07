@@ -1,6 +1,6 @@
 import {test, BrowserContext, Page} from '@playwright/test';
 import A_MarketingPage from "../../pages/cricket.approveme/A_MarketingPage";
-import R_PaymentEstimator from "../../pages/cricket.approveme/R_PaymentEstimator";
+import R_PaymentEstimator from "$pages/cricket.approveme/xR_PaymentEstimator";
 import {PaymentFrequency} from "../../data/paymentFrequency";
 
 test.describe('Cricket estimator', async () => {

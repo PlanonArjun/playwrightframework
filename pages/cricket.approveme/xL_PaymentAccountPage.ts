@@ -1,7 +1,7 @@
 // cricket wireless approve me
 import { type Page, type Locator , expect } from '@playwright/test';
 
-class L_PaymentAccountPage { // housing type rent own
+class XL_PaymentAccountPage { // housing type rent own
 
     readonly page: Page;
     readonly fieldRoutingNumber: Locator;
@@ -68,4 +68,4 @@ class L_PaymentAccountPage { // housing type rent own
     }
 
 }
-export default L_PaymentAccountPage;
+export default XL_PaymentAccountPage;

@@ -8,7 +8,7 @@ export enum Frequency {
     MONTHLY = 'string:Monthly',
 }
 
-class K_IncomeFrequencyPage { // housing type rent own
+class XK_IncomeFrequencyPage { // housing type rent own
 
     readonly page: Page;
     readonly frequency: Frequency;
@@ -79,4 +79,4 @@ class K_IncomeFrequencyPage { // housing type rent own
     }
 
 }
-export default K_IncomeFrequencyPage;
+export default XK_IncomeFrequencyPage;

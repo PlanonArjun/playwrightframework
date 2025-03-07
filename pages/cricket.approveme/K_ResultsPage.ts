@@ -1,6 +1,6 @@
 import { type Page, type Locator , expect } from '@playwright/test';
 
-class P_ResultsPage {
+class K_ResultsPage {
     readonly page: Page;
     readonly buttonNEXT: Locator;
     readonly buttonEXIT: Locator;
@@ -32,4 +32,4 @@ class P_ResultsPage {
     }
 
 }
-export default P_ResultsPage;
+export default K_ResultsPage;

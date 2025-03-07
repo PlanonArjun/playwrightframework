@@ -1,6 +1,6 @@
 import { type Page, type Locator , expect } from '@playwright/test';
 
-class N_PaymentCardPage {
+class XN_PaymentCardPage {
     readonly page: Page;
     readonly fieldCardNumberFirstSix: Locator;
     readonly fieldAddressLine1: Locator;
@@ -94,4 +94,4 @@ class N_PaymentCardPage {
     }
 
 }
-export default N_PaymentCardPage;
+export default XN_PaymentCardPage;

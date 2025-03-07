@@ -26,7 +26,7 @@ class E_AboutYou2Page { // home address city state zip years & months at address
         this.fieldZip = page.getByPlaceholder('ZIP');
         this.fieldYearsAtAddress = page.getByLabel('Time at current address:');
         this.fieldMonthsAtAddress = page.getByLabel('', { exact: true });
-        this.buttonNEXT = page.getByRole('button', { name: 'Next' });
+        this.buttonNEXT = page.locator('#MoveNext > span.next > span');
         this.buttonEXIT = page.getByRole('button', { name: 'Exit' });
         this.buttonEXITConfirm = page.locator('div').filter({ hasText: /^Exit$/ }).getByRole('button');
     }
@@ -59,14 +59,14 @@ class E_AboutYou2Page { // home address city state zip years & months at address
         await this.fieldZip.fill(zipIn);
     }
 
-    async _enterTimeAddAddress(years: string, months: string) {
-        await this.fieldYearsAtAddress.click();
-        await this.fieldYearsAtAddress.fill(years);
-        await this.fieldYearsAtAddress.press('Tab');
-        await this.fieldMonthsAtAddress.click();
-        await this.fieldMonthsAtAddress.fill(months);
-        await this.fieldMonthsAtAddress.press('Tab');
-    }
+    // async _enterTimeAddAddress(years: string, months: string) {
+    //     await this.fieldYearsAtAddress.click();
+    //     await this.fieldYearsAtAddress.fill(years);
+    //     await this.fieldYearsAtAddress.press('Tab');
+    //     await this.fieldMonthsAtAddress.click();
+    //     await this.fieldMonthsAtAddress.fill(months);
+    //     await this.fieldMonthsAtAddress.press('Tab');
+    // }
 
     async _NEXT() {
         await this.buttonNEXT.click();
@@ -82,7 +82,7 @@ class E_AboutYou2Page { // home address city state zip years & months at address
         await this._enterCity(dataIn[2]);
         await this._selectState(dataIn[3]);
         await this._enterZip(dataIn[4]);
-        await this._enterTimeAddAddress(dataIn[5],dataIn[6]);
+        // await this._enterTimeAddAddress(dataIn[5],dataIn[6]);
         await this._NEXT();
     }
 

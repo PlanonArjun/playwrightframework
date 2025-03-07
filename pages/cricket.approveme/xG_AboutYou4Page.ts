@@ -9,7 +9,7 @@ export enum IDType {
     State = 'string:StateIDCard',
 }
 
-class G_AboutYou4Page {
+class XG_AboutYou4Page {
     readonly page: Page;
     readonly type: IDType;
     readonly menuIDType: Locator;
@@ -82,4 +82,4 @@ class G_AboutYou4Page {
     }
 
 }
-export default G_AboutYou4Page;
+export default XG_AboutYou4Page;

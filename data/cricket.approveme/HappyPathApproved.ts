@@ -129,5 +129,10 @@ class HappyPathApproved {
         return this.approvedDatasetFull.paymentCardNumber;
     }
 
+    get getPaymentCardFirstSix(): string {
+        let cardNumberLocal = this.getPaymentCard.toString();
+        return cardNumberLocal.slice(0,6);
+    }
+
 }
 export default HappyPathApproved;

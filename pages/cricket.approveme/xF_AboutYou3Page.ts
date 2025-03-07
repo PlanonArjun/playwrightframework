@@ -6,7 +6,7 @@ export enum HousingType {
     OWN,
 }
 
-class F_AboutYou3Page { // housing type rent own
+class XF_AboutYou3Page { // housing type rent own
 
     readonly page: Page;
     readonly housingType: HousingType;
@@ -41,4 +41,4 @@ class F_AboutYou3Page { // housing type rent own
     }
 
 }
-export default F_AboutYou3Page;
+export default XF_AboutYou3Page;

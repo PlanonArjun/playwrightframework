@@ -9,7 +9,7 @@ export enum IncomeSource {
     OTHER = "Other",
 }
 
-class H_IncomeSourcePage { // housing type rent own
+class XH_IncomeSourcePage { // housing type rent own
 
     readonly page: Page;
     readonly incomeSource: IncomeSource;
@@ -71,4 +71,4 @@ class H_IncomeSourcePage { // housing type rent own
     }
 
 }
-export default H_IncomeSourcePage;
+export default XH_IncomeSourcePage;

@@ -1,7 +1,7 @@
 // cricket wireless approve me
 import { type Page, type Locator , expect } from '@playwright/test';
 
-class J_IncomeHistoryPage { // housing type rent own
+class XJ_IncomeHistoryPage { // housing type rent own
 
     readonly page: Page;
     readonly fieldYearsEmployed: Locator;
@@ -59,4 +59,4 @@ class J_IncomeHistoryPage { // housing type rent own
     }
 
 }
-export default J_IncomeHistoryPage;
+export default XJ_IncomeHistoryPage;

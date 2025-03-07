@@ -1,6 +1,7 @@
 // cricket wireless approve me
 import { type Page, type Locator , expect } from '@playwright/test';
 import A_MarketingPage from "./A_MarketingPage";
+import urls from '$utils/cricket.utils/urls';
 
 class B_SplashPage {
 
@@ -26,13 +27,12 @@ class B_SplashPage {
         this.linkPrivacy = page.getByRole('link', { name: 'Privacy Policy' });
         this.linkDisclosure = page.getByRole('link', { name: 'Application Disclosure' });
         this.linkArbitration = page.getByRole('link', { name: 'Arbitration Provision' });
-        this.buttonComeBackLater = page.getByRole('button', { name: 'Come Back Later' });
+        // this.buttonComeBackLater = page.getByRole('button', { name: 'Come Back Later' });
         this.buttonContinue = page.getByRole('button', { name: 'Continue' });
     }
 
    async navigate() {
-       await this.a_marketingPage.navigate();
-       await this.a_marketingPage.beginApply();
+     await this.page.goto(urls.splash.splash);
    }
 
     async checkLinkPhoto() {
@@ -88,10 +88,10 @@ class B_SplashPage {
         await this.page.getByRole('button', { name: 'Back' }).first().click();
     }
 
-    async comeBackLater() {
-        await this.buttonComeBackLater.click();
-    }
-
+    // async comeBackLater() {
+    //     await this.buttonComeBackLater.click();
+    // }
+    //
     async continue() {
         await this.selectCheckbox(); // required before CONTINUE button enabled
         await this.buttonContinue.click();
