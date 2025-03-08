@@ -1,5 +1,4 @@
 import {expect, test} from '@playwright/test';
-import HappyPathApproved from "../../data/cricket.approveme/HappyPathApproved"; // data object
 import A_MarketingPage from "../../pages/cricket.approveme/A_MarketingPage";
 import B_SplashPage from "../../pages/cricket.approveme/B_SplashPage";
 import C_StartAppPage from "../../pages/cricket.approveme/C_StartAppPage";
@@ -11,6 +10,7 @@ import H_DirDepPage from '$pages/cricket.approveme/H_DirectDepositPage';
 import I_PaymentCardPage from '$pages/cricket.approveme/I_PaymentCardPage';
 import J_ReviewAndSubmitPage from '$pages/cricket.approveme/J_ReviewAndSubmitPage';
 import K_ResultsPage from "$pages/cricket.approveme/K_ResultsPage";
+import HappyPathApproved from "../../data/cricket.approveme/HappyPathApproved"; // data object
 
 test.describe('cricket', async () => {
 

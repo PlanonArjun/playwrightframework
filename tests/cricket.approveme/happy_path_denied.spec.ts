@@ -4,17 +4,11 @@ import B_SplashPage from "../../pages/cricket.approveme/B_SplashPage";
 import C_StartAppPage from "../../pages/cricket.approveme/C_StartAppPage";
 import D_AboutYou1Page from "../../pages/cricket.approveme/D_AboutYou1Page";
 import E_AboutYou2Page from "../../pages/cricket.approveme/E_AboutYou2Page";
-import XF_AboutYou3Page, {HousingType} from "$pages/cricket.approveme/xF_AboutYou3Page";
-import XG_AboutYou4Page, {IDType} from "$pages/cricket.approveme/xG_AboutYou4Page";
-import XH_IncomeSourcePage, {IncomeSource} from "$pages/cricket.approveme/xH_IncomeSourcePage";
-import XI_IncomeContactPage from "$pages/cricket.approveme/xI_IncomeContactPage";
-import XJ_IncomeHistoryPage from "$pages/cricket.approveme/xJ_IncomeHistoryPage";
-import XK_IncomeFrequencyPage, {Frequency} from "$pages/cricket.approveme/xK_IncomeFrequencyPage";
-import XL_PaymentAccountPage from "$pages/cricket.approveme/xL_PaymentAccountPage";
-import M_DirectDepositPage from "$pages/cricket.approveme/xM_DirectDepositPage";
-import XN_PaymentCardPage from "$pages/cricket.approveme/xN_PaymentCardPage";
-import O_ReviewAndSubmitPage from "$pages/cricket.approveme/J_ReviewAndSubmitPage";
-import O_ReviewQAndSubmitPage from "$pages/cricket.approveme/J_ReviewAndSubmitPage";
+import F_IncomeInfoPage from '$pages/cricket.approveme/F_IncomeInfoPage';
+import G_BankAcctInfoPage from '$pages/cricket.approveme/G_BankAcctInfoPage';
+import H_DirDepPage from '$pages/cricket.approveme/H_DirectDepositPage';
+import I_PaymentCardPage from '$pages/cricket.approveme/I_PaymentCardPage';
+import J_ReviewAndSubmitPage from '$pages/cricket.approveme/J_ReviewAndSubmitPage';
 import K_ResultsPage from "$pages/cricket.approveme/K_ResultsPage";
 import HappyPathDenied from "../../data/cricket.approveme/HappyPathDenied";
 
@@ -27,6 +21,12 @@ test.describe('cricket', async () => {
   let nameFirstFetched:string;
   let nameLastFetched:string;
   let ssnFetched:string;
+
+  let bankInfo1Data: string[];
+  let routing:string;
+  let checking:string;
+  let yearsOpen:string;
+  let monthsOpen:string;
 
   test('denied', { tag: ['@approveme', '@cricketwireless', '@happy', '@denied'] },async ({browser}) => {
     await expect(async () => {
@@ -54,6 +54,8 @@ test.describe('cricket', async () => {
       for(let value in getStartAppData) { // optional, helpful
         console.log(getStartAppData[value] + "\t");
       }
+      console.log('\n');
+
       await c_startAppPage.happyPathPopulate(getStartAppData);
 
       let d_aboutYou1Page = new D_AboutYou1Page(cPage);
@@ -62,43 +64,31 @@ test.describe('cricket', async () => {
       let e_aboutYou2Page = new E_AboutYou2Page(cPage);
       await e_aboutYou2Page.happyPathPopulate(happyPathDenied.getAboutYou2);
 
-      let f_aboutYou3Page : XF_AboutYou3Page = new XF_AboutYou3Page(cPage,HousingType.OWN);
-      await f_aboutYou3Page._selectHousingType();
+      let f_incomeInfoPage: F_IncomeInfoPage = new F_IncomeInfoPage(cPage);
+      await f_incomeInfoPage.happyPathPopulate(happyPathDenied.getIncomeInfo);
 
-      let g_aboutYou4Page : XG_AboutYou4Page = new XG_AboutYou4Page(cPage,IDType.State);
-      await g_aboutYou4Page.selectIDType();
-      await g_aboutYou4Page.enterIDNumber("123456");
-      await g_aboutYou4Page.selectStateIssued("AZ");
-      await g_aboutYou4Page.NEXT();
+      let g_bankAcctInfoPage: G_BankAcctInfoPage = new G_BankAcctInfoPage(cPage);
 
-      let h_incomeSource = new XH_IncomeSourcePage(cPage, IncomeSource.FT);
-      await h_incomeSource._selectIncomeSource();
+      bankInfo1Data = happyPathDenied.getBankInfo1;
+      routing = bankInfo1Data[0];
+      checking = bankInfo1Data[1];
+      yearsOpen = bankInfo1Data[2];
+      monthsOpen = bankInfo1Data[3];
 
-      let i_incomeContact: XI_IncomeContactPage = new XI_IncomeContactPage(cPage);
-      await i_incomeContact.happyPathPopulate(happyPathDenied.getEmployerContactInfo);
+      for(let value in bankInfo1Data) { // optional, helpful
+        console.log(bankInfo1Data[value] + "\t");
+      }
 
-      let j_incomeHistory: XJ_IncomeHistoryPage = new XJ_IncomeHistoryPage(cPage);
-      await j_incomeHistory.happyPathPopulate(happyPathDenied.getIncomeHistory);
+      await g_bankAcctInfoPage.happyPathPopulate(bankInfo1Data);
 
-      let k_incomeFrequency: XK_IncomeFrequencyPage = new XK_IncomeFrequencyPage(cPage, Frequency.MONTHLY);
-      await k_incomeFrequency._selectFrequency();
-      await k_incomeFrequency.enterDates(happyPathDenied.getPayDates);
+      await (new H_DirDepPage(cPage,true)).happyPathGo();
 
-      let l_paymentAccount: XL_PaymentAccountPage = new XL_PaymentAccountPage(cPage);
-      await l_paymentAccount.happyPathPopulate(happyPathDenied.getPaymentAccountInfo);
+      await (new I_PaymentCardPage(cPage).enterCardNumberFirstSix(happyPathDenied.getPaymentCardFirstSix));
 
-      let m_dirDep: M_DirectDepositPage = new M_DirectDepositPage(cPage,true);
-      await m_dirDep.happyPathGo();
+      await (new J_ReviewAndSubmitPage(cPage)).happyPathGo();
 
-      let n_paymentCard: XN_PaymentCardPage = new XN_PaymentCardPage(cPage);
-      await n_paymentCard.happyPathGoWithSameAddress(happyPathDenied.getPaymentCard.toString().slice(0,7));
-
-      let o_reviewSubmit: O_ReviewAndSubmitPage = new O_ReviewQAndSubmitPage(cPage);
-      await o_reviewSubmit.happyPathGo();
-
-      let p_results: K_ResultsPage = new K_ResultsPage(cPage);
       try {
-        await p_results.verifyDenied();
+        await (new K_ResultsPage(cPage)).verifyDenied();
         await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason:'cricket denied'}})}`);
       }catch(Error) {
         await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
