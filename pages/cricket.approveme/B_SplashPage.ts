@@ -88,10 +88,6 @@ class B_SplashPage {
         await this.page.getByRole('button', { name: 'Back' }).first().click();
     }
 
-    // async comeBackLater() {
-    //     await this.buttonComeBackLater.click();
-    // }
-    //
     async continue() {
         await this.selectCheckbox(); // required before CONTINUE button enabled
         await this.buttonContinue.click();

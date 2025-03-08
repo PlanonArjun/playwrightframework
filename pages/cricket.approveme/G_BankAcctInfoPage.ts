@@ -15,9 +15,7 @@ class G_BankAcctInfoPage {
         this.page = page;
         this.fieldRouting = page.getByRole('textbox', { name: 'Bank routing number: info-icon' });
         this.fieldChecking = page.getByRole('textbox', { name: 'Checking account number: info' });
-        // this.fieldOpenYears = page.getByRole('spinbutton', { name: 'How long has this account' });
         this.fieldOpenYears = page.locator('#BankAccount_OpenYear');
-        // this.fieldOpenMonths = page.getByLabel('', { exact: true });
         this.fieldOpenMonths = page.locator('#BankAccount_OpenMonth');
         this.buttonNEXT = page.getByRole('button', { name: 'Next' });
         this.buttonEXIT = page.getByRole('button', { name: 'Exit' });

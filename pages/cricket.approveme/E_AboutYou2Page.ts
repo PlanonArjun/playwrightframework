@@ -59,14 +59,17 @@ class E_AboutYou2Page { // home address city state zip years & months at address
         await this.fieldZip.fill(zipIn);
     }
 
-    // async _enterTimeAddAddress(years: string, months: string) {
-    //     await this.fieldYearsAtAddress.click();
-    //     await this.fieldYearsAtAddress.fill(years);
-    //     await this.fieldYearsAtAddress.press('Tab');
-    //     await this.fieldMonthsAtAddress.click();
-    //     await this.fieldMonthsAtAddress.fill(months);
-    //     await this.fieldMonthsAtAddress.press('Tab');
-    // }
+    /* Leave this in here in case they put it back in this frame. */
+    /*
+    async _enterTimeAddAddress(years: string, months: string) {
+        await this.fieldYearsAtAddress.click();
+        await this.fieldYearsAtAddress.fill(years);
+        await this.fieldYearsAtAddress.press('Tab');
+        await this.fieldMonthsAtAddress.click();
+        await this.fieldMonthsAtAddress.fill(months);
+        await this.fieldMonthsAtAddress.press('Tab');
+    }
+     */
 
     async _NEXT() {
         await this.buttonNEXT.click();
@@ -82,7 +85,6 @@ class E_AboutYou2Page { // home address city state zip years & months at address
         await this._enterCity(dataIn[2]);
         await this._selectState(dataIn[3]);
         await this._enterZip(dataIn[4]);
-        // await this._enterTimeAddAddress(dataIn[5],dataIn[6]);
         await this._NEXT();
     }
 

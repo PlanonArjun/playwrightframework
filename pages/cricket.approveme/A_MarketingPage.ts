@@ -13,6 +13,7 @@ class A_MarketingPage {
         this.page = page;
         this.linkResume = page.getByText('Resume');
         this.linkPaymentEstimator = page.getByText('estimator');
+        /* Leave this. They routinely toggle between these two. */
         // this.buttonAPPLY_NOW = page.getByRole('link', { name: 'Apply In English' });
         this.buttonAPPLY_NOW = page.getByRole('link', { name: 'Apply Now' });
     }
@@ -24,7 +25,7 @@ class A_MarketingPage {
     async beginResume() {
         await this.linkResume.click();
         await this.page.waitForTimeout(500);
-        // await expect(this.page.getByRole('heading', { name: 'Resume by providing the' })).toBeVisible();
+        await expect(this.page.getByRole('heading', { name: 'Resume by providing the' })).toBeVisible({timeout: 5000});
     }
 
     async beginEstimate() {
@@ -34,7 +35,7 @@ class A_MarketingPage {
 
     async beginApply() {
         await this.buttonAPPLY_NOW.click();
-        // await expect(this.page.locator('#view-splash span').first()).toBeVisible();
+        await expect(this.page.locator('#view-splash span').first()).toBeVisible({timeout: 5000});
     }
 
 }
