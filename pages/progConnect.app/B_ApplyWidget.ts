@@ -1,9 +1,9 @@
-import {Locator, type Page} from '@playwright/test';
+import { FrameLocator, Locator, type Page } from '@playwright/test';
 import {FetchSSN} from "playwright-qe-core/dist/utils/fetchSSN";
+import { dateAsYYYY_MM_DD } from '$utils/progConnect.utils/date-helper';
 
 class B_ApplyWidget {
     readonly page: Page;
-    readonly parent: string = 'pc-mobile-view';
     readonly leaseWithContinueButton:Locator;
     readonly applyButton: Locator;
     readonly estimatePaymentsButton: Locator;
@@ -43,11 +43,13 @@ class B_ApplyWidget {
     readonly yourApprovedContinueButton:Locator;
     readonly leaseOverviewContinueButton:Locator;
     readonly dueTodayVerifyPaymentButton:Locator;
+    readonly iframe:FrameLocator;
     readonly reviewAndSignPaymentDueCheckbox:Locator;
     readonly reviewAndSignRecurringPaymentCheckbox:Locator;
     readonly reviewAndSignAgreeAndContinueButton:Locator;
+    readonly reviewAndSignSummaryText:Locator;
     readonly reviewAndSignSignAndContinueButton:Locator;
-    readonly checkoutPlaceOrderWithLowesButton:Locator;
+    readonly checkoutAutofillPaymentButton:Locator;
 
 
     constructor(page: Page) {
@@ -85,39 +87,26 @@ class B_ApplyWidget {
         this.cardInfoContinueButton = this.page.getByRole('button', { name: 'Continue' });
         this.bankInfoRoutingField = this.page.locator('#routing-number-input');
         this.bankInfoAccountField = this.page.locator('#checking-account-input');
-
-        /* I updated locators below this line and to the closing brace. */
         this.bankInfoContinueButton = this.page.getByRole('button', { name: 'Continue' });
         this.reviewYourInfoContinueButton = this.page.getByRole('button', { name: 'Continue' });
         this.submitApplicationButton = this.page.getByRole('button', { name: 'Submit Application' });
         this.yourApprovedContinueButton = this.page.getByRole('button', { name: 'Continue' });
         this.leaseOverviewContinueButton = this.page.getByRole('button', { name: 'Continue' });
         this.dueTodayVerifyPaymentButton = this.page.getByRole('button', { name: 'Verify Payment' });
-        //TODO:Need to get working ids for the checkboxes, currently the page isn't loading so we can't retrieve them.
-        this.reviewAndSignPaymentDueCheckbox = this.page.getByLabel('checkbox')
-        this.reviewAndSignRecurringPaymentCheckbox = this.page.getByLabel('checkbox')
-        this.reviewAndSignAgreeAndContinueButton = this.page.getByRole('button', { name: 'Agree And Continue' });
-        this.reviewAndSignSignAndContinueButton = this.page.locator('#continue-button');
-        this.checkoutPlaceOrderWithLowesButton = this.page.getByRole('button', { name: 'Place Order With Lowes' });
-
-        /* originals.... */
-        // this.bankInfoContinueButton = this.page.locator('pc-primary-button.hydrated');
-        // this.reviewYourInfoContinueButton = this.page.locator('pc-primary-button.hydrated');
-        // this.submitApplicationButton = this.page.locator('pc-primary-button.hydrated');
-        // this.yourApprovedContinueButton = this.page.locator('pc-primary-button.hydrated');
-        // this.leaseOverviewContinueButton = this.page.locator('pc-primary-button.hydrated');
-        // this.dueTodayVerifyPaymentButton = this.page.locator('pc-primary-button.hydrated');
-        // this.reviewAndSignPaymentDueCheckbox = this.page.locator('#-control-checkbox_xudwh');
-        // this.reviewAndSignRecurringPaymentCheckbox = this.page.locator('#-control-checkbox_hmwhq');
-        // this.reviewAndSignAgreeAndContinueButton = this.page.locator('span.grit-component.grit-button button.grit-button-primary.grit-button-md');
-        // this.reviewAndSignSignAndContinueButton = this.page.locator('span#continue-button-loading.grit-component.grit-button button#continue-button-button-element.grit-button-primary.grit-button-md');
-        // this.checkoutPlaceOrderWithLowesButton = this.page.locator('pc-primary-button.hydrated');
+        this.iframe = this.page.frameLocator('iframe#esign-iframe');
+        this.reviewAndSignPaymentDueCheckbox = this.iframe.locator('grit-wc-checkbox[data-test-consent-payment-due-at-signing-checkbox] input')
+        this.reviewAndSignRecurringPaymentCheckbox = this.iframe.locator('grit-wc-checkbox[data-test-consent-recurring-payment-checkbox] input')
+        this.reviewAndSignAgreeAndContinueButton = this.iframe.getByRole('button', { name: 'Agree And Continue' });
+        this.reviewAndSignSummaryText = this.iframe.getByText('Payment and early purchase option columns include the tax rate in effect on your Lease Date. Payment will change if the tax rate changes.');
+        this.reviewAndSignSignAndContinueButton = this.iframe.locator('#continue-button');
+        this.checkoutAutofillPaymentButton = this.page.getByRole('button', { name: 'Autofill payment' });
     }
 
     async clickLeaseWithContinueButton() {
         await this.leaseWithContinueButton.click();
     }
 
+    //TODO:Implement in the cart non-connect flow down the road
     async clickApplyButton() {
         await this.applyButton.click();
     }
@@ -126,6 +115,7 @@ class B_ApplyWidget {
         await this.iAgreeCheckbox.check();
     }
 
+    //TODO:Implement in the cart non-connect flow down the road
     async clickStartMyApplicationButton() {
         await this.startMyApplicationButton.click();
     }
@@ -135,7 +125,7 @@ class B_ApplyWidget {
     }
 
     async contactInfoEmailAddress() {
-        await this.contactInfoEmailField.fill('testemailaddress@progleasing.com');
+        await this.contactInfoEmailField.fill('connecttest@progleasing.com');
     }
 
     async contactInfoMobilePhone() {
@@ -159,6 +149,8 @@ class B_ApplyWidget {
     }
 
     async personalInfoSsn() {
+        //Need to click first for Firefox to work
+        await this.personalInfoSsnField.click({force:true});
         await this.personalInfoSsnField.fill(new FetchSSN(5).getRandomSSN())
     }
 
@@ -195,13 +187,11 @@ class B_ApplyWidget {
     }
 
     async fillIncomeInfoLastPayDay() {
-        // await this.incomeInfoLastPayDayField.fill('03/01/2025');
-        await this.incomeInfoLastPayDayField.fill('2025-03-01');
+        await this.incomeInfoLastPayDayField.fill(dateAsYYYY_MM_DD(-7));
     }
 
-    async fillIncomeInfonextPayDayField() {
-        // await this.incomeInfonextPayDayField.fill('03/15/2025');
-        await this.incomeInfonextPayDayField.fill('2025-03-15');
+    async fillIncomeInfoNextPayDay() {
+        await this.incomeInfonextPayDayField.fill(dateAsYYYY_MM_DD(7));
     }
 
     async enterIncomeInfoPayFrequencyDropDown() {
@@ -221,7 +211,7 @@ class B_ApplyWidget {
     }
 
     async fillCardInfoCardNumberField() {
-        await this.cardInfoCardNumberField.fill('373953192351004')
+        await this.cardInfoCardNumberField.fill('4111111111111111')
     }
 
     async fillCardInfoExpDateField() {
@@ -229,6 +219,7 @@ class B_ApplyWidget {
     }
 
     async fillCardInfoCvv() {
+        await this.cardInfoCvv.click({force:true})
         await this.cardInfoCvv.fill('123')
     }
 
@@ -281,11 +272,12 @@ class B_ApplyWidget {
     }
 
     async clickReviewAndSignSignAndContinueButton() {
+        await this.reviewAndSignSummaryText.scrollIntoViewIfNeeded();
         await this.reviewAndSignSignAndContinueButton.click();
     }
 
     async clickCheckoutPlaceOrderWithLowesButton() {
-        await this.checkoutPlaceOrderWithLowesButton.click();
+        await this.checkoutAutofillPaymentButton.click();
     }
 
 }
