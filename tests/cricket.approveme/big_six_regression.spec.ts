@@ -1,26 +1,20 @@
 import {BrowserContext, expect, Page, test} from '@playwright/test';
-import HappyPathApproved from "../../data/cricket.approveme/HappyPathApproved"; // data object
 import A_MarketingPage from "../../pages/cricket.approveme/A_MarketingPage";
 import B_SplashPage from "../../pages/cricket.approveme/B_SplashPage";
 import C_StartAppPage from "../../pages/cricket.approveme/C_StartAppPage";
 import D_AboutYou1Page from "../../pages/cricket.approveme/D_AboutYou1Page";
 import E_AboutYou2Page from "../../pages/cricket.approveme/E_AboutYou2Page";
-import F_AboutYou3Page, {HousingType} from "../../pages/cricket.approveme/F_AboutYou3Page";
-import G_AboutYou4Page, {IDType} from "../../pages/cricket.approveme/G_AboutYou4Page";
-import H_IncomeSourcePage, {IncomeSource} from "../../pages/cricket.approveme/H_IncomeSourcePage";
-import I_IncomeContactPage from "../../pages/cricket.approveme/I_IncomeContactPage";
-import J_IncomeHistoryPage from "../../pages/cricket.approveme/J_IncomeHistoryPage";
-import K_IncomeFrequencyPage, {Frequency} from "../../pages/cricket.approveme/K_IncomeFrequencyPage";
-import L_PaymentAccountPage from "../../pages/cricket.approveme/L_PaymentAccountPage";
-import M_DirectDepositPage from "../../pages/cricket.approveme/M_DirectDepositPage";
-import N_PaymentCardPage from "../../pages/cricket.approveme/N_PaymentCardPage";
-import O_ReviewAndSubmitPage from "../../pages/cricket.approveme/O_ReviewAndSubmitPage";
-import O_ReviewQAndSubmitPage from "../../pages/cricket.approveme/O_ReviewAndSubmitPage";
-import P_ResultsPage from "../../pages/cricket.approveme/P_ResultsPage";
-import Q_ResumeApplication from "../../pages/cricket.approveme/Q_ResumeApplication";
+import F_IncomeInfoPage from '$pages/cricket.approveme/F_IncomeInfoPage';
+import G_BankAcctInfoPage from '$pages/cricket.approveme/G_BankAcctInfoPage';
+import H_DirDepPage from '$pages/cricket.approveme/H_DirectDepositPage';
+import I_PaymentCardPage from '$pages/cricket.approveme/I_PaymentCardPage';
+import J_ReviewAndSubmitPage from '$pages/cricket.approveme/J_ReviewAndSubmitPage';
+import K_ResultsPage from "$pages/cricket.approveme/K_ResultsPage";
+import L_ResumeApplication from '$pages/cricket.approveme/L_ResumeApplication';
+import M_PaymentEstimator from '$pages/cricket.approveme/M_PaymentEstimator';
+import HappyPathApproved from "../../data/cricket.approveme/HappyPathApproved"; // data object
 import HappyPathPending from "../../data/cricket.approveme/HappyPathPending";
 import HappyPathDenied from "../../data/cricket.approveme/HappyPathDenied";
-import R_PaymentEstimator from "../../pages/cricket.approveme/R_PaymentEstimator";
 import {PaymentFrequency} from "../../data/paymentFrequency";
 
 let isLandingPageLoads: boolean = false;
@@ -33,6 +27,13 @@ test.describe('Cricket Big Six', async () => {
   let nameFirstFetched:string;
   let nameLastFetched:string;
   let ssnFetched:string;
+
+  let bankInfo1Data: string[];
+  let routing:string;
+  let checking:string;
+  let yearsOpen:string;
+  let monthsOpen:string;
+
   let isApplyPass: boolean = false;
   let isResumePass: boolean = false;
   let isFlowsShouldContinue: boolean = false;
@@ -82,6 +83,8 @@ test.describe('Cricket Big Six', async () => {
       for (let value in getStartAppData) { // optional, helpful
         console.log(getStartAppData[value] + "\t");
       }
+      console.log('\n');
+
       await c_startAppPage.happyPathPopulate(getStartAppData);
 
       let d_aboutYou1Page = new D_AboutYou1Page(cPage);
@@ -90,44 +93,31 @@ test.describe('Cricket Big Six', async () => {
       let e_aboutYou2Page = new E_AboutYou2Page(cPage);
       await e_aboutYou2Page.happyPathPopulate(happyPathApproved.getAboutYou2);
 
-      let f_aboutYou3Page: F_AboutYou3Page = new F_AboutYou3Page(cPage, HousingType.OWN);
-      await f_aboutYou3Page._selectHousingType();
+      let f_incomeInfoPage: F_IncomeInfoPage = new F_IncomeInfoPage(cPage);
+      await f_incomeInfoPage.happyPathPopulate(happyPathApproved.getIncomeInfo);
 
-      let g_aboutYou4Page: G_AboutYou4Page = new G_AboutYou4Page(cPage, IDType.State);
-      await g_aboutYou4Page.selectIDType();
-      await g_aboutYou4Page.enterIDNumber("123456");
-      await g_aboutYou4Page.selectStateIssued("AZ");
-      await g_aboutYou4Page.NEXT();
+      let g_bankAcctInfoPage: G_BankAcctInfoPage = new G_BankAcctInfoPage(cPage);
 
-      let h_incomeSource = new H_IncomeSourcePage(cPage, IncomeSource.FT);
-      await h_incomeSource._selectIncomeSource();
+      bankInfo1Data = happyPathApproved.getBankInfo1;
+      routing = bankInfo1Data[0];
+      checking = bankInfo1Data[1];
+      yearsOpen = bankInfo1Data[2];
+      monthsOpen = bankInfo1Data[3];
 
-      let i_incomeContact: I_IncomeContactPage = new I_IncomeContactPage(cPage);
-      await i_incomeContact.happyPathPopulate(happyPathApproved.getEmployerContactInfo);
+      for(let value in bankInfo1Data) { // optional, helpful
+        console.log(bankInfo1Data[value] + "\t");
+      }
 
-      let j_incomeHistory: J_IncomeHistoryPage = new J_IncomeHistoryPage(cPage);
-      await j_incomeHistory.happyPathPopulate(happyPathApproved.getIncomeHistory);
+      await g_bankAcctInfoPage.happyPathPopulate(bankInfo1Data);
 
-      let k_incomeFrequency: K_IncomeFrequencyPage = new K_IncomeFrequencyPage(cPage, Frequency.MONTHLY);
-      await k_incomeFrequency._selectFrequency();
-      await k_incomeFrequency.enterDates(happyPathApproved.getPayDates);
+      await (new H_DirDepPage(cPage,true)).happyPathGo();
 
-      let l_paymentAccount: L_PaymentAccountPage = new L_PaymentAccountPage(cPage);
-      await l_paymentAccount.happyPathPopulate(happyPathApproved.getPaymentAccountInfo);
+      await (new I_PaymentCardPage(cPage).enterCardNumberFirstSix(happyPathApproved.getPaymentCardFirstSix));
 
-      let m_dirDep: M_DirectDepositPage = new M_DirectDepositPage(cPage, true);
-      await m_dirDep.happyPathGo();
-
-      let n_paymentCard: N_PaymentCardPage = new N_PaymentCardPage(cPage);
-      await n_paymentCard.happyPathGoWithSameAddress(happyPathApproved.getPaymentCard.toString().slice(0, 7));
-
-      let o_reviewSubmit: O_ReviewAndSubmitPage = new O_ReviewQAndSubmitPage(cPage);
-      await o_reviewSubmit.happyPathGo();
-
-      let p_results: P_ResultsPage = new P_ResultsPage(cPage);
+      await (new J_ReviewAndSubmitPage(cPage)).happyPathGo();
 
       try {
-        await p_results.verifyApproved();
+        await (new K_ResultsPage(cPage)).verifyApproved();
         isApplyPass = true;
         console.log("apply passed; resume up next...")
         await cPage.evaluate(_ => {
@@ -160,13 +150,11 @@ test.describe('Cricket Big Six', async () => {
         await marketingPageR.navigate();
         await marketingPageR.beginResume();
 
-        let resumePage = new Q_ResumeApplication(cPageR);
+        let resumePage: L_ResumeApplication = new L_ResumeApplication(cPageR);
         await resumePage.happyPathPopulate([nameFirstFetched,nameLastFetched],ssnFetched);
 
-        let p_resultsR: P_ResultsPage = new P_ResultsPage(cPageR);
-
         try {
-          await p_resultsR.verifyApproved();
+          await (new K_ResultsPage(cPageR)).verifyApproved();
           console.log("apply-resume back-to-back passed...")
           isResumePass = true;
           isFlowsShouldContinue = true;
@@ -211,6 +199,8 @@ test.describe('Cricket Big Six', async () => {
         for(let value in getStartAppData) { // optional, helpful
           console.log(getStartAppData[value] + "\t");
         }
+        console.log('\n');
+
         await c_startAppPage.happyPathPopulate(getStartAppData);
 
         let d_aboutYou1Page = new D_AboutYou1Page(cPage);
@@ -219,44 +209,31 @@ test.describe('Cricket Big Six', async () => {
         let e_aboutYou2Page = new E_AboutYou2Page(cPage);
         await e_aboutYou2Page.happyPathPopulate(happyPathApproved.getAboutYou2);
 
-        let f_aboutYou3Page : F_AboutYou3Page = new F_AboutYou3Page(cPage,HousingType.OWN);
-        await f_aboutYou3Page._selectHousingType();
+        let f_incomeInfoPage: F_IncomeInfoPage = new F_IncomeInfoPage(cPage);
+        await f_incomeInfoPage.happyPathPopulate(happyPathApproved.getIncomeInfo);
 
-        let g_aboutYou4Page : G_AboutYou4Page = new G_AboutYou4Page(cPage,IDType.State);
-        await g_aboutYou4Page.selectIDType();
-        await g_aboutYou4Page.enterIDNumber("123456");
-        await g_aboutYou4Page.selectStateIssued("AZ");
-        await g_aboutYou4Page.NEXT();
+        let g_bankAcctInfoPage: G_BankAcctInfoPage = new G_BankAcctInfoPage(cPage);
 
-        let h_incomeSource = new H_IncomeSourcePage(cPage, IncomeSource.FT);
-        await h_incomeSource._selectIncomeSource();
+        bankInfo1Data = happyPathApproved.getBankInfo1;
+        routing = bankInfo1Data[0];
+        checking = bankInfo1Data[1];
+        yearsOpen = bankInfo1Data[2];
+        monthsOpen = bankInfo1Data[3];
 
-        let i_incomeContact: I_IncomeContactPage = new I_IncomeContactPage(cPage);
-        await i_incomeContact.happyPathPopulate(happyPathApproved.getEmployerContactInfo);
+        for(let value in bankInfo1Data) { // optional, helpful
+          console.log(bankInfo1Data[value] + "\t");
+        }
 
-        let j_incomeHistory: J_IncomeHistoryPage = new J_IncomeHistoryPage(cPage);
-        await j_incomeHistory.happyPathPopulate(happyPathApproved.getIncomeHistory);
+        await g_bankAcctInfoPage.happyPathPopulate(bankInfo1Data);
 
-        let k_incomeFrequency: K_IncomeFrequencyPage = new K_IncomeFrequencyPage(cPage, Frequency.MONTHLY);
-        await k_incomeFrequency._selectFrequency();
-        await k_incomeFrequency.enterDates(happyPathApproved.getPayDates);
+        await (new H_DirDepPage(cPage,true)).happyPathGo();
 
-        let l_paymentAccount: L_PaymentAccountPage = new L_PaymentAccountPage(cPage);
-        await l_paymentAccount.happyPathPopulate(happyPathApproved.getPaymentAccountInfo);
+        await (new I_PaymentCardPage(cPage).enterCardNumberFirstSix(happyPathApproved.getPaymentCardFirstSix));
 
-        let m_dirDep: M_DirectDepositPage = new M_DirectDepositPage(cPage,true);
-        await m_dirDep.happyPathGo();
-
-        let n_paymentCard: N_PaymentCardPage = new N_PaymentCardPage(cPage);
-        await n_paymentCard.happyPathGoWithSameAddress(happyPathApproved.getPaymentCard.toString().slice(0,7));
-
-        let o_reviewSubmit: O_ReviewAndSubmitPage = new O_ReviewQAndSubmitPage(cPage);
-        await o_reviewSubmit.happyPathGo();
-
-        let p_results: P_ResultsPage = new P_ResultsPage(cPage);
+        await (new J_ReviewAndSubmitPage(cPage)).happyPathGo();
 
         try {
-          await p_results.verifyApproved();
+          await (new K_ResultsPage(cPage)).verifyApproved();
           await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason:'cricket separate approved'}})}`);
         }catch(Error) {
           isFlowsShouldContinue = false;
@@ -303,13 +280,15 @@ test.describe('Cricket Big Six', async () => {
           let c_startAppPage = new C_StartAppPage(cPage);
 
           getStartAppData = happyPathPending.getStartAppData;
-          nameFirstFetched = getStartAppData[0];
-          nameLastFetched = getStartAppData[1];
-          ssnFetched = getStartAppData[3]; // ssn is 3
+          nameFirstFetched  = getStartAppData[0];
+          nameLastFetched   = getStartAppData[1];
+          ssnFetched        = getStartAppData[3]; // ssn is 3
 
-          for (let value in getStartAppData) { // optional, helpful
+          for(let value in getStartAppData) { // optional, helpful
             console.log(getStartAppData[value] + "\t");
           }
+          console.log('\n');
+
           await c_startAppPage.happyPathPopulate(getStartAppData);
 
           let d_aboutYou1Page = new D_AboutYou1Page(cPage);
@@ -318,44 +297,31 @@ test.describe('Cricket Big Six', async () => {
           let e_aboutYou2Page = new E_AboutYou2Page(cPage);
           await e_aboutYou2Page.happyPathPopulate(happyPathPending.getAboutYou2);
 
-          let f_aboutYou3Page: F_AboutYou3Page = new F_AboutYou3Page(cPage, HousingType.OWN);
-          await f_aboutYou3Page._selectHousingType();
+          let f_incomeInfoPage: F_IncomeInfoPage = new F_IncomeInfoPage(cPage);
+          await f_incomeInfoPage.happyPathPopulate(happyPathPending.getIncomeInfo);
 
-          let g_aboutYou4Page: G_AboutYou4Page = new G_AboutYou4Page(cPage, IDType.State);
-          await g_aboutYou4Page.selectIDType();
-          await g_aboutYou4Page.enterIDNumber("123456");
-          await g_aboutYou4Page.selectStateIssued("AZ");
-          await g_aboutYou4Page.NEXT();
+          let g_bankAcctInfoPage: G_BankAcctInfoPage = new G_BankAcctInfoPage(cPage);
 
-          let h_incomeSource = new H_IncomeSourcePage(cPage, IncomeSource.FT);
-          await h_incomeSource._selectIncomeSource();
+          bankInfo1Data = happyPathPending.getBankInfo1;
+          routing = bankInfo1Data[0];
+          checking = bankInfo1Data[1];
+          yearsOpen = bankInfo1Data[2];
+          monthsOpen = bankInfo1Data[3];
 
-          let i_incomeContact: I_IncomeContactPage = new I_IncomeContactPage(cPage);
-          await i_incomeContact.happyPathPopulate(happyPathPending.getEmployerContactInfo);
+          for(let value in bankInfo1Data) { // optional, helpful
+            console.log(bankInfo1Data[value] + "\t");
+          }
 
-          let j_incomeHistory: J_IncomeHistoryPage = new J_IncomeHistoryPage(cPage);
-          await j_incomeHistory.happyPathPopulate(happyPathPending.getIncomeHistory);
+          await g_bankAcctInfoPage.happyPathPopulate(bankInfo1Data);
 
-          let k_incomeFrequency: K_IncomeFrequencyPage = new K_IncomeFrequencyPage(cPage, Frequency.MONTHLY);
-          await k_incomeFrequency._selectFrequency();
-          await k_incomeFrequency.enterDates(happyPathPending.getPayDates);
+          await (new H_DirDepPage(cPage,true)).happyPathGo();
 
-          let l_paymentAccount: L_PaymentAccountPage = new L_PaymentAccountPage(cPage);
-          await l_paymentAccount.happyPathPopulate(happyPathPending.getPaymentAccountInfo);
+          await (new I_PaymentCardPage(cPage).enterCardNumberFirstSix(happyPathPending.getPaymentCardFirstSix));
 
-          let m_dirDep: M_DirectDepositPage = new M_DirectDepositPage(cPage, true);
-          await m_dirDep.happyPathGo();
-
-          let n_paymentCard: N_PaymentCardPage = new N_PaymentCardPage(cPage);
-          await n_paymentCard.happyPathGoWithSameAddress(happyPathPending.getPaymentCard.toString().slice(0, 7));
-
-          let o_reviewSubmit: O_ReviewAndSubmitPage = new O_ReviewQAndSubmitPage(cPage);
-          await o_reviewSubmit.happyPathGo();
-
-          let p_results: P_ResultsPage = new P_ResultsPage(cPage);
+          await (new J_ReviewAndSubmitPage(cPage)).happyPathGo();
 
           try {
-            await p_results.verifyPending();
+            await (new K_ResultsPage(cPage)).verifyPending();
             isPendingPass = true;
             await cPage.evaluate(_ => {
             }, `browserstack_executor: ${JSON.stringify({
@@ -409,13 +375,15 @@ test.describe('Cricket Big Six', async () => {
           let c_startAppPage = new C_StartAppPage(cPage);
 
           getStartAppData = happyPathDenied.getStartAppData;
-          nameFirstFetched = getStartAppData[0];
-          nameLastFetched = getStartAppData[1];
-          ssnFetched = getStartAppData[3]; // ssn is 3
+          nameFirstFetched  = getStartAppData[0];
+          nameLastFetched   = getStartAppData[1];
+          ssnFetched        = getStartAppData[3]; // ssn is 3
 
-          for (let value in getStartAppData) { // optional, helpful
+          for(let value in getStartAppData) { // optional, helpful
             console.log(getStartAppData[value] + "\t");
           }
+          console.log('\n');
+
           await c_startAppPage.happyPathPopulate(getStartAppData);
 
           let d_aboutYou1Page = new D_AboutYou1Page(cPage);
@@ -424,43 +392,32 @@ test.describe('Cricket Big Six', async () => {
           let e_aboutYou2Page = new E_AboutYou2Page(cPage);
           await e_aboutYou2Page.happyPathPopulate(happyPathDenied.getAboutYou2);
 
-          let f_aboutYou3Page: F_AboutYou3Page = new F_AboutYou3Page(cPage, HousingType.OWN);
-          await f_aboutYou3Page._selectHousingType();
+          let f_incomeInfoPage: F_IncomeInfoPage = new F_IncomeInfoPage(cPage);
+          await f_incomeInfoPage.happyPathPopulate(happyPathDenied.getIncomeInfo);
 
-          let g_aboutYou4Page: G_AboutYou4Page = new G_AboutYou4Page(cPage, IDType.State);
-          await g_aboutYou4Page.selectIDType();
-          await g_aboutYou4Page.enterIDNumber("123456");
-          await g_aboutYou4Page.selectStateIssued("AZ");
-          await g_aboutYou4Page.NEXT();
+          let g_bankAcctInfoPage: G_BankAcctInfoPage = new G_BankAcctInfoPage(cPage);
 
-          let h_incomeSource = new H_IncomeSourcePage(cPage, IncomeSource.FT);
-          await h_incomeSource._selectIncomeSource();
+          bankInfo1Data = happyPathDenied.getBankInfo1;
+          routing = bankInfo1Data[0];
+          checking = bankInfo1Data[1];
+          yearsOpen = bankInfo1Data[2];
+          monthsOpen = bankInfo1Data[3];
 
-          let i_incomeContact: I_IncomeContactPage = new I_IncomeContactPage(cPage);
-          await i_incomeContact.happyPathPopulate(happyPathDenied.getEmployerContactInfo);
+          for(let value in bankInfo1Data) { // optional, helpful
+            console.log(bankInfo1Data[value] + "\t");
+          }
 
-          let j_incomeHistory: J_IncomeHistoryPage = new J_IncomeHistoryPage(cPage);
-          await j_incomeHistory.happyPathPopulate(happyPathDenied.getIncomeHistory);
+          await g_bankAcctInfoPage.happyPathPopulate(bankInfo1Data);
 
-          let k_incomeFrequency: K_IncomeFrequencyPage = new K_IncomeFrequencyPage(cPage, Frequency.MONTHLY);
-          await k_incomeFrequency._selectFrequency();
-          await k_incomeFrequency.enterDates(happyPathDenied.getPayDates);
+          await (new H_DirDepPage(cPage,true)).happyPathGo();
 
-          let l_paymentAccount: L_PaymentAccountPage = new L_PaymentAccountPage(cPage);
-          await l_paymentAccount.happyPathPopulate(happyPathDenied.getPaymentAccountInfo);
+          await (new I_PaymentCardPage(cPage).enterCardNumberFirstSix(happyPathDenied.getPaymentCardFirstSix));
 
-          let m_dirDep: M_DirectDepositPage = new M_DirectDepositPage(cPage, true);
-          await m_dirDep.happyPathGo();
+          await (new J_ReviewAndSubmitPage(cPage)).happyPathGo();
 
-          let n_paymentCard: N_PaymentCardPage = new N_PaymentCardPage(cPage);
-          await n_paymentCard.happyPathGoWithSameAddress(happyPathDenied.getPaymentCard.toString().slice(0, 7));
-
-          let o_reviewSubmit: O_ReviewAndSubmitPage = new O_ReviewQAndSubmitPage(cPage);
-          await o_reviewSubmit.happyPathGo();
-
-          let p_results: P_ResultsPage = new P_ResultsPage(cPage);
+          let p_results: K_ResultsPage = new K_ResultsPage(cPage);
           try {
-            await p_results.verifyDenied();
+            await (new K_ResultsPage(cPage)).verifyDenied();
             isDeniedPass = true;
             await cPage.evaluate(_ => {
             }, `browserstack_executor: ${JSON.stringify({
@@ -499,10 +456,10 @@ test.describe('Cricket Big Six', async () => {
         let cPage = await bCont.newPage();
         let a_marketingPage = new A_MarketingPage(cPage);
         await a_marketingPage.beginEstimate();
-        let r_estimator = new R_PaymentEstimator(cPage);
+        let m_PaymentEstimator: M_PaymentEstimator = new M_PaymentEstimator(cPage);
 
         try {
-          await r_estimator.happyPathEstimate('3001', PaymentFrequency.Weekly);
+          await m_PaymentEstimator.happyPathEstimate('3001', PaymentFrequency.Weekly);
           isWeeklyPass = true;
           await cPage.evaluate(_ => {
           }, `browserstack_executor: ${JSON.stringify({
@@ -535,10 +492,10 @@ test.describe('Cricket Big Six', async () => {
         let cPage = await bCont.newPage();
         let a_marketingPage = new A_MarketingPage(cPage);
         await a_marketingPage.beginEstimate();
-        let r_estimator = new R_PaymentEstimator(cPage);
+        let m_PaymentEstimator: M_PaymentEstimator = new M_PaymentEstimator(cPage);
 
         try {
-          await r_estimator.happyPathEstimate('3022', PaymentFrequency.BiWeekly);
+          await m_PaymentEstimator.happyPathEstimate('3022', PaymentFrequency.BiWeekly);
           isBiweeklyPass = true;
           await cPage.evaluate(_ => {
           }, `browserstack_executor: ${JSON.stringify({
@@ -571,10 +528,10 @@ test.describe('Cricket Big Six', async () => {
         let cPage = await bCont.newPage();
         let a_marketingPage = new A_MarketingPage(cPage);
         await a_marketingPage.beginEstimate();
-        let r_estimator = new R_PaymentEstimator(cPage);
+        let m_PaymentEstimator: M_PaymentEstimator = new M_PaymentEstimator(cPage);
 
         try {
-          await r_estimator.happyPathEstimate('3044', PaymentFrequency.SemiMonthly);
+          await m_PaymentEstimator.happyPathEstimate('3044', PaymentFrequency.SemiMonthly);
           isSemiMonthlyPass = true;
           await cPage.evaluate(_ => {
           }, `browserstack_executor: ${JSON.stringify({
@@ -607,10 +564,10 @@ test.describe('Cricket Big Six', async () => {
         let cPage = await bCont.newPage();
         let a_marketingPage = new A_MarketingPage(cPage);
         await a_marketingPage.beginEstimate();
-        let r_estimator = new R_PaymentEstimator(cPage);
+        let m_PaymentEstimator: M_PaymentEstimator = new M_PaymentEstimator(cPage);
 
         try {
-          await r_estimator.happyPathEstimate('3099', PaymentFrequency.Monthly);
+          await m_PaymentEstimator.happyPathEstimate('3099', PaymentFrequency.Monthly);
           isMonthlyPass = true;
           await cPage.evaluate(_ => {
           }, `browserstack_executor: ${JSON.stringify({

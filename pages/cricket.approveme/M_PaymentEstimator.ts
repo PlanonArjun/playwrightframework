@@ -2,7 +2,7 @@
 import { type Page, type Locator, expect } from '@playwright/test';
 import {PaymentFrequency} from "../../data/paymentFrequency";
 
-class S_PaymentEstimator {
+class M_PaymentEstimator {
 
     readonly page: Page;
     readonly linkPaymentEstimator: Locator;
@@ -90,4 +90,4 @@ class S_PaymentEstimator {
     }
 
 }
-export default S_PaymentEstimator;
+export default M_PaymentEstimator;

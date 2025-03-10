@@ -28,7 +28,7 @@ class HappyPathPending {
         yearsOpen:      6,
         monthsOpen:     6,
         directDeposit:  true,
-        cardFirstSix:   4111111,
+        paymentCardNumber:   4111111111111111,
         employerName: 'Thorn Creek Kennel',
         employerPhone: '4357832364',
         employerZip: '84036',
@@ -92,7 +92,12 @@ class HappyPathPending {
     }
 
     get getPaymentCard(): number {
-        return this.pendingDatasetFull.cardFirstSix;
+        return this.pendingDatasetFull.paymentCardNumber;
+    }
+
+    get getPaymentCardFirstSix(): string {
+        let cardNumberLocal = this.getPaymentCard.toString();
+        return cardNumberLocal.slice(0,6);
     }
 
     private _employerContactInfo = [

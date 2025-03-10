@@ -19,9 +19,9 @@ class I_PaymentCardPage {
         this.buttonEXITConfirm = page.locator('div').filter({ hasText: /^Exit$/ }).getByRole('button');
     }
 
-    async enterCardNumberFirstSix(cardNumberIn: number) {
+    async enterCardNumberFirstSix(firstSixIn: string) {
         await this.fieldCardNumberFirstSix.click();
-        await this.fieldCardNumberFirstSix.fill(cardNumberIn.toString());
+        await this.fieldCardNumberFirstSix.fill(firstSixIn);
         await this._checkSameAs(); // default for happy path
         await this._NEXT();
     }

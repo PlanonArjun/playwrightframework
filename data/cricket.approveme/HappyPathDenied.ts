@@ -28,7 +28,7 @@ class HappyPathDenied {
         yearsOpen:      7,
         monthsOpen:     6,
         directDeposit:  true,
-        cardFirstSix:   4111111,
+        paymentCardNumber:   4111111111111111,
         employerName: 'Thorn Creek Kennel',
         employerPhone: '4357832364',
         employerZip: '84036',
@@ -91,10 +91,6 @@ class HappyPathDenied {
         return this.deniedDatasetFull.directDeposit; // true = 'YES'
     }
 
-    get getPaymentCard(): number {
-        return this.deniedDatasetFull.cardFirstSix;
-    }
-
     private _employerContactInfo = [
         this.deniedDatasetFull.employerName,
         this.deniedDatasetFull.employerPhone,
@@ -130,6 +126,16 @@ class HappyPathDenied {
     get getPaymentAccountInfo() {
         return this._paymentAccountInfo;
     }
+
+    get getPaymentCard(): number {
+        return this.deniedDatasetFull.paymentCardNumber;
+    }
+
+    get getPaymentCardFirstSix(): string {
+        let cardNumberLocal = this.getPaymentCard.toString();
+        return cardNumberLocal.slice(0,6);
+    }
+
 
 }
 export default HappyPathDenied;
