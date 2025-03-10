@@ -5,7 +5,8 @@ import {WooShoppingPage} from "$pages/progConnect.app/woo-shopping-page";
 import B_ApplyWidget from "$pages/progConnect.app/B_ApplyWidget";
 
 /**
- * NOTE: Test must be run in firefox, chromium fails to load the review and sign page for an unknown reason.
+ * NOTE: Test must be run with --project='Google Chrome' --headed  OR  --project='firefox' --headed ,
+ * chromium fails to load the review and sign page for an unknown reason.
  */
 
 let bCont: BrowserContext;
