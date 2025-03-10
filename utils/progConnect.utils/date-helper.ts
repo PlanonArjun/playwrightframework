@@ -33,7 +33,7 @@ export const daysFromNow = (days: number): string => {
 
 /**
  * Returns a date as a string with format (YYYY-MM-DD).
- * @param {number} days - Number of days from now
+ * @param {number} days - Number of days from now, or use a negative integer for the past
  * @returns {string} - A date as a string with format (YYYY-MM-DD)
  */
 export const dateAsYYYY_MM_DD = (days: number): string => {
