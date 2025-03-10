@@ -1,17 +1,16 @@
 import { setTaxFreeStatus } from "$pages/progConnect.app/cart-review-page";
-import test, {BrowserContext, expect, Page} from "@playwright/test";
+import test, {BrowserContext, Page} from "@playwright/test";
 import { setCustomerState } from "../../../data/progconnect/default-object-builder";
 import {WooShoppingPage} from "$pages/progConnect.app/woo-shopping-page";
-// import {postRequestRestWithHeader, getRequestRest, postRequestRestWithBody} from "playwright-qe-core/dist/utils/httpCallManager";
-// import {UriBuilder} from "playwright-qe-core/dist/utils/uriBuilder";
-// import {HttpStatus} from "@nestjs/common";
-import A_SwaggerPage from "$pages/progConnect.app/A_SwaggerPage"
-import {ITEM_SKU} from "../../../data/progconnect/item-skus";
 import B_ApplyWidget from "$pages/progConnect.app/B_ApplyWidget";
+
+/**
+ * NOTE: Test must be run with --project='Google Chrome' --headed  OR  --project='firefox' --headed ,
+ * chromium fails to load the review and sign page for an unknown reason.
+ */
 
 let bCont: BrowserContext;
 let cPage: Page;
-// let swaggerPage: A_SwaggerPage;
 let wooShoppingPage: WooShoppingPage;
 let b_ApplyWidget: B_ApplyWidget;
 
@@ -19,7 +18,7 @@ test.describe('happy-path', async () => {
 
     test.describe.configure({ retries: 0 });
     test.describe.configure({ mode: 'parallel' });
-    test.setTimeout(360000);
+    test.setTimeout(120000);
 
       test.beforeAll(() => {
         setTaxFreeStatus(false);
@@ -32,19 +31,15 @@ test.describe('happy-path', async () => {
         wooShoppingPage = new WooShoppingPage(cPage);
         await wooShoppingPage.goToWoo();
         await wooShoppingPage.buildBasicCart();
-        // await wooShoppingPage.addItemToCart(ITEM_SKU.COMFY_150);
-        // await wooShoppingPage.proceedToCheckout();
         await wooShoppingPage.startApplyOnlyFlow();
       });
 
       test('Happy path to virtual Card @Tier1 @Woo', async () => {
 
         b_ApplyWidget = await new B_ApplyWidget(cPage);
-        await b_ApplyWidget.clickLeaseWithContinueButton(); //This is used for the checkout flow
-        // await b_ApplyWidget.clickApplyButton();  //This is used for the cart flow
+        await b_ApplyWidget.clickLeaseWithContinueButton();
         await b_ApplyWidget.clickIAgreeCheckbox();
         await b_ApplyWidget.clickStartApplicationButton();
-        //await b_ApplyWidget.clickStartMyApplicationButton();  //This is used for the cart flow
         await b_ApplyWidget.contactInfoEmailAddress();
         await b_ApplyWidget.contactInfoMobilePhone();
         await b_ApplyWidget.clickContactInfoContinueButton();
@@ -61,7 +56,7 @@ test.describe('happy-path', async () => {
         await b_ApplyWidget.clickHomeAddressContinueButton();
         await b_ApplyWidget.fillIncomeInfoMonthlyIncome();
         await b_ApplyWidget.fillIncomeInfoLastPayDay();
-        await b_ApplyWidget.fillIncomeInfonextPayDayField();
+        await b_ApplyWidget.fillIncomeInfoNextPayDay();
         await b_ApplyWidget.enterIncomeInfoPayFrequencyDropDown();
         await b_ApplyWidget.clickIncomeInfoContinueButton();
         await b_ApplyWidget.fillCardInfoFirstNameField();
@@ -78,14 +73,11 @@ test.describe('happy-path', async () => {
         await b_ApplyWidget.clickYourApprovedContinueButton();
         await b_ApplyWidget.clickLeaseOverviewContinueButton();
         await b_ApplyWidget.clickDueTodayVerifyPaymentButton();
-        //TODO: Reenable these steps once environment problems have been resolved and page loads
-        // await b_ApplyWidget.checkReviewAndSignPaymentDueCheckbox();
-        // await b_ApplyWidget.checkReviewAndSignRecurringPaymentCheckbox();
-        // await b_ApplyWidget.clickReviewAndSignAgreeAndContinueButton();
-        // await b_ApplyWidget.clickReviewAndSignSignAndContinueButton();
-        // await b_ApplyWidget.clickCheckoutPlaceOrderWithLowesButton();
-        console.debug("for a debug endpoint to stop the test on the last screen if needed.");
-
+        await b_ApplyWidget.checkReviewAndSignPaymentDueCheckbox();
+        await b_ApplyWidget.checkReviewAndSignRecurringPaymentCheckbox();
+        await b_ApplyWidget.clickReviewAndSignAgreeAndContinueButton();
+        await b_ApplyWidget.clickReviewAndSignSignAndContinueButton();
+        await b_ApplyWidget.clickCheckoutPlaceOrderWithLowesButton();
 
       //TODO:Might want to implement this API code later down the road, started to go down this road when I was running into the UI site hanging, and found
       // out it needs to be https not http to connect to the Woo Commerce site.

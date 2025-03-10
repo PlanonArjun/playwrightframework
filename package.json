@@ -93,7 +93,8 @@
     "test:mattressfirm:estimator:ios": "npx browserstack-node-sdk playwright test --workers=4 --retries=0 -g mattressfirm.approveme/happy_path_estimator.spec.ts --browserstack.config=./browserstack.ios.yml --config=./playwright.ios.config.ts",
     "test:mattressfirm:estimator:desktop": "npx browserstack-node-sdk playwright test --workers=4 --retries=0 -g mattressfirm.approveme/happy_path_estimator.spec.ts --browserstack.config=./browserstack.desktop.yml --config=./playwright.config.ts",
     "test:mattressfirm:estimator:android": "npx browserstack-node-sdk playwright test --workers=4 --retries=0 -g mattressfirm.approveme/happy_path_estimator.spec.ts --browserstack.config=./browserstack.android.yml --config=./playwright.config.ts",
-    "test:apiExample:api": "npx browserstack-node-sdk playwright test --workers=16 --retries=0 -g apiExample.spec.ts            --browserstack.config=./browserstack.api.yml     --config=./playwright.api.config.ts"
+    "test:apiExample:api": "npx browserstack-node-sdk playwright test --workers=16 --retries=0 -g apiExample.spec.ts --browserstack.config=./browserstack.api.yml --config=./playwright.api.config.ts",
+    "test:connect:happy-path:desktop": "npx browserstack-node-sdk playwright test --workers=1 --retries=0 -g happy-path.spec.ts --browserstack.config=./browserstack.desktop.yml --config=./playwright.config.ts"
   },
   "repository": {
     "type": "git",
@@ -108,8 +109,8 @@
   },
   "devDependencies": {
     "@nestjs/common": "^11.0.10",
-    "@playwright/test": "^ 1.50.1",
-    "browserstack-node-sdk": "^1.34.39",
+    "@playwright/test": "^ 1.51.0",
+    "browserstack-node-sdk": "^1.34.42",
     "x2js": "^3.4.4",
     "playwright-qe-core": "^1.0.0"
   },
