@@ -2,7 +2,7 @@
 import { type Page, type Locator, expect } from '@playwright/test';
 import urls from '../../utils/lowes.utils/urls'
 
-class M_ResumeApplication {
+class L_ResumeApplication {
 
     readonly page: Page;
     readonly linkResume: Locator;
@@ -56,4 +56,4 @@ class M_ResumeApplication {
     }
 
 }
-export default M_ResumeApplication;
+export default L_ResumeApplication;

@@ -12,7 +12,7 @@ import H_BillingAddress from '../../pages/lowes.approveme/H_BillingAddress';
 import I_AccountDetails from '../../pages/lowes.approveme/I_AccountDetails';
 import J_LeaseIDVerification from '../../pages/lowes.approveme/J_LeaseIDVerification';
 import K_LeaseStatusPage from '../../pages/lowes.approveme/K_LeaseStatusPage';
-import M_ResumeApplication from '../../pages/lowes.approveme/M_ResumeApplication';
+import L_ResumeApplication from '$pages/lowes.approveme/L_ResumeApplication';
 
 test.describe('happy path resume', async () => {
 
@@ -107,7 +107,7 @@ test.describe('happy path resume', async () => {
         const bContR = await browser.newContext();
         const cPageR = await bContR.newPage();
 
-        const resumePageR =  new M_ResumeApplication(cPageR);
+        const resumePageR =  new L_ResumeApplication(cPageR);
         await resumePageR.navigateResume();
         await resumePageR.happyPathPopulate(ssnFetched,phoneFetched);
 
