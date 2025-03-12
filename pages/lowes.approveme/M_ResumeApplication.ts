@@ -26,7 +26,7 @@ class M_ResumeApplication {
     }
 
     async navigateResume() {
-        await this.page.goto(urls.resume.resume);
+        await this.page.goto(urls.continue.continue);
     }
 
     async _enterSSN(ssnIN: string) {

@@ -36,7 +36,7 @@ test.describe('Lowes Big Six', async () => {
 
         let a_marketingPage = new A_MarketingPage(cPage);
         try {
-            await a_marketingPage.navigate();
+            await a_marketingPage.navigateMarketing();
             await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason: 'Lowes landing page up'}})}`);
             isLandingPageLoads = true;
             console.log('landing page is up; begin tests...')
@@ -62,7 +62,7 @@ test.describe('Lowes Big Six', async () => {
 
             // navigate
             let marketingPage = new A_MarketingPage(cPage);
-            await marketingPage.navigate();
+            await marketingPage.navigateMarketing();
 
             // agree to terms and begin application
             let beforeStartPage = new B_BeforeStartPage(cPage);
@@ -178,7 +178,7 @@ test.describe('Lowes Big Six', async () => {
 
                 // navigate
                 let marketingPage = new A_MarketingPage(cPage);
-                await marketingPage.navigate();
+                await marketingPage.navigateMarketing();
 
                 // agree to terms and begin application
                 let beforeStartPage = new B_BeforeStartPage(cPage);
@@ -265,7 +265,7 @@ test.describe('Lowes Big Six', async () => {
 
                     // navigate
                     let marketingPage = new A_MarketingPage(cPage);
-                    await marketingPage.navigate();
+                    await marketingPage.navigateMarketing();
 
                     // agree to terms and begin application
                     let beforeStartPage = new B_BeforeStartPage(cPage);
@@ -353,7 +353,7 @@ test.describe('Lowes Big Six', async () => {
 
                     // navigate
                     let marketingPage = new A_MarketingPage(cPage);
-                    await marketingPage.navigate();
+                    await marketingPage.navigateMarketing();
 
                     // agree to terms and begin application
                     let beforeStartPage = new B_BeforeStartPage(cPage);
@@ -578,7 +578,7 @@ test.describe('Lowes Big Six', async () => {
             if (isLandingPageLoads) {
                 let bCont = await browser.newContext();
                 let cPage = await bCont.newPage();
-                await (new A_MarketingPage(cPage)).navigate();
+                await (new A_MarketingPage(cPage)).navigateMarketing();
                 try {
                     await (new B_BeforeStartPage(cPage)).checkLinkTerms();
                     isLinkTerms = true;
@@ -611,7 +611,7 @@ test.describe('Lowes Big Six', async () => {
             if (isLandingPageLoads) {
                 let bCont = await browser.newContext();
                 let cPage = await bCont.newPage();
-                await (new A_MarketingPage(cPage)).navigate();
+                await (new A_MarketingPage(cPage)).navigateMarketing();
                 try {
                     await (new B_BeforeStartPage(cPage)).checkLinkPrivacy();
                     isLinksPrivacy = true;
@@ -644,7 +644,7 @@ test.describe('Lowes Big Six', async () => {
             if (isLandingPageLoads) {
                 let bCont = await browser.newContext();
                 let cPage = await bCont.newPage();
-                await (new A_MarketingPage(cPage)).navigate();
+                await (new A_MarketingPage(cPage)).navigateMarketing();
                 try {
                     await (new B_BeforeStartPage(cPage)).checkLinkDisclosure();
                     isLinksDisclosure = true;
@@ -677,7 +677,7 @@ test.describe('Lowes Big Six', async () => {
             if (isLandingPageLoads) {
                 let bCont = await browser.newContext();
                 let cPage = await bCont.newPage();
-                await (new A_MarketingPage(cPage)).navigate();
+                await (new A_MarketingPage(cPage)).navigateMarketing();
                 try {
                     await (new B_BeforeStartPage(cPage)).checkLinkArbitration();
                     isLinkArbitration = true;

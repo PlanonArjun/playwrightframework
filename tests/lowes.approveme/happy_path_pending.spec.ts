@@ -29,7 +29,8 @@ test.describe('pending', async () => {
 
             // navigate
             let marketingPage = new A_MarketingPage(cPage);
-            await marketingPage.navigate();
+            await marketingPage.navigateMarketing();
+            await marketingPage.beginApply();
 
             // agree to terms and begin application
             let beforeStartPage = new B_BeforeStartPage(cPage);
