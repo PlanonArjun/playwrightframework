@@ -2,7 +2,7 @@
 import { type Page, type Locator, expect } from '@playwright/test';
 import {PaymentFrequency} from "../../data/paymentFrequency";
 
-class N_LeaseEstimator {
+class M_LeaseEstimator {
 
     readonly page: Page;
     readonly linkPaymentEstimator: Locator;
@@ -76,4 +76,4 @@ class N_LeaseEstimator {
     }
 
 }
-export default N_LeaseEstimator;
+export default M_LeaseEstimator;

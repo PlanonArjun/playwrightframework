@@ -16,14 +16,22 @@ class A_MarketingPage {
         this.buttonAPPLY_NOW = page.getByText('Apply Now');
     }
 
-    async navigate() {
+    async navigateMarketing() {
         await this.page.goto(urls.marketing.marketing);
-        await this.buttonAPPLY_NOW.click();
     }
 
     async navigateEstimator() {
         await this.page.goto(urls.marketing.marketing);
         await this.page.locator('a').filter({ hasText: 'PAYMENT ESTIMATOR' }).click();
+    }
+
+    async navigateResume() {
+        await this.page.goto(urls.continue.continue); // it's called Continue in Lowe's universe
+    }
+
+    async navigateBeforeStart() {
+        await this.page.goto(urls.beforeYouStart.beforeYouStart);
+        await this.page.waitForTimeout(1000);
     }
 
     async beginApply() {

@@ -2,7 +2,7 @@
 import { type Page, type Locator, expect } from '@playwright/test';
 import urls from '../../utils/lowes.utils/urls'
 
-class M_ResumeApplication {
+class L_ResumeApplication {
 
     readonly page: Page;
     readonly linkResume: Locator;
@@ -26,7 +26,7 @@ class M_ResumeApplication {
     }
 
     async navigateResume() {
-        await this.page.goto(urls.resume.resume);
+        await this.page.goto(urls.continue.continue);
     }
 
     async _enterSSN(ssnIN: string) {
@@ -56,4 +56,4 @@ class M_ResumeApplication {
     }
 
 }
-export default M_ResumeApplication;
+export default L_ResumeApplication;

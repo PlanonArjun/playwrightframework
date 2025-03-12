@@ -11,10 +11,10 @@ import D_AboutYou2Page from "../../pages/lowes.approveme/D_AboutYou2Page";
 import C_AboutYou1Page from "../../pages/lowes.approveme/C_AboutYou1Page";
 import B_BeforeStartPage from "../../pages/lowes.approveme/B_BeforeStartPage";
 import HappyPathApproved from "../../data/lowes.approveme/HappyPathApproved";
-import M_ResumeApplication from "../../pages/lowes.approveme/M_ResumeApplication";
+import L_ResumeApplication from "$pages/lowes.approveme/L_ResumeApplication";
 import HappyPathPending from "../../data/lowes.approveme/HappyPathPending";
 import HappyPathDenied from "../../data/lowes.approveme/HappyPathDenied";
-import N_LeaseEstimator from "../../pages/lowes.approveme/N_LeaseEstimator";
+import M_LeaseEstimator from "$pages/lowes.approveme/M_LeaseEstimator";
 import {PaymentFrequency} from "../../data/paymentFrequency";
 
 let isLandingPageLoads: boolean = false;
@@ -36,7 +36,7 @@ test.describe('Lowes Big Six', async () => {
 
         let a_marketingPage = new A_MarketingPage(cPage);
         try {
-            await a_marketingPage.navigate();
+            await a_marketingPage.navigateMarketing();
             await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason: 'Lowes landing page up'}})}`);
             isLandingPageLoads = true;
             console.log('landing page is up; begin tests...')
@@ -62,7 +62,7 @@ test.describe('Lowes Big Six', async () => {
 
             // navigate
             let marketingPage = new A_MarketingPage(cPage);
-            await marketingPage.navigate();
+            await marketingPage.navigateMarketing();
 
             // agree to terms and begin application
             let beforeStartPage = new B_BeforeStartPage(cPage);
@@ -140,7 +140,7 @@ test.describe('Lowes Big Six', async () => {
                 const bContR = await browser.newContext();
                 const cPageR = await bContR.newPage();
 
-                const resumePageR =  new M_ResumeApplication(cPageR);
+                const resumePageR =  new L_ResumeApplication(cPageR);
                 await resumePageR.navigateResume();
                 await resumePageR.happyPathPopulate(ssnFetched,phoneFetched);
 
@@ -178,7 +178,7 @@ test.describe('Lowes Big Six', async () => {
 
                 // navigate
                 let marketingPage = new A_MarketingPage(cPage);
-                await marketingPage.navigate();
+                await marketingPage.navigateMarketing();
 
                 // agree to terms and begin application
                 let beforeStartPage = new B_BeforeStartPage(cPage);
@@ -265,7 +265,7 @@ test.describe('Lowes Big Six', async () => {
 
                     // navigate
                     let marketingPage = new A_MarketingPage(cPage);
-                    await marketingPage.navigate();
+                    await marketingPage.navigateMarketing();
 
                     // agree to terms and begin application
                     let beforeStartPage = new B_BeforeStartPage(cPage);
@@ -353,7 +353,7 @@ test.describe('Lowes Big Six', async () => {
 
                     // navigate
                     let marketingPage = new A_MarketingPage(cPage);
-                    await marketingPage.navigate();
+                    await marketingPage.navigateMarketing();
 
                     // agree to terms and begin application
                     let beforeStartPage = new B_BeforeStartPage(cPage);
@@ -434,7 +434,7 @@ test.describe('Lowes Big Six', async () => {
                 let cPage = await bCont.newPage();
                 let a_marketingPage = new A_MarketingPage(cPage);
                 await a_marketingPage.navigateEstimator();
-                let n_estimator = new N_LeaseEstimator(cPage);
+                let n_estimator = new M_LeaseEstimator(cPage);
 
                 try {
                     await n_estimator.happyPathEstimate('3001', PaymentFrequency.Weekly);
@@ -470,7 +470,7 @@ test.describe('Lowes Big Six', async () => {
                 let cPage = await bCont.newPage();
                 let a_marketingPage = new A_MarketingPage(cPage);
                 await a_marketingPage.navigateEstimator();
-                let n_estimator = new N_LeaseEstimator(cPage);
+                let n_estimator = new M_LeaseEstimator(cPage);
 
                 try {
                     await n_estimator.happyPathEstimate('4001', PaymentFrequency.BiWeekly);
@@ -506,7 +506,7 @@ test.describe('Lowes Big Six', async () => {
                 let cPage = await bCont.newPage();
                 let a_marketingPage = new A_MarketingPage(cPage);
                 await a_marketingPage.navigateEstimator();
-                let n_estimator = new N_LeaseEstimator(cPage);
+                let n_estimator = new M_LeaseEstimator(cPage);
 
                 try {
                     await n_estimator.happyPathEstimate('4001', PaymentFrequency.SemiMonthly);
@@ -542,7 +542,7 @@ test.describe('Lowes Big Six', async () => {
                 let cPage = await bCont.newPage();
                 let a_marketingPage = new A_MarketingPage(cPage);
                 await a_marketingPage.navigateEstimator();
-                let n_estimator = new N_LeaseEstimator(cPage);
+                let n_estimator = new M_LeaseEstimator(cPage);
 
                 try {
                     await n_estimator.happyPathEstimate('4001', PaymentFrequency.Monthly);
@@ -578,7 +578,7 @@ test.describe('Lowes Big Six', async () => {
             if (isLandingPageLoads) {
                 let bCont = await browser.newContext();
                 let cPage = await bCont.newPage();
-                await (new A_MarketingPage(cPage)).navigate();
+                await (new A_MarketingPage(cPage)).navigateMarketing();
                 try {
                     await (new B_BeforeStartPage(cPage)).checkLinkTerms();
                     isLinkTerms = true;
@@ -611,7 +611,7 @@ test.describe('Lowes Big Six', async () => {
             if (isLandingPageLoads) {
                 let bCont = await browser.newContext();
                 let cPage = await bCont.newPage();
-                await (new A_MarketingPage(cPage)).navigate();
+                await (new A_MarketingPage(cPage)).navigateMarketing();
                 try {
                     await (new B_BeforeStartPage(cPage)).checkLinkPrivacy();
                     isLinksPrivacy = true;
@@ -644,7 +644,7 @@ test.describe('Lowes Big Six', async () => {
             if (isLandingPageLoads) {
                 let bCont = await browser.newContext();
                 let cPage = await bCont.newPage();
-                await (new A_MarketingPage(cPage)).navigate();
+                await (new A_MarketingPage(cPage)).navigateMarketing();
                 try {
                     await (new B_BeforeStartPage(cPage)).checkLinkDisclosure();
                     isLinksDisclosure = true;
@@ -677,7 +677,7 @@ test.describe('Lowes Big Six', async () => {
             if (isLandingPageLoads) {
                 let bCont = await browser.newContext();
                 let cPage = await bCont.newPage();
-                await (new A_MarketingPage(cPage)).navigate();
+                await (new A_MarketingPage(cPage)).navigateMarketing();
                 try {
                     await (new B_BeforeStartPage(cPage)).checkLinkArbitration();
                     isLinkArbitration = true;

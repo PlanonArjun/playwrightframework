@@ -1,10 +1,10 @@
 import {test, expect } from '@playwright/test';
 
 import HappyPathApproved from '../../data/lowes.approveme/HappyPathApproved';
-import A_MarketingPage from "../../pages/lowes.approveme/A_Marketingpage";
+import A_MarketingPage from "../../pages/lowes.approveme/A_MarketingPage";
 import B_BeforeStartPage from '../../pages/lowes.approveme/B_BeforeStartPage';
 import C_AboutYou1Page from '../../pages/lowes.approveme/C_AboutYou1Page';
-import D_AboutYou2Page from '../../pages/lowes.approveme/D_AboutYou2page';
+import D_AboutYou2Page from '../../pages/lowes.approveme/D_AboutYou2Page';
 import E_HomeAddress from '../../pages/lowes.approveme/E_HomeAddress';
 import F_IncomePage from '../../pages/lowes.approveme/F_IncomePage';
 import G_CreditCardDetailsPage from '../../pages/lowes.approveme/G_CreditCardDetails';
@@ -12,7 +12,7 @@ import H_BillingAddress from '../../pages/lowes.approveme/H_BillingAddress';
 import I_AccountDetails from '../../pages/lowes.approveme/I_AccountDetails';
 import J_LeaseIDVerification from '../../pages/lowes.approveme/J_LeaseIDVerification';
 import K_LeaseStatusPage from '../../pages/lowes.approveme/K_LeaseStatusPage';
-import M_ResumeApplication from '../../pages/lowes.approveme/M_ResumeApplication';
+import L_ResumeApplication from '$pages/lowes.approveme/L_ResumeApplication';
 
 test.describe('happy path resume', async () => {
 
@@ -36,7 +36,8 @@ test.describe('happy path resume', async () => {
 
       // navigate
       let marketingPage = new A_MarketingPage(cPage);
-      await marketingPage.navigate();
+      await marketingPage.navigateMarketing();
+      await marketingPage.beginApply();
 
       // agree to terms and begin application
       let beforeStartPage = new B_BeforeStartPage(cPage);
@@ -106,7 +107,7 @@ test.describe('happy path resume', async () => {
         const bContR = await browser.newContext();
         const cPageR = await bContR.newPage();
 
-        const resumePageR =  new M_ResumeApplication(cPageR);
+        const resumePageR =  new L_ResumeApplication(cPageR);
         await resumePageR.navigateResume();
         await resumePageR.happyPathPopulate(ssnFetched,phoneFetched);
 
