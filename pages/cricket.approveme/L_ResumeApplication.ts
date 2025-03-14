@@ -13,9 +13,9 @@ class L_ResumeApplication {
 
     constructor(page: Page) {
         this.page = page;
-        this.fieldNameFirst = page.getByPlaceholder('first');
+        this.fieldNameFirst =  page.getByRole('textbox', { name: 'Name:' });
         this.fieldNameLast = page.getByPlaceholder('last');
-        this.fieldSSN = page.getByPlaceholder('-45-6789');
+        this.fieldSSN = page.getByRole('textbox', { name: 'Social Security number or' });
         this.checkbox = page.locator('label').filter({ hasText: 'I have read and agree to the' }).locator('span').first();
         this.buttonNextR = page.getByRole('button', { name: 'Next' });
     }
