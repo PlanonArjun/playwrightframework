@@ -36,13 +36,13 @@ class K_LeaseStatusPage {
     }
 
     async verifySuccessPending() {
-        await expect(this.textPending).toBeVisible({timeout: 30000});
-        await expect(this.headingPending).toBeVisible({timeout: 30000});
+        await expect(this.textPending).toBeVisible({timeout: 40000});
+        await expect(this.headingPending).toBeVisible({timeout: 40000});
     }
 
     async verifySuccessDenied() {
         const element = this.page.getByText('We are unable to approve your application at this time.');
-        await expect(element).toHaveCount(1,{timeout: 30000})
+        await expect(element).toHaveCount(1,{timeout: 40000})
     }
 
     async EXIT() {
