@@ -19,14 +19,17 @@ projectName: not_set
 # Platforms object contains all the browser / device combinations you want to test on.
 # Entire list available here -> (https://www.browserstack.com/list-of-browsers-and-platforms/automate)
 platforms:
-  - deviceName: Galaxy S21
-    osVersion: 12.0
+  - deviceName: Galaxy S24
+    osVersion: 14.0
     deviceOrientation: portrait
-  - deviceName: Galaxy Note 20 Ultra
+  - deviceName: Galaxy S21
+    osVersion: 11.0
+    deviceOrientation: portrait
+  - deviceName: Galaxy Note 20
     osVersion: 10.0
     deviceOrientation: landscape
-  - deviceName: Galaxy Tab S10 Plus
-    osVersion: 14.0
+  - deviceName: Galaxy Tab S8
+    osVersion: 12.0
     deviceOrientation: portrait
   - deviceName: Pixel 9
     osVersion: 15.0
