@@ -26,11 +26,6 @@ class I_ResultsPage {
     }
 
     async verifySuccessApproved() {
-       try{
-        await this.cancelRating.click({timeout:15000});
-       }catch(error){
-        console.log('This Feedback rating window appears once in a while, if appears it cancel the pop-up window');
-       }
         await expect(this.page.getByText('Congratulations Preapproved,')).toBeVisible({ timeout: 15000 });
         await this.clickToPage.click({ force: true });
         await expect(this.page.getByText('Approved', { exact: true })).toBeVisible();
@@ -49,7 +44,7 @@ class I_ResultsPage {
 
     async verifySuccessDenied() {
         const element = this.page.getByText('Your application was not approved').first();
-        await expect(element).toHaveCount(1, { timeout: 15000 });
+        await expect(element).toBeVisible({ timeout: 15000 });
         console.log('success - denied');
     }
 
