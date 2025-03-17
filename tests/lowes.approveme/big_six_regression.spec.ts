@@ -63,6 +63,7 @@ test.describe('Lowes Big Six', async () => {
             // navigate
             let marketingPage = new A_MarketingPage(cPage);
             await marketingPage.navigateMarketing();
+            await marketingPage.beginApply();
 
             // agree to terms and begin application
             let beforeStartPage = new B_BeforeStartPage(cPage);
@@ -179,6 +180,7 @@ test.describe('Lowes Big Six', async () => {
                 // navigate
                 let marketingPage = new A_MarketingPage(cPage);
                 await marketingPage.navigateMarketing();
+                await marketingPage.beginApply();
 
                 // agree to terms and begin application
                 let beforeStartPage = new B_BeforeStartPage(cPage);
@@ -266,6 +268,7 @@ test.describe('Lowes Big Six', async () => {
                     // navigate
                     let marketingPage = new A_MarketingPage(cPage);
                     await marketingPage.navigateMarketing();
+                    await marketingPage.beginApply();
 
                     // agree to terms and begin application
                     let beforeStartPage = new B_BeforeStartPage(cPage);
@@ -354,6 +357,7 @@ test.describe('Lowes Big Six', async () => {
                     // navigate
                     let marketingPage = new A_MarketingPage(cPage);
                     await marketingPage.navigateMarketing();
+                    await marketingPage.beginApply();
 
                     // agree to terms and begin application
                     let beforeStartPage = new B_BeforeStartPage(cPage);
@@ -543,7 +547,6 @@ test.describe('Lowes Big Six', async () => {
                 let a_marketingPage = new A_MarketingPage(cPage);
                 await a_marketingPage.navigateEstimator();
                 let n_estimator = new M_LeaseEstimator(cPage);
-
                 try {
                     await n_estimator.happyPathEstimate('4001', PaymentFrequency.Monthly);
                     isMonthlyPass = true;
@@ -578,7 +581,7 @@ test.describe('Lowes Big Six', async () => {
             if (isLandingPageLoads) {
                 let bCont = await browser.newContext();
                 let cPage = await bCont.newPage();
-                await (new A_MarketingPage(cPage)).navigateMarketing();
+                await (new A_MarketingPage(cPage)).navigateBeforeStart();
                 try {
                     await (new B_BeforeStartPage(cPage)).checkLinkTerms();
                     isLinkTerms = true;
@@ -611,7 +614,7 @@ test.describe('Lowes Big Six', async () => {
             if (isLandingPageLoads) {
                 let bCont = await browser.newContext();
                 let cPage = await bCont.newPage();
-                await (new A_MarketingPage(cPage)).navigateMarketing();
+                await (new A_MarketingPage(cPage)).navigateBeforeStart();
                 try {
                     await (new B_BeforeStartPage(cPage)).checkLinkPrivacy();
                     isLinksPrivacy = true;
@@ -644,7 +647,7 @@ test.describe('Lowes Big Six', async () => {
             if (isLandingPageLoads) {
                 let bCont = await browser.newContext();
                 let cPage = await bCont.newPage();
-                await (new A_MarketingPage(cPage)).navigateMarketing();
+                await (new A_MarketingPage(cPage)).navigateBeforeStart();
                 try {
                     await (new B_BeforeStartPage(cPage)).checkLinkDisclosure();
                     isLinksDisclosure = true;
@@ -677,7 +680,7 @@ test.describe('Lowes Big Six', async () => {
             if (isLandingPageLoads) {
                 let bCont = await browser.newContext();
                 let cPage = await bCont.newPage();
-                await (new A_MarketingPage(cPage)).navigateMarketing();
+                await (new A_MarketingPage(cPage)).navigateBeforeStart();
                 try {
                     await (new B_BeforeStartPage(cPage)).checkLinkArbitration();
                     isLinkArbitration = true;

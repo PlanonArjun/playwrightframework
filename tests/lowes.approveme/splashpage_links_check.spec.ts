@@ -5,7 +5,6 @@ import B_BeforeStartPage from '../../pages/lowes.approveme/B_BeforeStartPage';
 let bCont: BrowserContext;
 let cPage: Page;
 let a_marketingPage: A_MarketingPage;
-let b_beforeStartPage: B_BeforeStartPage;
 
 test.describe('lowes links', async () => {
 
@@ -17,7 +16,6 @@ test.describe('lowes links', async () => {
     cPage = await bCont.newPage();
     a_marketingPage = new A_MarketingPage(cPage);
     await a_marketingPage.navigateBeforeStart();
-    b_beforeStartPage = new B_BeforeStartPage(cPage);
   });
 
   test.afterEach(async () => {
@@ -29,7 +27,7 @@ test.describe('lowes links', async () => {
   test('terms', { tag: ['@lowes', '@approveme', '@happypath', '@links'] },async () => {
     await expect(async () => {
       try {
-        await b_beforeStartPage.checkLinkTerms();
+        await (new B_BeforeStartPage(cPage).checkLinkTerms());
         await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason: 'terms'}})}`);
       }catch(Error) {
         await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
@@ -40,7 +38,7 @@ test.describe('lowes links', async () => {
   test('privacy', { tag: ['@lowes', '@approveme', '@happypath', '@links'] },async () => {
     await expect(async () => {
       try {
-        await b_beforeStartPage.checkLinkPrivacy();
+        await (new B_BeforeStartPage(cPage).checkLinkPrivacy());
         await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason: 'privacy'}})}`);
       }catch(Error) {
         await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
@@ -51,7 +49,7 @@ test.describe('lowes links', async () => {
   test('disclosure', { tag: ['@lowes', '@approveme', '@happypath', '@links'], },async () => {
     await expect(async () => {
       try {
-        await b_beforeStartPage.checkLinkDisclosure();
+        await (new B_BeforeStartPage(cPage).checkLinkDisclosure());
         await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason: 'disclosure'}})}`);
       }catch(Error) {
         await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
@@ -62,7 +60,7 @@ test.describe('lowes links', async () => {
   test('arbitration', { tag: ['@lowes', '@approveme', '@happypath', '@links'], },async () => {
     await expect(async () => {
       try {
-        await b_beforeStartPage.checkLinkArbitration();
+        await (new B_BeforeStartPage(cPage).checkLinkArbitration());
         await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason: 'arbitration'}})}`);
       }catch(Error) {
         await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
