@@ -45,7 +45,7 @@ class B_SelectShop {
     async lastLeaseMerchantName(): Promise<void> {
         const textRetrived = await this.merchantname.textContent();
         this.merchantText = textRetrived ?? '';
-        console.log("Mrchant Name ====== ", this.merchantText);
+        console.log("Merchant Name ====== ", this.merchantText);
 
     }
 

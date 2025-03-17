@@ -1,10 +1,9 @@
 import { test, expect } from '@playwright/test';
 import A_LoginPage from '../../pages/progweb.app/A_LoginPage';
-import HappyPathApproved from '../../data/progweb.approveme/happyPathApproved';
 import B_SelectShop from '../../pages/progweb.app/B_SelectShop';
-import C_StartApplication from '../../pages/progweb.app/C_StartApplication';
-import I_PaymentEstimator, { PaymentFrequency } from '../../pages/progweb.app/K_PaymentEstimator';
-
+import HappyPathApproved from 'data/progweb.approveme/HappyPathApproved';
+import I_PaymentEstimator from '$pages/progweb.app/K_PaymentEstimator';
+import { PaymentFrequency } from 'data/paymentFrequency';
 
 test.describe('navigation', async () => {
 
@@ -17,8 +16,6 @@ test.describe('navigation', async () => {
             const cPage = await bCont.newPage();
 
             let happyPathApproved = new HappyPathApproved();
-            console.log('UserEmail entered = ', happyPathApproved.getLoginData[0]);
-            console.log('UserPassword entered = ', happyPathApproved.getLoginData[1]);
 
             let loginPage = new A_LoginPage(cPage);
             await loginPage.happyPathPopulate(happyPathApproved.getLoginData);
@@ -47,8 +44,6 @@ test.describe('navigation', async () => {
             const cPage = await bCont.newPage();
 
             let happyPathApproved = new HappyPathApproved();
-            console.log('UserEmail entered = ', happyPathApproved.getLoginData[0]);
-            console.log('UserPassword entered = ', happyPathApproved.getLoginData[1]);
 
             let loginPage = new A_LoginPage(cPage);
             await loginPage.happyPathPopulate(happyPathApproved.getLoginData);
@@ -76,8 +71,6 @@ test.describe('navigation', async () => {
             const cPage = await bCont.newPage();
 
             let happyPathApproved = new HappyPathApproved();
-            console.log('UserEmail entered = ', happyPathApproved.getLoginData[0]);
-            console.log('UserPassword entered = ', happyPathApproved.getLoginData[1]);
 
             let loginPage = new A_LoginPage(cPage);
             await loginPage.happyPathPopulate(happyPathApproved.getLoginData);
@@ -105,8 +98,6 @@ test.describe('navigation', async () => {
             const cPage = await bCont.newPage();
 
             let happyPathApproved = new HappyPathApproved();
-            console.log('UserEmail entered = ', happyPathApproved.getLoginData[0]);
-            console.log('UserPassword entered = ', happyPathApproved.getLoginData[1]);
 
             let loginPage = new A_LoginPage(cPage);
             await loginPage.happyPathPopulate(happyPathApproved.getLoginData);

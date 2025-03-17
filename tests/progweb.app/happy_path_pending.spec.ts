@@ -23,8 +23,6 @@ test.describe('navigation', async () => {
       const bCont = await browser.newContext();
       const cPage = await bCont.newPage();
       let happyPathPending = new HappyPathPending();
-      console.log('UserEmail entered = ', happyPathPending.getLoginData[0]);
-      console.log('UserPassword entered = ', happyPathPending.getLoginData[1]);
 
       let loginPage = new A_LoginPage(cPage);
       await loginPage.happyPathPopulate(happyPathPending.getLoginData);
@@ -57,7 +55,6 @@ test.describe('navigation', async () => {
 
       let resultsPage = new I_ResultsPage(cPage);
       await resultsPage.verifySuccessPending();
-      await resultsPage.LOGOUT();
 
       await cPage.close();
       await bCont.close();

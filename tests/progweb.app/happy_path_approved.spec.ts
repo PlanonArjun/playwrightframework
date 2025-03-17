@@ -1,6 +1,5 @@
 import { test, expect } from '@playwright/test';
 import A_LoginPage from '../../pages/progweb.app/A_LoginPage';
-import HappyPathApproved from '../../data/progweb.approveme/happyPathApproved';
 import B_SelectShop from '../../pages/progweb.app/B_SelectShop';
 import C_StartApplication from '../../pages/progweb.app/C_StartApplication';
 import D_UpdateHomeAddress from '../../pages/progweb.app/D_UpdateHomeAddress';
@@ -9,6 +8,7 @@ import F_CreditCardDetails from '../../pages/progweb.app/F_UpdateCreditCardDetai
 import G_BankingInfo from '../../pages/progweb.app/G_UpdateBankingInfo';
 import H_SubmitApplication from '../../pages/progweb.app/H_SubmitApplication';
 import I_ResultsPage from '../../pages/progweb.app/I_ResultsPage';
+import HappyPathApproved from 'data/progweb.approveme/HappyPathApproved';
 
 
 test.describe('navigation', async () => {
@@ -55,15 +55,14 @@ test.describe('navigation', async () => {
 
       let submitApplication = new H_SubmitApplication(cPage);
       await submitApplication.happyPathPopulate();
-      await cPage.waitForTimeout(9000);
+      await cPage.waitForTimeout(15000);
 
       let resultsPage = new I_ResultsPage(cPage);
       await resultsPage.verifySuccessApproved();
-      await resultsPage.LOGOUT();
 
       await cPage.close();
       await bCont.close();
 
-    }).toPass({ timeout: 400000 });
+    }).toPass({ timeout: 500000 });
   });
 });

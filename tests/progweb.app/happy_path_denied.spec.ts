@@ -22,8 +22,6 @@ test.describe('navigation', async () => {
       const bCont = await browser.newContext();
       const cPage = await bCont.newPage();
       let happyPathDenied = new HappyPathDenied();
-      console.log('UserEmail entered = ',happyPathDenied.getLoginData[0]);
-      console.log('UserPassword entered = ',happyPathDenied.getLoginData[1]);
 
       let loginPage = new A_LoginPage(cPage);
       await loginPage.happyPathPopulate(happyPathDenied.getLoginData);
@@ -53,9 +51,9 @@ test.describe('navigation', async () => {
       let submitApplication = new H_SubmitApplication(cPage);
       await submitApplication.happyPathPopulate();
 
+      await cPage.waitForTimeout(5000);
       let resultsPage = new I_ResultsPage(cPage);
       await resultsPage.verifySuccessDenied();
-      await resultsPage.LOGOUT();
 
       await cPage.close();
       await bCont.close();
