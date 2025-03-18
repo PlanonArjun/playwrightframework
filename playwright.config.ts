@@ -150,15 +150,15 @@ const config = {
 			},
 		},
 		{
-			name: 'GalaxyS8',
+			name: 'GalaxyS9',
 			use: {
-				...devices['Galaxy S8'],
-				"userAgent": "Mozilla/5.0 (Linux; Android 7.0; SM-G950U Build/NRD90M) AppleWebKit/537.36 (HTML, like Gecko) Chrome/132.0.6834.15 Mobile Safari/537.36",
+				...devices['Galaxy S9+'],
+				"userAgent": "Mozilla/5.0 (Linux; Android 8.0.0; SM-G965U Build/R16NW) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.7049.17 Mobile Safari/537.36",
 				"viewport": {
-					"width": 360,
-					"height": 740
+					"width": 320,
+					"height": 658
 				},
-				"deviceScaleFactor": 3,
+				"deviceScaleFactor": 4.5,
 				"isMobile": true,
 				"hasTouch": true,
 				"defaultBrowserType": "chromium",
