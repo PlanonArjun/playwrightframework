@@ -31,13 +31,13 @@ class B_SplashPage {
         this.linkBankInfo = page.getByRole('link', { name: 'Bank routing and checking' });
         this.headingExpectedBank = page.getByRole('heading', { name: 'Bank routing and checking' });
         this.checkboxIHaveRead = page.locator('xpath=//label//span[1]');
-        this.linkTerms = page.locator('#view-splash').getByRole('link', { name: 'Terms of Use' });
-        this.textExpectedTerms = page.getByText('These Terms of Use ("Terms of');
-        this.linkPrivacy = page.locator('#view-splash').getByRole('link', { name: 'Privacy Policy' });
-        this.headingExpectedPrivacy = page.getByText('This privacy policy ("Privacy');
-        this.linkDisclosure = page.locator('#view-splash').getByRole('link', { name: 'Application Disclosure' });
-        this.textExpectedDisclosure = page.getByText('PLEASE READ THESE APPLICATION');
-        this.linkArbitration = page.locator('#view-splash').getByRole('link', { name: 'Arbitration Provision' });
+        this.linkTerms = page.getByRole('link', { name: 'Terms of Use' });
+        this.textExpectedTerms = page.getByText('Terms of use', { exact: true });
+        this.linkPrivacy = page.getByRole('link', { name: 'Privacy Policy' });
+        this.headingExpectedPrivacy = page.getByRole('banner').getByText('Privacy Policy');
+        this.linkDisclosure = page.getByRole('link', { name: 'Application Disclosure' });
+        this.textExpectedDisclosure = page.getByRole('banner').getByText('Application Disclosure');
+        this.linkArbitration = page.getByRole('link', { name: 'Arbitration Provision' });
         this.headingExpectedArbitration = page.getByRole('heading', { name: 'Arbitration Provision' });
         this.buttonComeBackLater = page.getByRole('button', { name: 'Come Back Later' });
         this.buttonContinue = page.getByRole('button', { name: 'Continue' });
@@ -50,18 +50,12 @@ class B_SplashPage {
 
     async checkLinkPhoto() {
         await this.linkPhotoId.click();
-        await expect(this.headingExpectedPhoto).toBeVisible();
-        await this.page.getByLabel('Close').click(); // required for Photo and Bank do not remove
-        await this.BACK();
-
+        await expect(this.headingExpectedPhoto).toBeVisible({timeout: 1000});
     }
 
     async checkLinkBankInfo() {
         await this.linkBankInfo.click();
-        await expect(this.headingExpectedBank).toBeVisible();
-        await this.page.getByLabel('Close').click(); // required for Photo and Bank do not remove
-        await this.BACK();
-
+        await expect(this.headingExpectedBank).toBeVisible({timeout: 1000});
     }
 
     async selectCheckbox() {
@@ -78,26 +72,22 @@ class B_SplashPage {
 
     async checkLinkTerms() {
         await this.linkTerms.click();
-        await expect(this.textExpectedTerms).toBeVisible();
-        await this.BACK();
+        await expect(this.textExpectedTerms).toBeVisible({timeout: 1000});
     }
 
     async checkLinkPrivacy() {
         await this.linkPrivacy.click();
         await expect(this.headingExpectedPrivacy).toBeVisible();
-        await this.BACK();
     }
 
     async checkLinkDisclosure() {
         await this.linkDisclosure.click();
         await expect(this.textExpectedDisclosure).toBeVisible();
-        await this.BACK();
     }
 
     async checkLinkArbitration() {
         await this.linkArbitration.click();
         await expect(this.headingExpectedArbitration).toBeVisible();
-        await this.BACK();
     }
 
     async comeBackLater() {
@@ -107,10 +97,6 @@ class B_SplashPage {
     async continue() {
         await this.selectCheckbox(); // required before CONTINUE button enabled
         await this.buttonContinue.click();
-    }
-
-    async BACK() {
-        await this.buttonBACK_shared.click();
     }
 
 }
