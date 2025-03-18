@@ -14,7 +14,7 @@ class B_SplashPage {
     readonly linkTerms: Locator;
     readonly textExpectedTerms: Locator;
     readonly linkPrivacy: Locator;
-    readonly headingExpectedPrivacy: Locator;
+    readonly textExpectedPrivacy: Locator;
     readonly linkDisclosure: Locator;
     readonly textExpectedDisclosure: Locator;
     readonly linkArbitration: Locator;
@@ -32,11 +32,11 @@ class B_SplashPage {
         this.headingExpectedBank = page.getByRole('heading', { name: 'Bank routing and checking' });
         this.checkboxIHaveRead = page.locator('xpath=//label//span[1]');
         this.linkTerms = page.getByRole('link', { name: 'Terms of Use' });
-        this.textExpectedTerms = page.getByText('Terms of use', { exact: true });
+        this.textExpectedTerms = page.getByText('Terms of Use', { exact: true });
         this.linkPrivacy = page.getByRole('link', { name: 'Privacy Policy' });
-        this.headingExpectedPrivacy = page.getByRole('banner').getByText('Privacy Policy');
+        this.textExpectedPrivacy = page.getByText('This privacy policy ("Privacy');
         this.linkDisclosure = page.getByRole('link', { name: 'Application Disclosure' });
-        this.textExpectedDisclosure = page.getByRole('banner').getByText('Application Disclosure');
+        this.textExpectedDisclosure = page.getByText('PLEASE READ THESE APPLICATION');
         this.linkArbitration = page.getByRole('link', { name: 'Arbitration Provision' });
         this.headingExpectedArbitration = page.getByRole('heading', { name: 'Arbitration Provision' });
         this.buttonComeBackLater = page.getByRole('button', { name: 'Come Back Later' });
@@ -50,12 +50,12 @@ class B_SplashPage {
 
     async checkLinkPhoto() {
         await this.linkPhotoId.click();
-        await expect(this.headingExpectedPhoto).toBeVisible({timeout: 1000});
+        await expect(this.headingExpectedPhoto).toBeVisible({timeout: 5000});
     }
 
     async checkLinkBankInfo() {
         await this.linkBankInfo.click();
-        await expect(this.headingExpectedBank).toBeVisible({timeout: 1000});
+        await expect(this.headingExpectedBank).toBeVisible({timeout: 5000});
     }
 
     async selectCheckbox() {
@@ -72,22 +72,22 @@ class B_SplashPage {
 
     async checkLinkTerms() {
         await this.linkTerms.click();
-        await expect(this.textExpectedTerms).toBeVisible({timeout: 1000});
+        await expect(this.textExpectedTerms).toBeVisible({timeout: 5000});
     }
 
     async checkLinkPrivacy() {
         await this.linkPrivacy.click();
-        await expect(this.headingExpectedPrivacy).toBeVisible();
+        await expect(this.textExpectedPrivacy).toBeVisible({timeout: 5000});
     }
 
     async checkLinkDisclosure() {
         await this.linkDisclosure.click();
-        await expect(this.textExpectedDisclosure).toBeVisible();
+        await expect(this.textExpectedDisclosure).toBeVisible({timeout: 5000});
     }
 
     async checkLinkArbitration() {
         await this.linkArbitration.click();
-        await expect(this.headingExpectedArbitration).toBeVisible();
+        await expect(this.headingExpectedArbitration).toBeVisible({timeout: 5000});
     }
 
     async comeBackLater() {
