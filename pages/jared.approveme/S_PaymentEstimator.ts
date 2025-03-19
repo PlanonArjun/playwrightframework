@@ -45,14 +45,6 @@ class S_PaymentEstimator {
         this.buttonCloseEstimatorX = page.getByText('X', { exact: true });
     }
 
-    async launchPaymentEstimator() {
-        /* This unconventional path to the estimator is here because it
-        works consistently for all desktop and mobile browsers we need.
-         */
-        await this.page.getByText('Estimator').click();
-        await this.page.waitForTimeout(250);
-    }
-
     async _enterCostOfItemsAsString(cost: string) {
         await this.fieldCostOfItems.click({force: true});
         await this.fieldCostOfItems.clear();
@@ -109,7 +101,7 @@ class S_PaymentEstimator {
     }
 
     async happyPathEstimate(costOfItemsAsString: string, payFrequencyIn: PaymentFrequency) {
-        await this.launchPaymentEstimator();
+        await this.page.getByText('estimator').click();
         await this._enterCostOfItemsAsString(costOfItemsAsString);
         await this._selectPaymentFrequency(payFrequencyIn);
         await this._getMyEstimate();
