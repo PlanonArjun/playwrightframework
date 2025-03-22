@@ -38,7 +38,7 @@ test.describe('jared', async () => {
     isHealthyLocal = await new JaredHealthCheck(cPage).isHealthy();
   });
 
-  test('denied', { tag: ['@approveme', '@signet', '@jared', '@splashpage', '@happy', '@denied'] }, async ({ browser }) => {
+  test('Jared denied', { tag: ['@approveme', '@signet', '@jared', '@splashpage', '@happy', '@denied'] }, async () => {
     test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
     await expect(async () => {
 

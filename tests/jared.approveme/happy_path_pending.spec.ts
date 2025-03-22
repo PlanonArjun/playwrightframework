@@ -38,7 +38,7 @@ test.describe('navigation', async () => {
     isHealthyLocal = await new JaredHealthCheck(cPage).isHealthy();
   });
 
-  test('happy path pending to results page - apply', { tag: ['@approveme', '@signet', '@jared', '@splashpage', '@happy', '@pending'] }, async ({ browser }) => {
+  test('Jared pending', { tag: ['@approveme', '@signet', '@jared', '@splashpage', '@happy', '@pending'] }, async ({ browser }) => {
     test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
     await expect(async () => {
 
