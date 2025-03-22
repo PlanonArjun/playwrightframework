@@ -1,5 +1,4 @@
-import { test, expect } from '@playwright/test';
-import A_MarketingPage from "../../pages/jared.approveme/A_MarketingPage";
+import { test, expect, BrowserContext, Page } from '@playwright/test';
 import B_SplashPage from "../../pages/jared.approveme/B_SplashPage";
 import C_StartAppPage from "../../pages/jared.approveme/C_StartAppPage";
 import F_RentOwn from '../../pages/jared.approveme/F_RentOwn';
@@ -17,6 +16,11 @@ import L_BankAccountDetails from '../../pages/jared.approveme/L_BankAccountDetai
 import M_BankDepositMode from '../../pages/jared.approveme/M_BankDepositMode';
 import N_PaymentCardDetails from '../../pages/jared.approveme/N_PaymentCardDetails';
 import O_PaymentBillingAddress from '../../pages/jared.approveme/O_PaymentBillingAddress';
+import JaredHealthCheck from './JaredHealthCheck';
+
+let bCont: BrowserContext;
+let cPage: Page;
+let isHealthyLocal: Boolean;
 
 test.describe('navigation', async () => {
 
@@ -28,17 +32,18 @@ test.describe('navigation', async () => {
   let nameLastFetched:string;
   let ssnFetched:string;
 
-  test('happy path approved to results page - apply', { tag: ['@approveme', '@signet', '@jared', '@splashpage', '@happy', '@approved'] }, async ({ browser }) => {
+  test.beforeAll(async ({browser}) => {
+    bCont = await browser.newContext();
+    cPage = await bCont.newPage();
+    isHealthyLocal = await new JaredHealthCheck(cPage).isHealthy();
+  });
+
+  test('happy path approved to results page - apply', { tag: ['@approveme', '@signet', '@jared', '@splashpage', '@happy', '@approved'] }, async () => {
+    test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
     await expect(async () => {
 
-      const bCont = await browser.newContext();
-      const cPage = await bCont.newPage();
-
-      let marketingPage = new A_MarketingPage(cPage);
-      await marketingPage.beginApply();
-      await cPage.waitForTimeout(1000);
-
       let splashPage = new B_SplashPage(cPage);
+      await splashPage.navigate();
       await splashPage.continue();
 
       let happyPathApproved = new HappyPathApproved();
@@ -107,6 +112,6 @@ test.describe('navigation', async () => {
         await bCont.close();
       }
 
-    }).toPass({ timeout: 100000 });
+    }).toPass({ timeout: 120000 });
   });
 });

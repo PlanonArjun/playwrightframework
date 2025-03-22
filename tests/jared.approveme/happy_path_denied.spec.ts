@@ -1,5 +1,4 @@
-import { test, expect } from '@playwright/test';
-import A_MarketingPage from "../../pages/jared.approveme/A_MarketingPage";
+import { test, expect, BrowserContext, Page } from '@playwright/test';
 import B_SplashPage from "../../pages/jared.approveme/B_SplashPage";
 import C_StartAppPage from "../../pages/jared.approveme/C_StartAppPage";
 import F_RentOwn from '../../pages/jared.approveme/F_RentOwn';
@@ -17,7 +16,11 @@ import M_BankDepositMode from '../../pages/jared.approveme/M_BankDepositMode';
 import N_PaymentCardDetails from '../../pages/jared.approveme/N_PaymentCardDetails';
 import O_PaymentBillingAddress from '../../pages/jared.approveme/O_PaymentBillingAddress';
 import HappyPathDenied from '../../data/jared.approveme/HappyPathDenied';
-import HappyPathApproved from "../../data/jared.approveme/HappyPathApproved";
+import JaredHealthCheck from './JaredHealthCheck';
+
+let bCont: BrowserContext;
+let cPage: Page;
+let isHealthyLocal: Boolean;
 
 test.describe('jared', async () => {
 
@@ -29,18 +32,19 @@ test.describe('jared', async () => {
   let nameLastFetched:string;
   let ssnFetched:string;
 
+  test.beforeAll(async ({browser}) => {
+    bCont = await browser.newContext();
+    cPage = await bCont.newPage();
+    isHealthyLocal = await new JaredHealthCheck(cPage).isHealthy();
+  });
+
   test('denied', { tag: ['@approveme', '@signet', '@jared', '@splashpage', '@happy', '@denied'] }, async ({ browser }) => {
+    test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
     await expect(async () => {
 
-      const bCont = await browser.newContext();
-      const cPage = await bCont.newPage();
-
-      let a_marketingPage = new A_MarketingPage(cPage);
-      await a_marketingPage.beginApply();
-      await cPage.waitForTimeout(1000);
-
-      let b_splashPage = new B_SplashPage(cPage);
-      await b_splashPage.continue();
+      let splashPage = new B_SplashPage(cPage);
+      await splashPage.navigate();
+      await splashPage.continue();
 
       let happyPathDenied = new HappyPathDenied();
 

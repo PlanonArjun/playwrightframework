@@ -1,6 +1,7 @@
 // signet_jared approve me
 import { type Page, type Locator, expect } from '@playwright/test';
 import A_MarketingPage from "./A_MarketingPage";
+import urls from '$utils/jared.utils/urls';
 
 class B_SplashPage {
 
@@ -45,7 +46,7 @@ class B_SplashPage {
     }
 
     async navigate() {
-        await this.a_marketingPage.beginApply();
+        await this.page.goto(urls.splash.splash);
     }
 
     async checkLinkPhoto() {

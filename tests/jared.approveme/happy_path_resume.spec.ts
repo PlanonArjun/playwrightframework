@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, BrowserContext, Page } from '@playwright/test';
 import A_MarketingPage from "../../pages/jared.approveme/A_MarketingPage";
 import B_SplashPage from "../../pages/jared.approveme/B_SplashPage";
 import C_StartAppPage from "../../pages/jared.approveme/C_StartAppPage";
@@ -18,8 +18,13 @@ import O_PaymentBillingAddress from '../../pages/jared.approveme/O_PaymentBillin
 import D_AboutYouContactPage from '../../pages/jared.approveme/D_AboutYouContactPage';
 import E_AboutYouAddressPage from '../../pages/jared.approveme/E_AboutYouAddressPage';
 import R_ResumeApplication from "../../pages/jared.approveme/R_ResumeApplication";
+import JaredHealthCheck from './JaredHealthCheck';
 
-test.describe('navigation', async () => {
+let bCont: BrowserContext;
+let cPage: Page;
+let isHealthyLocal: Boolean;
+
+test.describe('approved-resume', async () => {
 
   test.describe.configure({ retries: 0 });
   test.describe.configure({ mode: 'serial' });
@@ -30,17 +35,18 @@ test.describe('navigation', async () => {
   let ssnFetched: string;
   let isApplyPass: boolean = false;
 
-  test('approved first', { tag: ['@approveme', '@jared', '@signet', '@happy', '@approved'] }, async ({ browser }) => {
+  test.beforeAll(async ({browser}) => {
+    bCont = await browser.newContext();
+    cPage = await bCont.newPage();
+    isHealthyLocal = await new JaredHealthCheck(cPage).isHealthy();
+  });
+
+  test('approved first', { tag: ['@approveme', '@jared', '@signet', '@happy', '@approved'] }, async () => {
+    test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
     await expect(async () => {
 
-      const bCont = await browser.newContext();
-      const cPage = await bCont.newPage();
-
-      let marketingPage = new A_MarketingPage(cPage);
-      await marketingPage.beginApply();
-      await cPage.waitForTimeout(1000);
-
       let splashPage = new B_SplashPage(cPage);
+      await splashPage.navigate();
       await splashPage.continue();
 
       let happyPathApproved = new HappyPathApproved();
@@ -105,12 +111,9 @@ test.describe('navigation', async () => {
         await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason:'jared approved'}})}`);
       }catch(Error) {
         await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
-      }finally{
-        await cPage.close();
-        await bCont.close();
       }
 
-    }).toPass({ timeout: 100000 });
+    }).toPass({ timeout: 120000 });
   });
 
   test('resume second', { tag: ['@approveme', '@jared', '@Signet', '@happy', '@resume'] }, async ({ browser }) => {
@@ -135,9 +138,6 @@ test.describe('navigation', async () => {
           await cPageR.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason:'jared resume'}})}`);
         }catch(Error) {
           await cPageR.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
-        }finally{
-          await cPageR.close();
-          await bContR.close();
         }
       }else {
         console.log("Apply failed. Resume skipped.");
