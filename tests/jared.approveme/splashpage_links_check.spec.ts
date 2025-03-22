@@ -18,7 +18,7 @@ test.describe('navigation', async () => {
     isHealthyLocal = await new JaredHealthCheck(cPage).isHealthy();
   });
 
-  test.beforeEach(async ({browser}) => {
+  test.beforeEach(async () => {
     await cPage.goto(urls.splash.splash);
   });
 
@@ -47,7 +47,7 @@ test.describe('navigation', async () => {
     }
   });
 
-  test('checkbox', { tag: ['@approveme', '@signet', '@jared', '@splashpage', '@linkscheck'] }, async ({ browser }) => {
+  test('checkbox', { tag: ['@approveme', '@signet', '@jared', '@splashpage', '@linkscheck'] }, async () => {
     test.skip(isHealthyLocal !== true, 'health check FAILED; test.skip()');
     try {
       let splash = new B_SplashPage(cPage);
@@ -59,7 +59,7 @@ test.describe('navigation', async () => {
     }
   });
 
-  test('terms', { tag: ['@approveme', '@signet', '@jared', '@splashpage', '@linkscheck'] }, async ({ browser }) => {
+  test('terms', { tag: ['@approveme', '@signet', '@jared', '@splashpage', '@linkscheck'] }, async () => {
     test.skip(isHealthyLocal !== true, 'health check FAILED; test.skip()');
     try {
       await (new B_SplashPage(cPage)).checkLinkTerms();
@@ -69,7 +69,7 @@ test.describe('navigation', async () => {
     }
   });
 
-  test('privacy', { tag: ['@approveme', '@signet', '@jared', '@splashpage', '@linkscheck'] }, async ({ browser }) => {
+  test('privacy', { tag: ['@approveme', '@signet', '@jared', '@splashpage', '@linkscheck'] }, async () => {
     test.skip(isHealthyLocal !== true, 'health check FAILED; test.skip()');
     try {
       await (new B_SplashPage(cPage)).checkLinkPrivacy();
@@ -79,7 +79,7 @@ test.describe('navigation', async () => {
     }
   });
 
-  test('disclosure', { tag: ['@approveme', '@signet', '@jared', '@splashpage', '@linkscheck'] }, async ({ browser }) => {
+  test('disclosure', { tag: ['@approveme', '@signet', '@jared', '@splashpage', '@linkscheck'] }, async () => {
     test.skip(isHealthyLocal !== true, 'health check FAILED; test.skip()');
     try {
       await (new B_SplashPage(cPage)).checkLinkDisclosure();
@@ -89,7 +89,7 @@ test.describe('navigation', async () => {
     }
   });
 
-  test('arbitration', { tag: ['@approveme', '@signet', '@jared', '@splashpage', '@linkscheck'] }, async ({ browser }) => {
+  test('arbitration', { tag: ['@approveme', '@signet', '@jared', '@splashpage', '@linkscheck'] }, async () => {
     test.skip(isHealthyLocal !== true, 'health check FAILED; test.skip()');
     try {
       await (new B_SplashPage(cPage)).checkLinkArbitration();
