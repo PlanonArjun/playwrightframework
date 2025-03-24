@@ -19,7 +19,7 @@ class B_SplashPage {
     readonly linkDisclosure: Locator;
     readonly textExpectedDisclosure: Locator;
     readonly linkArbitration: Locator;
-    readonly headingExpectedArbitration: Locator;
+    readonly textExpectedArbitration: Locator;
     readonly buttonComeBackLater: Locator;
     readonly buttonContinue: Locator;
     readonly buttonBACK_shared: Locator;
@@ -39,10 +39,12 @@ class B_SplashPage {
         this.linkDisclosure = page.getByRole('link', { name: 'Application Disclosure' });
         this.textExpectedDisclosure = page.getByText('PLEASE READ THESE APPLICATION');
         this.linkArbitration = page.getByRole('link', { name: 'Arbitration Provision' });
-        this.headingExpectedArbitration = page.getByRole('heading', { name: 'Arbitration Provision' });
+        this.textExpectedArbitration = page.getByText('This Arbitration Provision (“');
         this.buttonComeBackLater = page.getByRole('button', { name: 'Come Back Later' });
         this.buttonContinue = page.getByRole('button', { name: 'Continue' });
         this.buttonBACK_shared = page.getByRole('button', { name: 'Back' }).first();
+
+
     }
 
     async navigate() {
@@ -88,7 +90,7 @@ class B_SplashPage {
 
     async checkLinkArbitration() {
         await this.linkArbitration.click();
-        await expect(this.headingExpectedArbitration).toBeVisible({timeout: 5000});
+        await expect(this.textExpectedArbitration).toBeVisible({timeout: 5000});
     }
 
     async comeBackLater() {

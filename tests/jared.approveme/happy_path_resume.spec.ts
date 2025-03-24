@@ -117,6 +117,7 @@ test.describe('approved-resume', async () => {
   });
 
   test('resume second', { tag: ['@approveme', '@jared', '@Signet', '@happy', '@resume'] }, async ({ browser }) => {
+    test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
     await expect(async () => {
 
       if(isApplyPass) {

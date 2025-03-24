@@ -28,6 +28,10 @@ class JaredHealthCheck {
     if(!(await this.buttonContinue.isVisible({timeout: 5000}))) {
       this.statusHealthy = false;
     }
+    if(this.statusHealthy) {
+      console.log('Jared health pre-check PASS...')
+    }
+
     return this.statusHealthy;
   }
 

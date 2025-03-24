@@ -24,6 +24,7 @@ import HappyPathPending from "../../data/jared.approveme/HappyPathPending";
 import HappyPathDenied from "../../data/jared.approveme/HappyPathDenied";
 import S_PaymentEstimator from "../../pages/jared.approveme/S_PaymentEstimator";
 import JaredHealthCheck from './JaredHealthCheck';
+import urls from '$utils/jared.utils/urls';
 
 let bCont: BrowserContext;
 let cPage: Page;
@@ -47,7 +48,7 @@ test.describe('Jared Big Six', async () => {
     });
 
     test('approve before resume', { tag: ['@jared', '@approveme', '@happy', '@approved'] }, async () => {
-        test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
+        test.skip(isHealthyLocal == false, 'health check FAILED; test()');
         await expect(async () => {
 
             let splashPage = new B_SplashPage(cPage);
@@ -125,21 +126,15 @@ test.describe('Jared Big Six', async () => {
                     action: 'setSessionStatus',
                     arguments: {status: 'failed', reason: Error.toString()}
                 })}`);
-            }/* finally {
-                await cPage.close();
-                await bCont.close();
-            }*/
-
+            }
         }).toPass({ timeout: 120000 });
     });
 
     test('resume second', { tag: ['@jared', '@approveme', '@happy', '@resume'] },async () => {
-        test.skip(isApplyPass == false, 'apply FAILED; test.skip()');
+        test.skip(isHealthyLocal == false, 'health check FAILED; test()');
+        test.skip(isApplyPass == false, 'apply FAILED; test()');
 
         await expect(async () => {
-
-            // const bContR = await browser.newContext();
-            // const cPageR = await bContR.newPage();
 
             let marketingPageR = new A_MarketingPage(cPage);
             await marketingPageR.navigate();
@@ -153,114 +148,103 @@ test.describe('Jared Big Six', async () => {
             try {
                 await results.verifySuccessApproved();
                 console.log("apply-resume back-to-back passed...")
-                isResumePass = true;
+                isApplyPass = true;
                 await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason:'Jared resume'}})}`);
             }catch(Error) {
                 await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
-            }/*finally{
-                    await cPageR.close();
-                    await bContR.close();
-                }*/
+            }
         }).toPass({timeout: 90000});
     });
 
     test('separate approved', { tag: ['@jared', '@approveme', '@happy', '@approved'] },async () => {
-        test.skip(isApplyPass == false, 'apply FAILED; test.skip()');
-
-        if(isApplyPass && isResumePass) {
+        test.skip(isHealthyLocal == false, 'health check FAILED; test()');
+        if(isApplyPass) {
             console.log('separate approved skipped on purpose, not needed');
-        }else {
-
-            await expect(async () => {
-
-                // let bCont = await browser.newContext();
-                // let cPage = await bCont.newPage();
-
-                let splashPage = new B_SplashPage(cPage);
-                await splashPage.navigate();
-                await splashPage.continue();
-
-                let happyPathApproved = new HappyPathApproved();
-
-                let c_startAppPage = new C_StartAppPage(cPage);
-
-                getStartAppData = happyPathApproved.getStartAppData;
-                nameFirstFetched = getStartAppData[0];
-                nameLastFetched = getStartAppData[1];
-                ssnFetched = getStartAppData[3]; // ssn is 3
-
-                for (let value in getStartAppData) { // optional, helpful
-                    console.log(getStartAppData[value] + "\t");
-                }
-                await c_startAppPage.happyPathPopulate(getStartAppData);
-
-                let aboutYouContactPage = new D_AboutYouContactPage(cPage);
-                await aboutYouContactPage.happyPathPopulate(happyPathApproved.getAboutYou1);
-
-                let aboutYouAddressPage = new E_AboutYouAddressPage(cPage);
-                await aboutYouAddressPage.happyPathPopulate(happyPathApproved.getAboutYou2);
-
-                let rentOwn = new F_RentOwn(cPage);
-                await rentOwn.setIsOwn(true);
-
-                let iDType = new G_IDType(cPage);
-                await iDType.happyPathPopulate(happyPathApproved.getIdNumber);
-
-                let employStatus = new H_EmployStatus(cPage);
-                await employStatus.happyPathPopulate();
-
-                let employeeInfo = new I_EmployeeInfo(cPage);
-                await employeeInfo.happyPathPopulate(happyPathApproved.getEmployeeInfo);
-
-                let employerDuration = new J_EmployerDuration(cPage);
-                await employerDuration.happyPathPopulate(happyPathApproved.getEmployerInfo);
-
-                let incomeInfoPage = new K_IncomeInfoPage(cPage);
-                await incomeInfoPage.happyPathPopulate(happyPathApproved.getIncomeInfo);
-
-                let bankAccountDetails = new L_BankAccountDetails(cPage);
-                await bankAccountDetails.happyPathPopulate(happyPathApproved.getBankInfo1);
-
-                let bankDepositMode = new M_BankDepositMode(cPage);
-                await bankDepositMode.setIsDirectDeposit(happyPathApproved.getBankInfo2);
-
-                let paymentCardsDetails = new N_PaymentCardDetails(cPage);
-                await paymentCardsDetails.happyPathPopulate(happyPathApproved.getPaymentCard);
-
-                let paymentBillingAddress = new O_PaymentBillingAddress(cPage);
-                await paymentBillingAddress._checkSameAs();
-                await paymentBillingAddress._NEXT();
-
-                let submitConfirm = new P_ConfirmSubmit(cPage);
-                await submitConfirm.submitApplication();
-
-                let results: Q_ResultsPage = new Q_ResultsPage(cPage);
-
-                try {
-                    await results.verifySuccessApproved();
-                    await cPage.evaluate(_ => {
-                    }, `browserstack_executor: ${JSON.stringify({
-                        action: 'setSessionStatus',
-                        arguments: { status: 'passed', reason: 'jared separate approved' }
-                    })}`);
-                } catch (Error) {
-                    await cPage.evaluate(_ => {
-                    }, `browserstack_executor: ${JSON.stringify({
-                        action: 'setSessionStatus',
-                        arguments: { status: 'failed', reason: Error.toString() }
-                    })}`);
-                }/*finally{
-                    await cPage.close();
-                    await bCont.close();
-                }*/
-
-            }).toPass({ timeout: 120000 });
         }
+        test.skip(isApplyPass == true, 'approved-resume PASS; test()');
+
+        await expect(async () => {
+
+            let splashPage = new B_SplashPage(cPage);
+            await splashPage.navigate();
+            await splashPage.continue();
+
+            let happyPathApproved = new HappyPathApproved();
+
+            let c_startAppPage = new C_StartAppPage(cPage);
+
+            getStartAppData = happyPathApproved.getStartAppData;
+            nameFirstFetched = getStartAppData[0];
+            nameLastFetched = getStartAppData[1];
+            ssnFetched = getStartAppData[3]; // ssn is 3
+
+            for (let value in getStartAppData) { // optional, helpful
+                console.log(getStartAppData[value] + "\t");
+            }
+            await c_startAppPage.happyPathPopulate(getStartAppData);
+
+            let aboutYouContactPage = new D_AboutYouContactPage(cPage);
+            await aboutYouContactPage.happyPathPopulate(happyPathApproved.getAboutYou1);
+
+            let aboutYouAddressPage = new E_AboutYouAddressPage(cPage);
+            await aboutYouAddressPage.happyPathPopulate(happyPathApproved.getAboutYou2);
+
+            let rentOwn = new F_RentOwn(cPage);
+            await rentOwn.setIsOwn(true);
+
+            let iDType = new G_IDType(cPage);
+            await iDType.happyPathPopulate(happyPathApproved.getIdNumber);
+
+            let employStatus = new H_EmployStatus(cPage);
+            await employStatus.happyPathPopulate();
+
+            let employeeInfo = new I_EmployeeInfo(cPage);
+            await employeeInfo.happyPathPopulate(happyPathApproved.getEmployeeInfo);
+
+            let employerDuration = new J_EmployerDuration(cPage);
+            await employerDuration.happyPathPopulate(happyPathApproved.getEmployerInfo);
+
+            let incomeInfoPage = new K_IncomeInfoPage(cPage);
+            await incomeInfoPage.happyPathPopulate(happyPathApproved.getIncomeInfo);
+
+            let bankAccountDetails = new L_BankAccountDetails(cPage);
+            await bankAccountDetails.happyPathPopulate(happyPathApproved.getBankInfo1);
+
+            let bankDepositMode = new M_BankDepositMode(cPage);
+            await bankDepositMode.setIsDirectDeposit(happyPathApproved.getBankInfo2);
+
+            let paymentCardsDetails = new N_PaymentCardDetails(cPage);
+            await paymentCardsDetails.happyPathPopulate(happyPathApproved.getPaymentCard);
+
+            let paymentBillingAddress = new O_PaymentBillingAddress(cPage);
+            await paymentBillingAddress._checkSameAs();
+            await paymentBillingAddress._NEXT();
+
+            let submitConfirm = new P_ConfirmSubmit(cPage);
+            await submitConfirm.submitApplication();
+
+            let results: Q_ResultsPage = new Q_ResultsPage(cPage);
+
+            try {
+                await results.verifySuccessApproved();
+                await cPage.evaluate(_ => {
+                }, `browserstack_executor: ${JSON.stringify({
+                    action: 'setSessionStatus',
+                    arguments: { status: 'passed', reason: 'jared separate approved' }
+                })}`);
+            } catch (Error) {
+                await cPage.evaluate(_ => {
+                }, `browserstack_executor: ${JSON.stringify({
+                    action: 'setSessionStatus',
+                    arguments: { status: 'failed', reason: Error.toString() }
+                })}`);
+            }
+        }).toPass({ timeout: 120000 });
     });
 
     test('Jared pending', { tag: ['@jared', '@approveme', '@happy', '@pending'] },async () => {
+        test.skip(isHealthyLocal == false, 'health check FAILED; test()');
         console.log('continue with pending...');
-        test.skip(isResumePass == false, 'approved-resume FAIL; test.skip()');
 
         await expect(async () => {
 
@@ -340,16 +324,12 @@ test.describe('Jared Big Six', async () => {
                     action: 'setSessionStatus',
                     arguments: {status: 'failed', reason: Error.toString()}
                 })}`);
-            }/* finally {
-                        await cPage.close();
-                        await bCont.close();
-                    }*/
-
+            }
         }).toPass({timeout: 120000});
     });
 
     test('Jared denied', { tag: ['@jared', '@approveme', '@happy', '@denied'] },async () => {
-        test.skip(isResumePass == false, 'approved-resume FAIL; test.skip()');
+        test.skip(isHealthyLocal == false, 'health check FAILED; test()');
         console.log('continue with denied...');
 
         await expect(async () => {
@@ -431,510 +411,210 @@ test.describe('Jared Big Six', async () => {
                     action: 'setSessionStatus',
                     arguments: {status: 'failed', reason: Error.toString()}
                 })}`);
-            }/* finally {
-                        await cPage.close();
-                        await bCont.close();
-                    }*/
-
+            }
         }).toPass({timeout: 120000});
     });
 
     test('estimator : weekly', { tag: ['@jared', '@approveme', '@happypath', '@estimate'] }, async () => {
-        test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
+        test.skip(isHealthyLocal == false, 'health check FAILED; test()');
         console.log('continue with estimator tests...');
-        // const ATTEMPTS_MAX: number = 2;
-        // let attempts: number = 1;
-        // let isWeeklyPass = false;
-        // while((attempts <= ATTEMPTS_MAX) && (isWeeklyPass===false)) {
-            // const bCont = await browser.newContext();
-            // const cPage = await bCont.newPage();
-            let a_marketingPage = new A_MarketingPage(cPage);
-            await a_marketingPage.navigate();
-            let s_estimator = new S_PaymentEstimator(cPage);
+        await (new A_MarketingPage(cPage)).navigate();
+        let s_estimator = new S_PaymentEstimator(cPage);
 
-            try {
-                await s_estimator.happyPathEstimate('3001', PaymentFrequency.Weekly);
-                // isWeeklyPass = true;
-                await cPage.evaluate(_ => {
-                }, `browserstack_executor: ${JSON.stringify({
-                    action: 'setSessionStatus',
-                    arguments: {status: 'passed', reason: 'weekly'}
-                })}`);
-            } catch (Error) {
-                // attempts++;
-                await cPage.evaluate(_ => {
-                }, `browserstack_executor: ${JSON.stringify({
-                    action: 'setSessionStatus',
-                    arguments: {status: 'failed', reason: Error.toString()}
-                })}`);
-            }/* finally {
-                    await cPage.close();
-                    await bCont.close();
-                }*/
-        // }
+        try {
+            await s_estimator.happyPathEstimate('3001', PaymentFrequency.Weekly);
+            await cPage.evaluate(_ => {
+            }, `browserstack_executor: ${JSON.stringify({
+                action: 'setSessionStatus',
+                arguments: {status: 'passed', reason: 'weekly'}
+            })}`);
+        } catch (Error) {
+            await cPage.evaluate(_ => {
+            }, `browserstack_executor: ${JSON.stringify({
+                action: 'setSessionStatus',
+                arguments: {status: 'failed', reason: Error.toString()}
+            })}`);
+        }
     });
 
     test('estimator : monthly', { tag: ['@jared', '@approveme', '@happypath', '@estimate'] }, async () => {
-        test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
-        // const ATTEMPTS_MAX: number = 2;
-        // let attempts: number = 1;
-        // let isWeeklyPass = false;
-        // while((attempts <= ATTEMPTS_MAX) && (isWeeklyPass===false)) {
-            // const bCont = await browser.newContext();
-            // const cPage = await bCont.newPage();
-            let a_marketingPage = new A_MarketingPage(cPage);
-            await a_marketingPage.navigate();
-            let s_estimator = new S_PaymentEstimator(cPage);
+        test.skip(isHealthyLocal == false, 'health check FAILED; test()');
+        await (new A_MarketingPage(cPage)).navigate();
+        let s_estimator = new S_PaymentEstimator(cPage);
 
-            try {
-                await s_estimator.happyPathEstimate('4001', PaymentFrequency.Monthly);
-                // isWeeklyPass = true;
-                await cPage.evaluate(_ => {
-                }, `browserstack_executor: ${JSON.stringify({
-                    action: 'setSessionStatus',
-                    arguments: {status: 'passed', reason: 'monthly'}
-                })}`);
-            } catch (Error) {
-                // attempts++;
-                await cPage.evaluate(_ => {
-                }, `browserstack_executor: ${JSON.stringify({
-                    action: 'setSessionStatus',
-                    arguments: {status: 'failed', reason: Error.toString()}
-                })}`);
-            }/* finally {
-                    await cPage.close();
-                    await bCont.close();
-                }*/
-        // }
+        try {
+            await s_estimator.happyPathEstimate('4001', PaymentFrequency.Monthly);
+            await cPage.evaluate(_ => {
+            }, `browserstack_executor: ${JSON.stringify({
+                action: 'setSessionStatus',
+                arguments: {status: 'passed', reason: 'monthly'}
+            })}`);
+        } catch (Error) {
+            await cPage.evaluate(_ => {
+            }, `browserstack_executor: ${JSON.stringify({
+                action: 'setSessionStatus',
+                arguments: {status: 'failed', reason: Error.toString()}
+            })}`);
+        }
     });
 
     test('estimator : biweekly', { tag: ['@jared', '@approveme', '@happypath', '@estimate'] }, async () => {
-        test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
-        // const ATTEMPTS_MAX: number = 2;
-        // let attempts: number = 1;
-        // let isWeeklyPass = false;
-        // while((attempts <= ATTEMPTS_MAX) && (isWeeklyPass===false)) {
-            // const bCont = await browser.newContext();
-            // const cPage = await bCont.newPage();
-            let a_marketingPage = new A_MarketingPage(cPage);
-            await a_marketingPage.navigate();
-            let s_estimator = new S_PaymentEstimator(cPage);
+        test.skip(isHealthyLocal == false, 'health check FAILED; test()');
+        await (new A_MarketingPage(cPage)).navigate();
+        let s_estimator = new S_PaymentEstimator(cPage);
 
-            try {
-                await s_estimator.happyPathEstimate('4001', PaymentFrequency.BiWeekly);
-                // isWeeklyPass = true;
-                await cPage.evaluate(_ => {
-                }, `browserstack_executor: ${JSON.stringify({
-                    action: 'setSessionStatus',
-                    arguments: {status: 'passed', reason: 'biweekly'}
-                })}`);
-            } catch (Error) {
-                // attempts++;
-                await cPage.evaluate(_ => {
-                }, `browserstack_executor: ${JSON.stringify({
-                    action: 'setSessionStatus',
-                    arguments: {status: 'failed', reason: Error.toString()}
-                })}`);
-            }/* finally {
-                    await cPage.close();
-                    await bCont.close();
-                }*/
-        // }
+        try {
+            await s_estimator.happyPathEstimate('4001', PaymentFrequency.BiWeekly);
+            await cPage.evaluate(_ => {
+            }, `browserstack_executor: ${JSON.stringify({
+                action: 'setSessionStatus',
+                arguments: {status: 'passed', reason: 'biweekly'}
+            })}`);
+        } catch (Error) {
+            await cPage.evaluate(_ => {
+            }, `browserstack_executor: ${JSON.stringify({
+                action: 'setSessionStatus',
+                arguments: {status: 'failed', reason: Error.toString()}
+            })}`);
+        }
     });
 
     test('estimator : semimonthly', { tag: ['@jared', '@approveme', '@happypath', '@estimate'] }, async () => {
-        test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
-        // const ATTEMPTS_MAX: number = 2;
-        // let attempts: number = 1;
-        // let isWeeklyPass = false;
-        // while((attempts <= ATTEMPTS_MAX) && (isWeeklyPass===false)) {
-            // const bCont = await browser.newContext();
-            // const cPage = await bCont.newPage();
-            let a_marketingPage = new A_MarketingPage(cPage);
-            await a_marketingPage.navigate();
-            let s_estimator = new S_PaymentEstimator(cPage);
-
-            try {
-                await s_estimator.happyPathEstimate('4001', PaymentFrequency.SemiMonthly);
-                // isWeeklyPass = true;
-                await cPage.evaluate(_ => {
-                }, `browserstack_executor: ${JSON.stringify({
-                    action: 'setSessionStatus',
-                    arguments: {status: 'passed', reason: 'semimonthly'}
-                })}`);
-            } catch (Error) {
-                // attempts++;
-                await cPage.evaluate(_ => {
-                }, `browserstack_executor: ${JSON.stringify({
-                    action: 'setSessionStatus',
-                    arguments: {status: 'failed', reason: Error.toString()}
-                })}`);
-            }/* finally {
-                    await cPage.close();
-                    await bCont.close();
-                }*/
-        // }
+        test.skip(isHealthyLocal == false, 'health check FAILED; test()');
+        await (new A_MarketingPage(cPage)).navigate();
+        let s_estimator = new S_PaymentEstimator(cPage);
+        try {
+            await s_estimator.happyPathEstimate('4001', PaymentFrequency.SemiMonthly);
+            await cPage.evaluate(_ => {
+            }, `browserstack_executor: ${JSON.stringify({
+                action: 'setSessionStatus',
+                arguments: {status: 'passed', reason: 'semimonthly'}
+            })}`);
+        } catch (Error) {
+            await cPage.evaluate(_ => {
+            }, `browserstack_executor: ${JSON.stringify({
+                action: 'setSessionStatus',
+                arguments: {status: 'failed', reason: Error.toString()}
+            })}`);
+        }finally {
+            await bCont.close();
+            await cPage.close();
+        }
     });
 
-    test('links check : photoId', { tag: ['@jared', '@approveme', '@linkscheck'] },async () => {
+    test('links check : photo Id', { tag: ['@approveme', '@signet', '@jared', '@splashpage', '@linkscheck'] }, async ({browser}) => {
+        test.skip(isHealthyLocal == false, 'health check FAILED; test()');
         console.log('continue with links check tests...');
-        test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
-        // const ATTEMPTS_MAX: number = 2;
-        // let attempts: number = 1;
-        // let isLinksPhotoPass = false;
-        // while((attempts <= ATTEMPTS_MAX) && (isLinksPhotoPass===false)) {
-            // let bCont = await browser.newContext();
-            // let cPage = await bCont.newPage();
-            let splashPageLocal = new B_SplashPage(cPage);
-            await splashPageLocal.navigate();
-            try {
-                await splashPageLocal.checkLinkPhoto();
-                // isLinksPhotoPass = true;
-                await cPage.evaluate(_ => {
-                }, `browserstack_executor: ${JSON.stringify({
-                    action: 'setSessionStatus',
-                    arguments: {status: 'passed', reason: 'photoId'}
-                })}`);
-            } catch (Error) {
-                // attempts++;
-                await cPage.evaluate(_ => {
-                }, `browserstack_executor: ${JSON.stringify({
-                    action: 'setSessionStatus',
-                    arguments: {status: 'failed', reason: Error.toString()}
-                })}`);
-            }/* finally {
-                    await cPage.close();
-                    await bCont.close();
-                }*/
-        // }
+        let bContL = await browser.newContext();
+        let cPageL = await bContL.newPage();
+        await cPageL.goto(urls.splash.splash);
+        try {
+            await (new B_SplashPage(cPageL)).checkLinkPhoto();
+            await cPageL.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed', reason: 'photo Id'}})}`);
+        }catch(Error) {
+            await cPageL.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed', reason: Error.toString()}})}`);
+        }finally {
+            await bContL.close();
+            await cPageL.close();
+        }
     });
 
-    test('links check : bankinfo', { tag: ['@jared', '@approveme', '@linkscheck'] },async () => {
-        test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
-            // let bCont = await browser.newContext();
-            // let cPage = await bCont.newPage();
-            let splashPageLocal = new B_SplashPage(cPage);
-            await splashPageLocal.navigate();
-            try {
-                await splashPageLocal.checkLinkBankInfo();
-                // isLinkBankInfo = true;
-                await cPage.evaluate(_ => {
-                }, `browserstack_executor: ${JSON.stringify({
-                    action: 'setSessionStatus',
-                    arguments: {status: 'passed', reason: 'bankinfo'}
-                })}`);
-            } catch (Error) {
-                // attempts++;
-                await cPage.evaluate(_ => {
-                }, `browserstack_executor: ${JSON.stringify({
-                    action: 'setSessionStatus',
-                    arguments: {status: 'failed', reason: Error.toString()}
-                })}`);
-            }/* finally {
-                    await cPage.close();
-                    await bCont.close();
-                }*/
-        // }
+    test('links check : bankInfo', { tag: ['@approveme', '@signet', '@jared', '@splashpage', '@linkscheck'] }, async ({browser}) => {
+        test.skip(isHealthyLocal !== true, 'health check FAILED; test()');
+        let bContL = await browser.newContext();
+        let cPageL = await bContL.newPage();
+        await cPageL.goto(urls.splash.splash);
+        try {
+            await (new B_SplashPage(cPageL)).checkLinkBankInfo();
+            await cPageL.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed', reason: 'bankInfo'}})}`);
+        }catch(Error) {
+            await cPageL.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed', reason: Error.toString()}})}`);
+        }finally {
+            await bContL.close();
+            await cPageL.close();
+        }
     });
 
-    // test('links check : bankinfo', { tag: ['@jared', '@approveme', '@linkscheck'] },async () => {
-    //     test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
-    //     const ATTEMPTS_MAX: number = 2;
-    //     let attempts: number = 1;
-    //     let isLinkBankInfo = false;
-    //     while((attempts <= ATTEMPTS_MAX) && (isLinkBankInfo===false)) {
-    //         // let bCont = await browser.newContext();
-    //         // let cPage = await bCont.newPage();
-    //         let splashPageLocal = new B_SplashPage(cPage);
-    //         await splashPageLocal.navigate();
-    //         try {
-    //             await splashPageLocal.checkLinkBankInfo();
-    //             isLinkBankInfo = true;
-    //             await cPage.evaluate(_ => {
-    //             }, `browserstack_executor: ${JSON.stringify({
-    //                 action: 'setSessionStatus',
-    //                 arguments: {status: 'passed', reason: 'bankinfo'}
-    //             })}`);
-    //         } catch (Error) {
-    //             attempts++;
-    //             await cPage.evaluate(_ => {
-    //             }, `browserstack_executor: ${JSON.stringify({
-    //                 action: 'setSessionStatus',
-    //                 arguments: {status: 'failed', reason: Error.toString()}
-    //             })}`);
-    //         }/* finally {
-    //                 await cPage.close();
-    //                 await bCont.close();
-    //             }*/
-    //     }
-    // });
-
-    // test('links check : checkbox', { tag: ['@jared', '@approveme', '@linkscheck'] },async () => {
-    //     test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
-    //     const ATTEMPTS_MAX: number = 2;
-    //     let attempts: number = 1;
-    //     let isLinksCheckbox = false;
-    //     while((attempts <= ATTEMPTS_MAX) && (isLinksCheckbox===false)) {
-    //         // let bCont = await browser.newContext();
-    //         // let cPage = await bCont.newPage();
-    //         let splashPageLocal = new B_SplashPage(cPage);
-    //         await splashPageLocal.navigate();
-    //         try {
-    //             await splashPageLocal.selectCheckbox();
-    //             await cPage.waitForTimeout(500);
-    //             await splashPageLocal.unSelectCheckbox();
-    //             await cPage.waitForTimeout(500);
-    //             isLinksCheckbox = true;
-    //             await cPage.evaluate(_ => {
-    //             }, `browserstack_executor: ${JSON.stringify({
-    //                 action: 'setSessionStatus',
-    //                 arguments: {status: 'passed', reason: 'checkbox'}
-    //             })}`);
-    //         } catch (Error) {
-    //             attempts++;
-    //             await cPage.evaluate(_ => {
-    //             }, `browserstack_executor: ${JSON.stringify({
-    //                 action: 'setSessionStatus',
-    //                 arguments: {status: 'failed', reason: Error.toString()}
-    //             })}`);
-    //         }/* finally {
-    //                 await cPage.close();
-    //                 await bCont.close();
-    //             }*/
-    //     }
-    // });
-
-    test('links check : checkbox', { tag: ['@jared', '@approveme', '@linkscheck'] },async () => {
-        test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
-        // const ATTEMPTS_MAX: number = 2;
-        // let attempts: number = 1;
-        // let isLinksCheckbox = false;
-        // while((attempts <= ATTEMPTS_MAX) && (isLinksCheckbox===false)) {
-            // let bCont = await browser.newContext();
-            // let cPage = await bCont.newPage();
-            let splashPageLocal = new B_SplashPage(cPage);
-            await splashPageLocal.navigate();
-            try {
-                await splashPageLocal.selectCheckbox();
-                await cPage.waitForTimeout(500);
-                await splashPageLocal.unSelectCheckbox();
-                await cPage.waitForTimeout(500);
-                // isLinksCheckbox = true;
-                await cPage.evaluate(_ => {
-                }, `browserstack_executor: ${JSON.stringify({
-                    action: 'setSessionStatus',
-                    arguments: {status: 'passed', reason: 'checkbox'}
-                })}`);
-            } catch (Error) {
-                // attempts++;
-                await cPage.evaluate(_ => {
-                }, `browserstack_executor: ${JSON.stringify({
-                    action: 'setSessionStatus',
-                    arguments: {status: 'failed', reason: Error.toString()}
-                })}`);
-            }/* finally {
-                    await cPage.close();
-                    await bCont.close();
-                }*/
-        // }
+    test('links check : checkbox', { tag: ['@approveme', '@signet', '@jared', '@splashpage', '@linkscheck'] }, async ({browser}) => {
+        test.skip(isHealthyLocal !== true, 'health check FAILED; test()');
+        let bContL = await browser.newContext();
+        let cPageL = await bContL.newPage();
+        await cPageL.goto(urls.splash.splash);
+        try {
+            let splash = new B_SplashPage(cPageL);
+            await splash.selectCheckbox();
+            await splash.unSelectCheckbox();
+            await cPageL.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed', reason: 'checkbox'}})}`);
+        }catch(Error) {
+            await cPageL.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed', reason: Error.toString()}})}`);
+        }finally {
+            await bContL.close();
+            await cPageL.close();
+        }
     });
 
-    test('links check : terms', { tag: ['@jared', '@approveme', '@linkscheck'] },async () => {
-        test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
-            // let bCont = await browser.newContext();
-            // let cPage = await bCont.newPage();
-            let splashPageLocal = new B_SplashPage(cPage);
-            await splashPageLocal.navigate();
-            try {
-                await splashPageLocal.checkLinkTerms();
-                await cPage.evaluate(_ => {
-                }, `browserstack_executor: ${JSON.stringify({
-                    action: 'setSessionStatus',
-                    arguments: {status: 'passed', reason: 'terms'}
-                })}`);
-            } catch (Error) {
-                await cPage.evaluate(_ => {
-                }, `browserstack_executor: ${JSON.stringify({
-                    action: 'setSessionStatus',
-                    arguments: {status: 'failed', reason: Error.toString()}
-                })}`);
-            }/* finally {
-                    await cPage.close();
-                    await bCont.close();
-                }*/
-        // }
+    test('links check : terms', { tag: ['@approveme', '@signet', '@jared', '@splashpage', '@linkscheck'] }, async ({browser}) => {
+        test.skip(isHealthyLocal !== true, 'health check FAILED; test()');
+        let bContL = await browser.newContext();
+        let cPageL = await bContL.newPage();
+        await cPageL.goto(urls.splash.splash);
+        try {
+            await (new B_SplashPage(cPageL)).checkLinkTerms();
+            await cPageL.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed', reason: 'terms'}})}`);
+        }catch(Error) {
+            await cPageL.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed', reason: Error.toString()}})}`);
+        }finally {
+            await bContL.close();
+            await cPageL.close();
+        }
     });
 
-    // test('links check : privacy', { tag: ['@jared', '@approveme', '@linkscheck'] },async () => {
-    //     test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
-    //     const ATTEMPTS_MAX: number = 2;
-    //     let attempts: number = 1;
-    //     let isLinkTerms = false;
-    //     while((attempts <= ATTEMPTS_MAX) && (isLinkTerms===false)) {
-    //         // let bCont = await browser.newContext();
-    //         // let cPage = await bCont.newPage();
-    //         let splashPageLocal = new B_SplashPage(cPage);
-    //         await splashPageLocal.navigate();
-    //         try {
-    //             await splashPageLocal.checkLinkPrivacy();
-    //             isLinkTerms = true;
-    //             await cPage.evaluate(_ => {
-    //             }, `browserstack_executor: ${JSON.stringify({
-    //                 action: 'setSessionStatus',
-    //                 arguments: {status: 'passed', reason: 'terms'}
-    //             })}`);
-    //         } catch (Error) {
-    //             attempts++;
-    //             await cPage.evaluate(_ => {
-    //             }, `browserstack_executor: ${JSON.stringify({
-    //                 action: 'setSessionStatus',
-    //                 arguments: {status: 'failed', reason: Error.toString()}
-    //             })}`);
-    //         }/* finally {
-    //                 await cPage.close();
-    //                 await bCont.close();
-    //             }*/
-    //     }
-    // });
-
-    test('links check : privacy', { tag: ['@jared', '@approveme', '@linkscheck'] },async () => {
-        test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
-            // let bCont = await browser.newContext();
-            // let cPage = await bCont.newPage();
-            let splashPageLocal = new B_SplashPage(cPage);
-            await splashPageLocal.navigate();
-            try {
-                await splashPageLocal.checkLinkPrivacy();
-                await cPage.evaluate(_ => {
-                }, `browserstack_executor: ${JSON.stringify({
-                    action: 'setSessionStatus',
-                    arguments: {status: 'passed', reason: 'terms'}
-                })}`);
-            } catch (Error) {
-                await cPage.evaluate(_ => {
-                }, `browserstack_executor: ${JSON.stringify({
-                    action: 'setSessionStatus',
-                    arguments: {status: 'failed', reason: Error.toString()}
-                })}`);
-            }/* finally {
-                    await cPage.close();
-                    await bCont.close();
-                }*/
-        // }
+    test('links check : privacy', { tag: ['@approveme', '@signet', '@jared', '@splashpage', '@linkscheck'] }, async ({browser}) => {
+        test.skip(isHealthyLocal !== true, 'health check FAILED; test()');
+        let bContL = await browser.newContext();
+        let cPageL = await bContL.newPage();
+        await cPageL.goto(urls.splash.splash);
+        try {
+            await (new B_SplashPage(cPageL)).checkLinkPrivacy();
+            await cPageL.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed', reason: 'privacy'}})}`);
+        }catch(Error) {
+            await cPageL.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed', reason: Error.toString()}})}`);
+        }finally {
+            await bContL.close();
+            await cPageL.close();
+        }
     });
 
-    // test('links check : disclosure', { tag: ['@jared', '@approveme', '@linkscheck'] },async () => {
-    //     test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
-    //     const ATTEMPTS_MAX: number = 2;
-    //     let attempts: number = 1;
-    //     let isLinksDisclosure = false;
-    //     while((attempts <= ATTEMPTS_MAX) && (isLinksDisclosure===false)) {
-    //         // let bCont = await browser.newContext();
-    //         // let cPage = await bCont.newPage();
-    //         let splashPageLocal = new B_SplashPage(cPage);
-    //         await splashPageLocal.navigate();
-    //         try {
-    //             await splashPageLocal.checkLinkDisclosure();
-    //             isLinksDisclosure = true;
-    //             await cPage.evaluate(_ => {
-    //             }, `browserstack_executor: ${JSON.stringify({
-    //                 action: 'setSessionStatus',
-    //                 arguments: {status: 'passed', reason: 'disclosure'}
-    //             })}`);
-    //         } catch (Error) {
-    //             attempts++;
-    //             await cPage.evaluate(_ => {
-    //             }, `browserstack_executor: ${JSON.stringify({
-    //                 action: 'setSessionStatus',
-    //                 arguments: {status: 'failed', reason: Error.toString()}
-    //             })}`);
-    //         }/* finally {
-    //                 await cPage.close();
-    //                 await bCont.close();
-    //             }*/
-    //     }
-    // });
-    test('links check : disclosure', { tag: ['@jared', '@approveme', '@linkscheck'] },async () => {
-        test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
-            // let bCont = await browser.newContext();
-            // let cPage = await bCont.newPage();
-            let splashPageLocal = new B_SplashPage(cPage);
-            await splashPageLocal.navigate();
-            try {
-                await splashPageLocal.checkLinkDisclosure();
-                await cPage.evaluate(_ => {
-                }, `browserstack_executor: ${JSON.stringify({
-                    action: 'setSessionStatus',
-                    arguments: {status: 'passed', reason: 'disclosure'}
-                })}`);
-            } catch (Error) {
-                await cPage.evaluate(_ => {
-                }, `browserstack_executor: ${JSON.stringify({
-                    action: 'setSessionStatus',
-                    arguments: {status: 'failed', reason: Error.toString()}
-                })}`);
-            }/* finally {
-                    await cPage.close();
-                    await bCont.close();
-                }*/
-        // }
+    test('links check : disclosure', { tag: ['@approveme', '@signet', '@jared', '@splashpage', '@linkscheck'] }, async ({browser}) => {
+        test.skip(isHealthyLocal !== true, 'health check FAILED; test()');
+        let bContL = await browser.newContext();
+        let cPageL = await bContL.newPage();
+        await cPageL.goto(urls.splash.splash);
+        try {
+            await (new B_SplashPage(cPageL)).checkLinkDisclosure();
+            await cPageL.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed', reason: 'disclosure'}})}`);
+        }catch(Error) {
+            await cPageL.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed', reason: Error.toString()}})}`);
+        }finally {
+            await bContL.close();
+            await cPageL.close();
+        }
     });
 
-    // test('links check : arbitration', { tag: ['@jared', '@approveme', '@linkscheck'] },async () => {
-    //     test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
-    //     const ATTEMPTS_MAX: number = 2;
-    //     let attempts: number = 1;
-    //     let isLinkArbitration = false;
-    //     while((attempts <= ATTEMPTS_MAX) && (isLinkArbitration===false)) {
-    //         // let bCont = await browser.newContext();
-    //         // let cPage = await bCont.newPage();
-    //         let splashPageLocal = new B_SplashPage(cPage);
-    //         await splashPageLocal.navigate();
-    //         try {
-    //             await splashPageLocal.checkLinkArbitration()
-    //             isLinkArbitration = true;
-    //             await cPage.evaluate(_ => {
-    //             }, `browserstack_executor: ${JSON.stringify({
-    //                 action: 'setSessionStatus',
-    //                 arguments: {status: 'passed', reason: 'arbitration'}
-    //             })}`);
-    //         } catch (Error) {
-    //             attempts++;
-    //             await cPage.evaluate(_ => {
-    //             }, `browserstack_executor: ${JSON.stringify({
-    //                 action: 'setSessionStatus',
-    //                 arguments: {status: 'failed', reason: Error.toString()}
-    //             })}`);
-    //         }/* finally {
-    //                 await cPage.close();
-    //                 await bCont.close();
-    //             }*/
-    //     }
-    // });
-
-    test('links check : arbitration', { tag: ['@jared', '@approveme', '@linkscheck'] },async () => {
-        test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
-            // let bCont = await browser.newContext();
-            // let cPage = await bCont.newPage();
-            let splashPageLocal = new B_SplashPage(cPage);
-            await splashPageLocal.navigate();
-            try {
-                await splashPageLocal.checkLinkArbitration()
-                await cPage.evaluate(_ => {
-                }, `browserstack_executor: ${JSON.stringify({
-                    action: 'setSessionStatus',
-                    arguments: {status: 'passed', reason: 'arbitration'}
-                })}`);
-            } catch (Error) {
-                await cPage.evaluate(_ => {
-                }, `browserstack_executor: ${JSON.stringify({
-                    action: 'setSessionStatus',
-                    arguments: {status: 'failed', reason: Error.toString()}
-                })}`);
-            }/* finally {
-                    await cPage.close();
-                    await bCont.close();
-                }*/
-        // }
+    test('links check : arbitration', { tag: ['@approveme', '@signet', '@jared', '@splashpage', '@linkscheck'] }, async ({browser}) => {
+        test.skip(isHealthyLocal !== true, 'health check FAILED; test()');
+        let bContL = await browser.newContext();
+        let cPageL = await bContL.newPage();
+        await cPageL.goto(urls.splash.splash);
+        try {
+            await (new B_SplashPage(cPage)).checkLinkArbitration();
+            await cPageL.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed', reason: 'arbitration'}})}`);
+        }catch(Error) {
+            await cPageL.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed', reason: Error.toString()}})}`);
+        }finally {
+            await bContL.close();
+            await cPageL.close();
+        }
     });
+
 });
