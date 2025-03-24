@@ -607,7 +607,7 @@ test.describe('Jared Big Six', async () => {
         let cPageL = await bContL.newPage();
         await cPageL.goto(urls.splash.splash);
         try {
-            await (new B_SplashPage(cPage)).checkLinkArbitration();
+            await (new B_SplashPage(cPageL)).checkLinkArbitration();
             await cPageL.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed', reason: 'arbitration'}})}`);
         }catch(Error) {
             await cPageL.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed', reason: Error.toString()}})}`);
