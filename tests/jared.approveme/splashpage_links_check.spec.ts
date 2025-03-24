@@ -1,27 +1,34 @@
 import {test, BrowserContext, Page} from '@playwright/test';
 import B_SplashPage from "../../pages/jared.approveme/B_SplashPage";
 import urls from '$utils/jared.utils/urls';
+import JaredHealthCheck from './JaredHealthCheck';
 
 let bCont: BrowserContext;
 let cPage: Page;
+let isHealthyLocal: Boolean;
 
 test.describe('navigation', async () => {
 
   test.describe.configure({ retries: 0 });
   test.describe.configure({ mode: 'parallel' });
 
-  test.beforeEach(async ({browser}) => {
+  test.beforeAll(async ({browser}) => {
     bCont = await browser.newContext();
     cPage = await bCont.newPage();
+    isHealthyLocal = await new JaredHealthCheck(cPage).isHealthy();
+  });
+
+  test.beforeEach(async () => {
     await cPage.goto(urls.splash.splash);
   });
 
-  test.afterEach(async () => {
+  test.afterAll(async () => {
     await cPage.close();
     await bCont.close();
   });
 
   test('photoId', { tag: ['@approveme', '@signet', '@jared', '@splashpage', '@linkscheck'] }, async () => {
+    test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
     try {
       await (new B_SplashPage(cPage)).checkLinkPhoto();
       await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed', reason: 'photoId'}})}`);
@@ -31,6 +38,7 @@ test.describe('navigation', async () => {
   });
 
   test('bankInfo', { tag: ['@approveme', '@signet', '@jared', '@splashpage', '@linkscheck'] }, async () => {
+    test.skip(isHealthyLocal !== true, 'health check FAILED; test.skip()');
     try {
       await (new B_SplashPage(cPage)).checkLinkBankInfo();
       await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed', reason: 'bankInfo'}})}`);
@@ -39,7 +47,8 @@ test.describe('navigation', async () => {
     }
   });
 
-  test('checkbox', { tag: ['@approveme', '@signet', '@jared', '@splashpage', '@linkscheck'] }, async ({ browser }) => {
+  test('checkbox', { tag: ['@approveme', '@signet', '@jared', '@splashpage', '@linkscheck'] }, async () => {
+    test.skip(isHealthyLocal !== true, 'health check FAILED; test.skip()');
     try {
       let splash = new B_SplashPage(cPage);
       await splash.selectCheckbox();
@@ -50,7 +59,8 @@ test.describe('navigation', async () => {
     }
   });
 
-  test('terms', { tag: ['@approveme', '@signet', '@jared', '@splashpage', '@linkscheck'] }, async ({ browser }) => {
+  test('terms', { tag: ['@approveme', '@signet', '@jared', '@splashpage', '@linkscheck'] }, async () => {
+    test.skip(isHealthyLocal !== true, 'health check FAILED; test.skip()');
     try {
       await (new B_SplashPage(cPage)).checkLinkTerms();
       await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed', reason: 'terms'}})}`);
@@ -59,7 +69,8 @@ test.describe('navigation', async () => {
     }
   });
 
-  test('privacy', { tag: ['@approveme', '@signet', '@jared', '@splashpage', '@linkscheck'] }, async ({ browser }) => {
+  test('privacy', { tag: ['@approveme', '@signet', '@jared', '@splashpage', '@linkscheck'] }, async () => {
+    test.skip(isHealthyLocal !== true, 'health check FAILED; test.skip()');
     try {
       await (new B_SplashPage(cPage)).checkLinkPrivacy();
       await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed', reason: 'privacy'}})}`);
@@ -68,7 +79,8 @@ test.describe('navigation', async () => {
     }
   });
 
-  test('disclosure', { tag: ['@approveme', '@signet', '@jared', '@splashpage', '@linkscheck'] }, async ({ browser }) => {
+  test('disclosure', { tag: ['@approveme', '@signet', '@jared', '@splashpage', '@linkscheck'] }, async () => {
+    test.skip(isHealthyLocal !== true, 'health check FAILED; test.skip()');
     try {
       await (new B_SplashPage(cPage)).checkLinkDisclosure();
       await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed', reason: 'disclosure'}})}`);
@@ -77,7 +89,8 @@ test.describe('navigation', async () => {
     }
   });
 
-  test('arbitration', { tag: ['@approveme', '@signet', '@jared', '@splashpage', '@linkscheck'] }, async ({ browser }) => {
+  test('arbitration', { tag: ['@approveme', '@signet', '@jared', '@splashpage', '@linkscheck'] }, async () => {
+    test.skip(isHealthyLocal !== true, 'health check FAILED; test.skip()');
     try {
       await (new B_SplashPage(cPage)).checkLinkArbitration();
       await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed', reason: 'arbitration'}})}`);
