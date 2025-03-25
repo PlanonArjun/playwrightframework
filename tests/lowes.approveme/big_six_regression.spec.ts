@@ -16,6 +16,7 @@ import HappyPathPending from "../../data/lowes.approveme/HappyPathPending";
 import HappyPathDenied from "../../data/lowes.approveme/HappyPathDenied";
 import M_LeaseEstimator from "$pages/lowes.approveme/M_LeaseEstimator";
 import {PaymentFrequency} from "../../data/paymentFrequency";
+import urls from '$utils/lowes.utils/urls';
 
 let isLandingPageLoads: boolean = false;
 
@@ -581,7 +582,7 @@ test.describe('Lowes Big Six', async () => {
             if (isLandingPageLoads) {
                 let bCont = await browser.newContext();
                 let cPage = await bCont.newPage();
-                await (new A_MarketingPage(cPage)).navigateBeforeStart();
+                await cPage.goto(urls.beforeYouStart.beforeYouStart);
                 try {
                     await (new B_BeforeStartPage(cPage)).checkLinkTerms();
                     isLinkTerms = true;
@@ -614,7 +615,7 @@ test.describe('Lowes Big Six', async () => {
             if (isLandingPageLoads) {
                 let bCont = await browser.newContext();
                 let cPage = await bCont.newPage();
-                await (new A_MarketingPage(cPage)).navigateBeforeStart();
+                await cPage.goto(urls.beforeYouStart.beforeYouStart);
                 try {
                     await (new B_BeforeStartPage(cPage)).checkLinkPrivacy();
                     isLinksPrivacy = true;
@@ -647,7 +648,7 @@ test.describe('Lowes Big Six', async () => {
             if (isLandingPageLoads) {
                 let bCont = await browser.newContext();
                 let cPage = await bCont.newPage();
-                await (new A_MarketingPage(cPage)).navigateBeforeStart();
+                await cPage.goto(urls.beforeYouStart.beforeYouStart);
                 try {
                     await (new B_BeforeStartPage(cPage)).checkLinkDisclosure();
                     isLinksDisclosure = true;
@@ -680,7 +681,7 @@ test.describe('Lowes Big Six', async () => {
             if (isLandingPageLoads) {
                 let bCont = await browser.newContext();
                 let cPage = await bCont.newPage();
-                await (new A_MarketingPage(cPage)).navigateBeforeStart();
+                await cPage.goto(urls.beforeYouStart.beforeYouStart);
                 try {
                     await (new B_BeforeStartPage(cPage)).checkLinkArbitration();
                     isLinkArbitration = true;

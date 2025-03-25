@@ -7,16 +7,16 @@ class B_BeforeStartPage {
     readonly checkboxIHaveRead: Locator;
 
     readonly linkTerms: Locator;
-    readonly headingTerms: Locator;
+    readonly textExpectedTerms: Locator;
 
     readonly linkPrivacy: Locator;
-    readonly headingPrivacy: Locator;
+    readonly textExpectedPrivacy: Locator;
 
     readonly linkDisclosure: Locator;
-    readonly headingDisclosure: Locator;
+    readonly textExpectedDisclosure: Locator;
 
     readonly linkArbitration: Locator;
-    readonly headingArbitration: Locator;
+    readonly textExpectedArbitration: Locator;
 
     readonly buttonComeBackLater: Locator;
     readonly buttonContinue: Locator;
@@ -27,22 +27,22 @@ class B_BeforeStartPage {
         this.checkboxIHaveRead = page.locator('xpath = //label//span');
 
         this.linkTerms = page.getByRole('link', { name: 'Terms of Use' });
-        this.headingTerms = page.getByRole('heading', { name: 'Terms of Use' });
+        this.textExpectedTerms = page.getByText('These Terms of Use ("Terms of');
 
         this.linkPrivacy = page.getByRole('link', { name: 'Privacy Policy' });
-        this.headingPrivacy = page.getByRole('heading', { name: 'Privacy Policy' });
+        this.textExpectedPrivacy = page.getByText('This privacy policy ("Privacy');
 
         this.linkDisclosure = page.getByRole('link', { name: 'Application Disclosure' });
-        this.headingDisclosure = page.getByRole('heading', { name: 'Application Disclosure' });
+        this.textExpectedDisclosure = page.getByText('PLEASE READ THESE APPLICATION');
 
         this.linkArbitration = page.getByRole('link', { name: 'Arbitration Provision' });
-        this.headingArbitration = page.getByRole('heading', { name: 'Arbitration Provision' });
+        this.textExpectedArbitration = page.getByText('This Arbitration Provision (“');
 
         this.buttonComeBackLater = page.getByRole('button', { name: 'Come Back Later' });
         this.buttonContinue = page.getByRole('button', { name: 'Continue' });
     }
 
-    async _selectCheckbox() {
+    async selectCheckbox() {
         if (!(await this.checkboxIHaveRead.isChecked())) {
             await this.checkboxIHaveRead.check();
             await this.page.waitForTimeout(250); // may need this quarter second here...
@@ -60,7 +60,7 @@ class B_BeforeStartPage {
     }
 
     async continue() {
-        await this._selectCheckbox(); // required before CONTINUE button enabled
+        await this.selectCheckbox(); // required before CONTINUE button enabled
         await this.buttonContinue.click();
         await this.page.waitForTimeout(250); // may need this quarter second here...
     }
@@ -68,25 +68,25 @@ class B_BeforeStartPage {
     async checkLinkTerms() {
         await this.linkTerms.click();
         await this.page.waitForTimeout(250); // may need this quarter second here...
-        await this.headingTerms.isVisible();
+        await this.textExpectedTerms.isVisible();
     }
 
     async checkLinkPrivacy() {
         await this.linkPrivacy.click();
         await this.page.waitForTimeout(250); // may need this quarter second here...
-        await this.headingPrivacy.isVisible();
+        await this.textExpectedPrivacy.isVisible();
     }
 
     async checkLinkDisclosure() {
         await this.linkDisclosure.click();
         await this.page.waitForTimeout(250); // may need this quarter second here...
-        await this.headingDisclosure.isVisible();
+        await this.textExpectedDisclosure.isVisible();
     }
 
     async checkLinkArbitration() {
         await this.linkArbitration.click();
         await this.page.waitForTimeout(250); // may need this quarter second here...
-        await this.headingArbitration.isVisible();
+        await this.textExpectedArbitration.isVisible();
     }
 
 }
