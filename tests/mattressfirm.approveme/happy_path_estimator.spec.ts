@@ -19,6 +19,7 @@ test.describe('estimate', async () => {
         cPage = await bCont.newPage();
         a_marketingPage = new A_MarketingPage(cPage);
         await a_marketingPage.navigate();
+        await a_marketingPage.beginEstimate();
         s_estimator = new S_PaymentEstimator(cPage);
     });
 
@@ -29,7 +30,7 @@ test.describe('estimate', async () => {
 
     test('weekly', { tag: ['@mattressfirm', '@approveme', '@happypath', '@estimate'] }, async () => {
         try {
-                await s_estimator.happyPathEstimate('2999', PaymentFrequency.Weekly, 'TX');
+                await s_estimator.happyPathEstimate('2999', PaymentFrequency.Weekly/*, 'TX'*/);
                 await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason: 'weekly'}})}`);
             }catch(Error) {
                 await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
@@ -38,7 +39,7 @@ test.describe('estimate', async () => {
 
     test('biweekly', { tag: ['@mattressfirm', '@approveme', '@happypath', '@estimate'] }, async () => {
             try {
-                await s_estimator.happyPathEstimate('5000', PaymentFrequency.BiWeekly, 'ND');
+                await s_estimator.happyPathEstimate('5000', PaymentFrequency.BiWeekly/*, 'ND'*/);
                 await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason: 'biweekly'}})}`);
             }catch(Error) {
                 await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
@@ -47,7 +48,7 @@ test.describe('estimate', async () => {
 
     test('semimonthly', { tag: ['@mattressfirm', '@approveme', '@happypath', '@estimate'] }, async () => {
         try {
-            await s_estimator.happyPathEstimate('4000', PaymentFrequency.SemiMonthly, 'ME');
+            await s_estimator.happyPathEstimate('4000', PaymentFrequency.SemiMonthly/*, 'ME'*/);
             await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason: 'semimonthly'}})}`);
         }catch(Error) {
             await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
@@ -56,7 +57,7 @@ test.describe('estimate', async () => {
 
     test('monthly', { tag: ['@mattressfirm', '@approveme', '@happypath', '@estimate'] }, async () => {
         try {
-            await s_estimator.happyPathEstimate('3001', PaymentFrequency.Monthly, 'UT');
+            await s_estimator.happyPathEstimate('3001', PaymentFrequency.Monthly/*, 'UT'*/);
             await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason: 'monthly'}})}`);
         }catch(Error) {
             await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);

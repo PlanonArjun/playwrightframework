@@ -11,7 +11,7 @@ class A_MarketingPage1 {
     constructor(page: Page) {
         this.page = page;
         this.linkResume = page.getByText('Resume');
-        this.linkPaymentEstimator = page.getByText('Payment Estimator');
+        this.linkPaymentEstimator = page.getByText('estimator');
         this.buttonAPPLY_NOW = page.getByRole('link', { name: 'Apply Now' });
     }
 
