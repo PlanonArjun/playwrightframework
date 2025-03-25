@@ -17,23 +17,9 @@ import J_LinksCheck from '$pages/progweb.app/J_LinksCheck';
 
 let isLandingPageLoads: boolean = false;
 
-test.describe('Cricket Big Six', async () => {
+test.describe('ProgWeb Big Six', async () => {
 
   test.describe.configure({ mode: 'serial' }); // do not change
-
-  let getStartAppData: string[];
-  let nameFirstFetched:string;
-  let nameLastFetched:string;
-  let ssnFetched:string;
-
-  let bankInfo1Data: string[];
-  let routing:string;
-  let checking:string;
-  let yearsOpen:string;
-  let monthsOpen:string;
-
-  let isApplyPass: boolean = false;
-  let isResumePass: boolean = false;
   let isFlowsShouldContinue: boolean = false;
 
   test('landing page', async ({browser}) => {
@@ -56,7 +42,7 @@ test.describe('Cricket Big Six', async () => {
     }
   });
 
-  test('approved', { tag: ['@approveme', '@cricketwireless', '@happy', '@approved'] },async ({browser}) => {
+  test('approved', { tag: ['@progweb', '@happy', '@approved'] },async ({browser}) => {
           await expect(async () => {
 
         let bCont = await browser.newContext();
@@ -106,7 +92,7 @@ test.describe('Cricket Big Six', async () => {
       }).toPass({ timeout: 500000 });
   });
   
-  test('pending', { tag: ['@approveme', '@cricketwireless', '@happy', '@pending'] },async ({browser}) => {
+  test('pending', { tag: ['@progweb', '@happy', '@pending'] },async ({browser}) => {
     const ATTEMPTS_MAX: number = 2;
     let attempts: number = 1;
     let isPendingPass = false;
@@ -164,7 +150,7 @@ test.describe('Cricket Big Six', async () => {
     }
   });
 
-  test('denied', { tag: ['@approveme', '@cricketwireless', '@happy', '@denied'] },async ({browser}) => {
+  test('denied', { tag: ['@progweb', '@happy', '@denied'] },async ({browser}) => {
     const ATTEMPTS_MAX: number = 2;
     let attempts: number = 1;
     let isDeniedPass = false;
@@ -220,7 +206,7 @@ test.describe('Cricket Big Six', async () => {
     }
   });
 
-  test('estimator : weekly', { tag: ['@cricket', '@approveme', '@happypath', '@estimate'] }, async ({browser}) => {
+  test('estimator : weekly', { tag: ['@progweb', '@happypath', '@estimate'] }, async ({browser}) => {
     const ATTEMPTS_MAX: number = 2;
     let attempts: number = 1;
     let isWeeklyPass = false;
@@ -274,7 +260,7 @@ test.describe('Cricket Big Six', async () => {
 
 
 
-  test.skip('estimator : weekly1', { tag: ['@cricket', '@approveme', '@happypath', '@estimate'] }, async ({browser}) => {
+  test.skip('estimator : weekly1', { tag: ['@progweb', '@happypath', '@estimate'] }, async ({browser}) => {
     const ATTEMPTS_MAX: number = 2;
     let attempts: number = 1;
     let isWeeklyPass = false;
@@ -322,7 +308,7 @@ test.describe('Cricket Big Six', async () => {
 }
 });
 
-test('estimator : biweekly', { tag: ['@cricket', '@approveme', '@happypath', '@estimate'] }, async ({browser}) => {
+test('estimator : biweekly', { tag: ['@progweb', '@happypath', '@estimate'] }, async ({browser}) => {
   const ATTEMPTS_MAX: number = 2;
   let attempts: number = 1;
   let isBiweeklyPass = false;
@@ -373,7 +359,7 @@ let bCont: BrowserContext = await browser.newContext();
 
 
 
-  test('estimator : semimonthly', { tag: ['@cricket', '@approveme', '@happypath', '@estimate'] }, async ({browser}) => {
+  test('estimator : semimonthly', { tag: ['@progweb', '@happypath', '@estimate'] }, async ({browser}) => {
     const ATTEMPTS_MAX: number = 2;
     let attempts: number = 1;
     let isSemiMonthlyPass = false;
@@ -424,7 +410,7 @@ let bCont: BrowserContext = await browser.newContext();
 
 
 
- test('estimator : monthly', { tag: ['@cricket', '@approveme', '@happypath', '@estimate'] }, async ({browser}) => {
+ test('estimator : monthly', { tag: ['@progweb', '@happypath', '@estimate'] }, async ({browser}) => {
   const ATTEMPTS_MAX: number = 2;
   let attempts: number = 1;
   let isMonthlyPass = false;
@@ -472,7 +458,7 @@ let bCont: BrowserContext = await browser.newContext();
   });
 
   
-  test('links check : application disclosure', { tag: ['@approveme', '@cricketwireless', '@linkscheck'] },async ({browser}) => {
+  test('links check : application disclosure', { tag: ['@progweb', '@linkscheck'] },async ({browser}) => {
     const ATTEMPTS_MAX: number = 2;
     let attempts: number = 1;
     let isLinksBankInfoPass = false;
@@ -517,7 +503,7 @@ let bCont: BrowserContext = await browser.newContext();
   });
 
 
-  test('links check : eSign disclosure', { tag: ['@approveme', '@cricketwireless', '@linkscheck'] },async ({browser}) => {
+  test('links check : eSign disclosure', { tag: ['@progweb', '@linkscheck'] },async ({browser}) => {
     const ATTEMPTS_MAX: number = 2;
     let attempts: number = 1;
     let isLinksTermsPass = false;
@@ -559,7 +545,7 @@ let bCont: BrowserContext = await browser.newContext();
     }
   });
 
-  test('links check : arbitration', { tag: ['@approveme', '@cricketwireless', '@linkscheck'] },async ({browser}) => {
+  test('links check : arbitration', { tag: ['@progweb', '@linkscheck'] },async ({browser}) => {
     const ATTEMPTS_MAX: number = 2;
     let attempts: number = 1;
     let isLinksPrivacyPass = false;
@@ -602,7 +588,7 @@ let bCont: BrowserContext = await browser.newContext();
     }
   });
 
-  test('links check : privacy', { tag: ['@approveme', '@cricketwireless', '@linkscheck'] },async ({browser}) => {
+  test('links check : privacy', { tag: ['@progweb', '@linkscheck'] },async ({browser}) => {
     const ATTEMPTS_MAX: number = 2;
     let attempts: number = 1;
     let isLinksDisclosurePass = false;
@@ -645,7 +631,7 @@ let bCont: BrowserContext = await browser.newContext();
     }
   });
 
-  test('links check : terms of use', { tag: ['@approveme', '@cricketwireless', '@linkscheck'] },async ({browser}) => {
+  test('links check : terms of use', { tag: ['@progweb', '@linkscheck'] },async ({browser}) => {
     const ATTEMPTS_MAX: number = 2;
     let attempts: number = 1;
     let isLinksArbitrationPass = false;
