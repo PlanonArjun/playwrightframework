@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, chromium } from '@playwright/test';
 import HappyPathApproved from '../../data/lowes.approveme/HappyPathApproved';
 import A_MarketingPage from "../../pages/lowes.approveme/A_MarketingPage";
 import B_BeforeStartPage from '../../pages/lowes.approveme/B_BeforeStartPage';
@@ -11,11 +11,22 @@ import H_BillingAddress from '../../pages/lowes.approveme/H_BillingAddress';
 import I_AccountDetails from '../../pages/lowes.approveme/I_AccountDetails';
 import J_LeaseIDVerification from '../../pages/lowes.approveme/J_LeaseIDVerification';
 import K_LeaseStatusPage from '../../pages/lowes.approveme/K_LeaseStatusPage';
+import LowesHealthCheck from './LowesHealthCheck';
+
+let isHealthyLocal: Boolean;
 
 test.describe('approved', async () => {
 
   test.describe.configure({ retries: 0 });
   test.describe.configure({ mode: 'serial' });
+
+  test.beforeAll(async () => {
+    let browserTemp = await chromium.launch({ headless: true });
+    let pageTemp = await browserTemp.newPage();
+    isHealthyLocal = await new LowesHealthCheck(pageTemp).isHealthy();
+    await browserTemp.close();
+    await pageTemp.close();
+  });
 
   test('approved', { tag: ['@lowes', '@approveme', '@happypath', '@approved'] }, async ({ browser }) => {
     await expect(async () => {

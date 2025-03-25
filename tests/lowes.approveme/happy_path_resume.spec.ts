@@ -1,4 +1,4 @@
-import {test, expect } from '@playwright/test';
+import { test, expect, BrowserContext, Page, chromium } from '@playwright/test';
 
 import HappyPathApproved from '../../data/lowes.approveme/HappyPathApproved';
 import A_MarketingPage from "../../pages/lowes.approveme/A_MarketingPage";
@@ -13,23 +13,32 @@ import I_AccountDetails from '../../pages/lowes.approveme/I_AccountDetails';
 import J_LeaseIDVerification from '../../pages/lowes.approveme/J_LeaseIDVerification';
 import K_LeaseStatusPage from '../../pages/lowes.approveme/K_LeaseStatusPage';
 import L_ResumeApplication from '$pages/lowes.approveme/L_ResumeApplication';
+import LowesHealthCheck from './LowesHealthCheck';
+
+let ssnFetched:string;
+let phoneFetched:string;
+let isApplyPass: boolean = false;
+let isHealthyLocal: Boolean;
 
 test.describe('happy path resume', async () => {
 
   test.describe.configure({ retries: 0 });
   test.describe.configure({ mode: 'serial' });
 
-  let ssnFetched:string;
-  let phoneFetched:string;
-  let isApplyPass: boolean = false;
-
+  test.beforeAll(async () => {
+    let browserTemp = await chromium.launch({ headless: true });
+    let pageTemp = await browserTemp.newPage();
+    isHealthyLocal = await new LowesHealthCheck(pageTemp).isHealthy();
+    await browserTemp.close();
+    await pageTemp.close();
+  });
 
   test('approve first', { tag: ['@lowes', '@approveme', '@happypath', '@approved'] }, async ({ browser }) => {
+    test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
     await expect(async () => {
 
-      // context and page
-      const bCont = await browser.newContext();
-      const cPage = await bCont.newPage();
+      let bCont: BrowserContext = await browser.newContext();
+      let cPage: Page = await bCont.newPage();
 
       // data object
       let happyPathApproved = new HappyPathApproved();
@@ -82,11 +91,11 @@ test.describe('happy path resume', async () => {
       // verify approved success and then exit
       try {
         await (new K_LeaseStatusPage(cPage)).verifySuccessApproved();
-        console.log("Apply passed. Resume up next.")
+        console.log("Initial apply passed. Resume up next.")
         isApplyPass = true;
         await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason:'Lowes approved before resume'}})}`);
       }catch(Error) {
-        console.log("Apply failed.")
+        console.log("Initial apply failed.")
         await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
         test.fail();
       }finally{
@@ -100,6 +109,8 @@ test.describe('happy path resume', async () => {
 
 
   test('resume second', { tag: ['@lowes', '@approveme', '@happypath', '@resume'] }, async ({ browser }) => {
+    test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
+    test.skip(isApplyPass == false, 'initial apply FAILED; test.skip()');
     await expect(async () => {
 
       if(isApplyPass) {
@@ -123,7 +134,7 @@ test.describe('happy path resume', async () => {
           await bContR.close();
         }
       }else {
-        console.log("Apply failed. Resume skipped.");
+        console.log("Initial apply failed. Resume skipped.");
       }
     }).toPass({ timeout: 90000 });
 

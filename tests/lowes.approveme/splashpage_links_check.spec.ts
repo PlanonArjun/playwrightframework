@@ -29,14 +29,12 @@ test.describe('lowes links', async () => {
 
   test('terms', { tag: ['@lowes', '@approveme', '@happypath', '@links'] },async () => {
     test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
-    // await expect(async () => {
     try {
       await (new B_BeforeStartPage(cPage).checkLinkTerms());
       await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason: 'terms'}})}`);
     }catch(Error) {
       await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
     }
-    // }).toPass({timeout: 20000});
   });
 
   test('privacy', { tag: ['@lowes', '@approveme', '@happypath', '@links'] },async () => {
