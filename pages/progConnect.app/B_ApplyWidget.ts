@@ -99,7 +99,7 @@ class B_ApplyWidget {
         this.reviewAndSignAgreeAndContinueButton = this.iframe.getByRole('button', { name: 'Agree And Continue' });
         this.reviewAndSignSummaryText = this.iframe.getByText('Payment and early purchase option columns include the tax rate in effect on your Lease Date. Payment will change if the tax rate changes.');
         this.reviewAndSignSignAndContinueButton = this.iframe.locator('#continue-button');
-        this.checkoutAutofillPaymentButton = this.page.getByRole('button', { name: 'Autofill payment' });
+        this.checkoutAutofillPaymentButton = this.page.getByRole('button', { name: 'Button override testing in QA' });
     }
 
     async clickLeaseWithContinueButton() {

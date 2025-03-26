@@ -92,8 +92,8 @@ const submitApplication = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlso
     '              <app:Occupation>Banker</app:Occupation>' +
     '              <app:HireDate>2023-02-03T00:00:00</app:HireDate>' +
     '              <app:MonthlyGrossIncome>3435.99</app:MonthlyGrossIncome>' +
-    '              <app:LastPayDate>2025-02-02T00:00:00</app:LastPayDate>' +
-    '              <app:NextPayDate>2025-02-04T00:00:00</app:NextPayDate>' +
+    '              <app:LastPayDate>2025-03-24T00:00:00</app:LastPayDate>' +
+    '              <app:NextPayDate>2025-04-20T00:00:00</app:NextPayDate>' +
     '              <app:PayFrequency>WEEKLY</app:PayFrequency>' +
     '              <app:SupervisorName>George</app:SupervisorName>' +
     '              <app:WorkAddress>' +
