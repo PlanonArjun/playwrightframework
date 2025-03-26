@@ -93,18 +93,7 @@ test.describe('ProgWeb Big Six', async () => {
   });
   
   test('pending', { tag: ['@progweb', '@happy', '@pending'] },async ({browser}) => {
-    const ATTEMPTS_MAX: number = 2;
-    let attempts: number = 1;
-    let isPendingPass = false;
-    while((attempts <= ATTEMPTS_MAX) && (isPendingPass===false)) {
-
-      if (isFlowsShouldContinue) {
-
-        if(attempts===1) {
-          console.log('continue with pending...');
-        }
-
-        await expect(async () => {
+           await expect(async () => {
 
           let bCont: BrowserContext = await browser.newContext();
           const cPage = await bCont.newPage();
@@ -145,22 +134,11 @@ test.describe('ProgWeb Big Six', async () => {
           await cPage.close();
           await bCont.close();
     
-        }).toPass({ timeout: 500000 });
-      }
-    }
+        }).toPass({ timeout: 500000 }); 
   });
 
   test('denied', { tag: ['@progweb', '@happy', '@denied'] },async ({browser}) => {
-    const ATTEMPTS_MAX: number = 2;
-    let attempts: number = 1;
-    let isDeniedPass = false;
-    while((attempts <= ATTEMPTS_MAX) && (isDeniedPass===false)) {
-
-      if(isFlowsShouldContinue) {
-
-        console.log('continue with denied...');
-
-        await expect(async () => {
+         await expect(async () => {
 
           let bCont: BrowserContext = await browser.newContext();
           const cPage = await bCont.newPage();
@@ -202,8 +180,6 @@ test.describe('ProgWeb Big Six', async () => {
           await bCont.close();
     
         }).toPass({ timeout: 500000 });
-      }
-    }
   });
 
   test('estimator : weekly', { tag: ['@progweb', '@happypath', '@estimate'] }, async ({browser}) => {
