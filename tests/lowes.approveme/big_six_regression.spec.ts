@@ -125,29 +125,29 @@ test.describe('Lowes Big Six', async () => {
         test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
         test.skip(isApplyPass == false, 'initial apply FAILED; test.skip()');
 
-            await expect(async () => {
+        await expect(async () => {
 
-                const bContR = await browser.newContext();
-                const cPageR = await bContR.newPage();
+            const bContR = await browser.newContext();
+            const cPageR = await bContR.newPage();
 
-                const resumePageR =  new L_ResumeApplication(cPageR);
-                await resumePageR.navigateResume();
-                await resumePageR.happyPathPopulate(ssnFetched,phoneFetched);
+            const resumePageR =  new L_ResumeApplication(cPageR);
+            await resumePageR.navigateResume();
+            await resumePageR.happyPathPopulate(ssnFetched,phoneFetched);
 
-                let leaseStatusPage = new K_LeaseStatusPage(cPageR);
+            let leaseStatusPage = new K_LeaseStatusPage(cPageR);
 
-                try {
-                    await leaseStatusPage.verifySuccessApproved();
-                    console.log("apply-resume back-to-back passed...")
-                    isResumePass = true;
-                    await cPageR.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason:'Lowes resume'}})}`);
-                }catch(Error) {
-                    await cPageR.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
-                }finally{
-                    await cPageR.close();
-                    await bContR.close();
-                }
-            }).toPass({timeout: 90000});
+            try {
+                await leaseStatusPage.verifySuccessApproved();
+                console.log("apply-resume back-to-back passed...")
+                isResumePass = true;
+                await cPageR.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason:'Lowes resume'}})}`);
+            }catch(Error) {
+                await cPageR.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
+            }finally{
+                await cPageR.close();
+                await bContR.close();
+            }
+        }).toPass({timeout: 90000});
     });
 
     test('separate approved', { tag: ['@lowes', '@approveme', '@happy', '@approved'] },async ({browser}) => {
@@ -157,75 +157,75 @@ test.describe('Lowes Big Six', async () => {
         };
         test.skip((isApplyPass == true && isResumePass == true));
 
-            await expect(async () => {
+        await expect(async () => {
 
-                const bCont = await browser.newContext();
-                const cPage = await bCont.newPage();
+            const bCont = await browser.newContext();
+            const cPage = await bCont.newPage();
 
-                // data object
-                let happyPathApproved = new HappyPathApproved();
+            // data object
+            let happyPathApproved = new HappyPathApproved();
 
-                // navigate
-                let marketingPage = new A_MarketingPage(cPage);
-                await marketingPage.navigateMarketing();
-                await marketingPage.beginApply();
+            // navigate
+            let marketingPage = new A_MarketingPage(cPage);
+            await marketingPage.navigateMarketing();
+            await marketingPage.beginApply();
 
-                // agree to terms and begin application
-                let beforeStartPage = new B_BeforeStartPage(cPage);
-                await beforeStartPage.continue();
+            // agree to terms and begin application
+            let beforeStartPage = new B_BeforeStartPage(cPage);
+            await beforeStartPage.continue();
 
-                // name dob ssn
-                let aboutYou1Page = new C_AboutYou1Page(cPage);
-                await aboutYou1Page.happyPathPopulate(happyPathApproved.getStartAppData);
-                ssnFetched = happyPathApproved.getStartAppData[3].substring(5,9);
-                console.log('SSN last four digits fetched from approved flow ', ssnFetched);
+            // name dob ssn
+            let aboutYou1Page = new C_AboutYou1Page(cPage);
+            await aboutYou1Page.happyPathPopulate(happyPathApproved.getStartAppData);
+            ssnFetched = happyPathApproved.getStartAppData[3].substring(5,9);
+            console.log('SSN last four digits fetched from approved flow ', ssnFetched);
 
-                // phone email
-                let aboutYou2Page = new D_AboutYou2Page(cPage);
-                await aboutYou2Page.happyPathPopulate(happyPathApproved.getAboutYou1);
-                phoneFetched = happyPathApproved.getAboutYou1[0];
-                console.log('Phone number fetched from approved flow ', phoneFetched);
+            // phone email
+            let aboutYou2Page = new D_AboutYou2Page(cPage);
+            await aboutYou2Page.happyPathPopulate(happyPathApproved.getAboutYou1);
+            phoneFetched = happyPathApproved.getAboutYou1[0];
+            console.log('Phone number fetched from approved flow ', phoneFetched);
 
-                // address city state zip
-                let homeAddress = new E_HomeAddress(cPage);
-                await homeAddress.happyPathPopulate(happyPathApproved.getHomeAddress);
+            // address city state zip
+            let homeAddress = new E_HomeAddress(cPage);
+            await homeAddress.happyPathPopulate(happyPathApproved.getHomeAddress);
 
-                // pay freq pay dates income
-                let incomePage = new F_IncomePage(cPage);
-                await incomePage.happyPathPopulate(happyPathApproved.getIncomeInfo);
+            // pay freq pay dates income
+            let incomePage = new F_IncomePage(cPage);
+            await incomePage.happyPathPopulate(happyPathApproved.getIncomeInfo);
 
-                // payment card
-                let creditCardDetails = new G_CreditCardDetailsPage(cPage);
-                await creditCardDetails.happyPathPopulate(happyPathApproved.getCreditCardInfo);
+            // payment card
+            let creditCardDetails = new G_CreditCardDetailsPage(cPage);
+            await creditCardDetails.happyPathPopulate(happyPathApproved.getCreditCardInfo);
 
-                // billing address
-                let billingAddress = new H_BillingAddress(cPage);
-                await billingAddress.happyPathPopulate(happyPathApproved.getHomeAddress);
+            // billing address
+            let billingAddress = new H_BillingAddress(cPage);
+            await billingAddress.happyPathPopulate(happyPathApproved.getHomeAddress);
 
-                // bank info
-                let accountDetails = new I_AccountDetails(cPage);
-                await accountDetails.happyPathPopulate(happyPathApproved.getBankInfo1);
+            // bank info
+            let accountDetails = new I_AccountDetails(cPage);
+            await accountDetails.happyPathPopulate(happyPathApproved.getBankInfo1);
 
-                // accept and proceed - finish
-                let leaseIdVerification = new J_LeaseIDVerification(cPage);
-                await leaseIdVerification.happyPathAcceptProceed();
+            // accept and proceed - finish
+            let leaseIdVerification = new J_LeaseIDVerification(cPage);
+            await leaseIdVerification.happyPathAcceptProceed();
 
-                // verify approved success and then exit
-                let leaseStatusPage = new K_LeaseStatusPage(cPage);
+            // verify approved success and then exit
+            let leaseStatusPage = new K_LeaseStatusPage(cPage);
 
-                try {
-                    await leaseStatusPage.verifySuccessApproved();
-                    console.log('separate approved passed...');
-                    await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason:'Lowes separate approved'}})}`);
-                }catch(Error) {
-                    await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
-                }finally{
-                    await cPage.close();
-                    await bCont.close();
-                }
-            }).toPass({timeout: 120000});
+            try {
+                await leaseStatusPage.verifySuccessApproved();
+                console.log('separate approved passed...');
+                await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason:'Lowes separate approved'}})}`);
+            }catch(Error) {
+                await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
+            }finally{
+                await cPage.close();
+                await bCont.close();
+            }
+        }).toPass({timeout: 120000});
     });
-    
+
     test('pending', { tag: ['@lowes', '@approveme', '@happy', '@pending'] },async ({browser}) => {
         const ATTEMPTS_MAX: number = 2;
         let attempts: number = 1;
