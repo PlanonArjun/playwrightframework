@@ -11,7 +11,7 @@ accessKey: YOUR_ACCESS_KEY
 # ======================
 # The following capabilities are used to set up reporting on BrowserStack:
 # Set 'projectName' to the name of your project. Example, Marketing Website
-projectName: not_set
+projectName: 2025-03-26 Lowes B6R
 
 # =======================================
 # Platforms (Browsers / Devices to test)
@@ -19,30 +19,30 @@ projectName: not_set
 # Platforms object contains all the browser / device combinations you want to test on.
 # Entire list available here -> (https://www.browserstack.com/list-of-browsers-and-platforms/automate)
 platforms:
-  - os: Windows
-    osVersion: '11'
-    browserName: Playwright-chromium
-    browserVersion: '131'
-  - os: Windows
-    osVersion: '11'
-    browserName: Playwright-firefox
-    browserVersion: '132'
-  - os: Windows
-    osVersion: '10'
-    browserName: Chrome
-    browserVersion: '132'
+#  - os: Windows
+#    osVersion: '11'
+#    browserName: Playwright-chromium
+#    browserVersion: '131'
+#  - os: Windows
+#    osVersion: '11'
+#    browserName: Playwright-firefox
+#    browserVersion: '132'
+#  - os: Windows
+#    osVersion: '10'
+#    browserName: Chrome
+#    browserVersion: '132'
   - os: OS X
     osVersion: Sequoia
     browserName: Chrome
     browserVersion: '132'
-  - os: OS X
-    osVersion: Sonoma
-    browserName: Playwright-firefox
-    browserVersion: '130'
-  - os: OS X
-    osVersion: Sequoia
-    browserName: Playwright-webkit
-    browserVersion: '18'
+#  - os: OS X
+#    osVersion: Sonoma
+#    browserName: Playwright-firefox
+#    browserVersion: '130'
+#  - os: OS X
+#    osVersion: Sequoia
+#    browserName: Playwright-webkit
+#    browserVersion: '18'
 
 # =======================
 # Parallels per Platform
@@ -68,7 +68,7 @@ browserstackLocal: true # <boolean> (Default false)
   # forceLocal: true  # <boolean> (Default: false) Set to true if you need to resolve all your traffic via BrowserStack Local tunnel.
   # Entire list of arguments available here -> https://www.browserstack.com/docs/automate/selenium/manage-incoming-connections
 # Set `buildName` as the name of the job / testsuite being run
-buildName: not_set
+buildName: 2025-03-26 Lowes B6R
 # `buildIdentifier` is a unique id to differentiate every execution that gets appended to
 # buildName. Choose your buildIdentifier format from the available expressions:
 # ${BUILD_NUMBER} (Default): Generates an incremental counter with every execution

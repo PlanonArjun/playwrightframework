@@ -1,4 +1,4 @@
-import {expect, test} from '@playwright/test';
+import { chromium, expect, test } from '@playwright/test';
 import A_MarketingPage from "../../pages/lowes.approveme/A_MarketingPage";
 import K_LeaseStatusPage from "../../pages/lowes.approveme/K_LeaseStatusPage";
 import J_LeaseIDVerification from "../../pages/lowes.approveme/J_LeaseIDVerification";
@@ -17,8 +17,9 @@ import HappyPathDenied from "../../data/lowes.approveme/HappyPathDenied";
 import M_LeaseEstimator from "$pages/lowes.approveme/M_LeaseEstimator";
 import {PaymentFrequency} from "../../data/paymentFrequency";
 import urls from '$utils/lowes.utils/urls';
+import LowesHealthCheck from './LowesHealthCheck';
 
-let isLandingPageLoads: boolean = false;
+let isHealthyLocal: Boolean;
 
 test.describe('Lowes Big Six', async () => {
 
@@ -28,30 +29,17 @@ test.describe('Lowes Big Six', async () => {
     let phoneFetched:string;
     let isApplyPass: boolean = false;
     let isResumePass: boolean = false;
-    let isFlowsShouldContinue: boolean = false;
 
-
-    test('Lowes landing page', async ({browser}) => {
-        let bCont = await browser.newContext();
-        let cPage = await bCont.newPage();
-
-        let a_marketingPage = new A_MarketingPage(cPage);
-        try {
-            await a_marketingPage.navigateMarketing();
-            await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason: 'Lowes landing page up'}})}`);
-            isLandingPageLoads = true;
-            console.log('landing page is up; begin tests...')
-        }catch(Error) {
-            console.log('\nfull stop; landing page is down...\n');
-            test.fail();
-        }finally{
-            await cPage.close();
-            await bCont.close();
-        }
+    test.beforeAll(async () => {
+        let browserTemp = await chromium.launch({ headless: true });
+        let pageTemp = await browserTemp.newPage();
+        isHealthyLocal = await new LowesHealthCheck(pageTemp).isHealthy();
+        await browserTemp.close();
+        await pageTemp.close();
     });
 
-
     test('lowes approve before resume', { tag: ['@lowes', '@approveme', '@happy', '@approved'] }, async ({ browser }) => {
+        test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
         await expect(async () => {
 
             // context and page
@@ -59,7 +47,7 @@ test.describe('Lowes Big Six', async () => {
             const cPage = await bCont.newPage();
 
             // data object
-            let happyPathApproved = new HappyPathApproved();
+            let happyPathApprovedData = new HappyPathApproved();
 
             // navigate
             let marketingPage = new A_MarketingPage(cPage);
@@ -72,35 +60,35 @@ test.describe('Lowes Big Six', async () => {
 
             // name dob ssn
             let aboutYou1Page = new C_AboutYou1Page(cPage);
-            await aboutYou1Page.happyPathPopulate(happyPathApproved.getStartAppData);
-            ssnFetched = happyPathApproved.getStartAppData[3].substring(5,9);
+            await aboutYou1Page.happyPathPopulate(happyPathApprovedData.getStartAppData);
+            ssnFetched = happyPathApprovedData.getStartAppData[3].substring(5,9);
             console.log('SSN last four digits fetched from approved flow ', ssnFetched);
 
             // phone email
             let aboutYou2Page = new D_AboutYou2Page(cPage);
-            await aboutYou2Page.happyPathPopulate(happyPathApproved.getAboutYou1);
-            phoneFetched = happyPathApproved.getAboutYou1[0];
+            await aboutYou2Page.happyPathPopulate(happyPathApprovedData.getAboutYou1);
+            phoneFetched = happyPathApprovedData.getAboutYou1[0];
             console.log('Phone number fetched from approved flow ', phoneFetched);
 
             // address city state zip
             let homeAddress = new E_HomeAddress(cPage);
-            await homeAddress.happyPathPopulate(happyPathApproved.getHomeAddress);
+            await homeAddress.happyPathPopulate(happyPathApprovedData.getHomeAddress);
 
             // pay freq pay dates income
             let incomePage = new F_IncomePage(cPage);
-            await incomePage.happyPathPopulate(happyPathApproved.getIncomeInfo);
+            await incomePage.happyPathPopulate(happyPathApprovedData.getIncomeInfo);
 
             // payment card
             let creditCardDetails = new G_CreditCardDetailsPage(cPage);
-            await creditCardDetails.happyPathPopulate(happyPathApproved.getCreditCardInfo);
+            await creditCardDetails.happyPathPopulate(happyPathApprovedData.getCreditCardInfo);
 
             // billing address
             let billingAddress = new H_BillingAddress(cPage);
-            await billingAddress.happyPathPopulate(happyPathApproved.getHomeAddress);
+            await billingAddress.happyPathPopulate(happyPathApprovedData.getHomeAddress);
 
             // bank info
             let accountDetails = new I_AccountDetails(cPage);
-            await accountDetails.happyPathPopulate(happyPathApproved.getBankInfo1);
+            await accountDetails.happyPathPopulate(happyPathApprovedData.getBankInfo1);
 
             // accept and proceed - finish
             let leaseIdVerification = new J_LeaseIDVerification(cPage);
@@ -133,9 +121,9 @@ test.describe('Lowes Big Six', async () => {
         }).toPass({ timeout: 120000 });
     });
 
-
     test('resume second', { tag: ['@lowes', '@approveme', '@happy', '@resume'] },async ({browser}) => {
-        if(isApplyPass) {
+        test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
+        test.skip(isApplyPass == false, 'initial apply FAILED; test.skip()');
 
             await expect(async () => {
 
@@ -152,7 +140,6 @@ test.describe('Lowes Big Six', async () => {
                     await leaseStatusPage.verifySuccessApproved();
                     console.log("apply-resume back-to-back passed...")
                     isResumePass = true;
-                    isFlowsShouldContinue = true;
                     await cPageR.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason:'Lowes resume'}})}`);
                 }catch(Error) {
                     await cPageR.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
@@ -161,14 +148,14 @@ test.describe('Lowes Big Six', async () => {
                     await bContR.close();
                 }
             }).toPass({timeout: 90000});
-        }else {
-            console.log("apply failed so resume skipped...");
-        }
     });
 
-
     test('separate approved', { tag: ['@lowes', '@approveme', '@happy', '@approved'] },async ({browser}) => {
-        if((!isResumePass) && (isFlowsShouldContinue)) {
+        test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
+        if(isApplyPass == true && isResumePass == true) {
+            console.log('separate approved skipped on purpose, not needed');
+        };
+        test.skip((isApplyPass == true && isResumePass == true));
 
             await expect(async () => {
 
@@ -228,23 +215,17 @@ test.describe('Lowes Big Six', async () => {
 
                 try {
                     await leaseStatusPage.verifySuccessApproved();
+                    console.log('separate approved passed...');
                     await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason:'Lowes separate approved'}})}`);
                 }catch(Error) {
-                    isFlowsShouldContinue = false;
                     await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
                 }finally{
                     await cPage.close();
                     await bCont.close();
                 }
-
             }).toPass({timeout: 120000});
-
-        }else {
-            console.log('separate approved skipped on purpose, not needed');
-        }
     });
-
-
+    
     test('pending', { tag: ['@lowes', '@approveme', '@happy', '@pending'] },async ({browser}) => {
         const ATTEMPTS_MAX: number = 2;
         let attempts: number = 1;

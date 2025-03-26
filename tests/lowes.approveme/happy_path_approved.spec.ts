@@ -29,6 +29,7 @@ test.describe('approved', async () => {
   });
 
   test('approved', { tag: ['@lowes', '@approveme', '@happypath', '@approved'] }, async ({ browser }) => {
+    test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
     await expect(async () => {
 
       // context and page
