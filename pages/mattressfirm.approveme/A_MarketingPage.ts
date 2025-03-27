@@ -26,6 +26,7 @@ class A_MarketingPage1 {
     }
 
     async beginEstimate() {
+        await this.navigate();
         await this.linkPaymentEstimator.click();
         await expect(this.page.locator('#lce-iframe').contentFrame().getByRole('heading', { name: 'Estimate lease-to-own costs' })).toBeVisible();
     }
