@@ -1,4 +1,4 @@
-import { test, expect, BrowserContext, Page } from '@playwright/test';
+import { test, expect, BrowserContext, Page, chromium } from '@playwright/test';
 
 import B_SplashPage from "../../pages/mattressfirm.approveme/B_SplashPage";
 import C_StartAppPage from "../../pages/mattressfirm.approveme/C_StartAppPages";
@@ -31,10 +31,12 @@ test.describe('navigation', async () => {
 
     let getStartAppData: string[];
 
-    test.beforeAll(async ({browser}) => {
-        bCont = await browser.newContext();
-        cPage = await bCont.newPage();
-        isHealthyLocal = await new MTFMHealthCheck(cPage).isHealthy();
+    test.beforeAll(async () => {
+        let browserTemp = await chromium.launch({ headless: true });
+        let pageTemp = await browserTemp.newPage();
+        isHealthyLocal = await new MTFMHealthCheck(pageTemp).isHealthy();
+        await browserTemp.close();
+        await pageTemp.close();
     });
 
     test('happy path approved to results page - apply', {tag: ['@approveme', '@mattressfirm', '@happy', '@pending']}, async ({browser}) => {

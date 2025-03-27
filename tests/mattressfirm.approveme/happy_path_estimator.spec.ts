@@ -1,4 +1,4 @@
-import test, {BrowserContext, Page} from '@playwright/test';
+import test, { BrowserContext, chromium, Page } from '@playwright/test';
 import A_MarketingPage from '../../pages/mattressfirm.approveme/A_MarketingPage';
 import S_PaymentEstimator from '../../pages/mattressfirm.approveme/S_PaymentEstimator';
 import {PaymentFrequency} from "../../data/paymentFrequency";
@@ -17,13 +17,17 @@ test.describe('estimate', async () => {
     test.describe.configure({ mode: 'parallel' });
     test.setTimeout(30000);
 
-    test.beforeAll(async ({browser}) => {
-        bCont = await browser.newContext();
-        cPage = await bCont.newPage();
-        isHealthyLocal = await new MTFMHealthCheck(cPage).isHealthy();
+    test.beforeAll(async () => {
+        let browserTemp = await chromium.launch({ headless: true });
+        let pageTemp = await browserTemp.newPage();
+        isHealthyLocal = await new MTFMHealthCheck(pageTemp).isHealthy();
+        await browserTemp.close();
+        await pageTemp.close();
     });
 
     test.beforeEach(async ({browser}) => {
+        bCont = await browser.newContext();
+        cPage = await bCont.newPage();
         a_marketingPage = new A_MarketingPage(cPage);
         await a_marketingPage.navigate();
         await a_marketingPage.beginEstimate();

@@ -1,4 +1,4 @@
-import { test, expect, BrowserContext, Page } from '@playwright/test';
+import { test, expect, BrowserContext, Page, chromium } from '@playwright/test';
 import A_MarketingPage from "../../pages/mattressfirm.approveme/A_MarketingPage";
 import B_SplashPage from "../../pages/mattressfirm.approveme/B_SplashPage";
 import C_StartAppPage from "../../pages/mattressfirm.approveme/C_StartAppPages";
@@ -28,10 +28,12 @@ test.describe('MTFM', async () => {
   test.describe.configure({ retries: 0 });
   test.describe.configure({ mode: 'serial' });
 
-  test.beforeAll(async ({browser}) => {
-    bCont = await browser.newContext();
-    cPage = await bCont.newPage();
-    isHealthyLocal = await new MTFMHealthCheck(cPage).isHealthy();
+  test.beforeAll(async () => {
+    let browserTemp = await chromium.launch({ headless: true });
+    let pageTemp = await browserTemp.newPage();
+    isHealthyLocal = await new MTFMHealthCheck(pageTemp).isHealthy();
+    await browserTemp.close();
+    await pageTemp.close();
   });
 
   test('denied', {tag: ['@approveme', '@mattressfirm', '@happy', '@denied']}, async ({browser}) => {

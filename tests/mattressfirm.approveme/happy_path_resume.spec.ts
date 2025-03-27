@@ -1,4 +1,4 @@
-import {test, expect } from '@playwright/test';
+import { test, expect, chromium } from '@playwright/test';
 import B_SplashPage from "../../pages/mattressfirm.approveme/B_SplashPage";
 import C_StartAppPage from "../../pages/mattressfirm.approveme/C_StartAppPages";
 import D_AboutYouPage from "../../pages/mattressfirm.approveme/D_AboutYouPage";
@@ -18,6 +18,7 @@ import H_EmployeeStatusPage from '../../pages/mattressfirm.approveme/H_EmployeeS
 import F_RentOwnPage from '../../pages/mattressfirm.approveme/F_RentOwnPage';
 import G_IdTypePage from '../../pages/mattressfirm.approveme/G_IdTypePage';
 import R_Resume from "../../pages/mattressfirm.approveme/R_Resume";
+import MTFMHealthCheck from './MTFMHealthCheck';
 
 test.describe('navigation', async () => {
 
@@ -30,8 +31,18 @@ test.describe('navigation', async () => {
     let ssnFetched:string;
     let isApplyPass: boolean = false;
     let splashPageLocal: B_SplashPage;
+    let isHealthyLocal: Boolean;
+
+    test.beforeAll(async () => {
+        let browserTemp = await chromium.launch({ headless: true });
+        let pageTemp = await browserTemp.newPage();
+        isHealthyLocal = await new MTFMHealthCheck(pageTemp).isHealthy();
+        await browserTemp.close();
+        await pageTemp.close();
+    });
 
     test('approve first', { tag: ['@approveme', '@mattressfirm', '@happy', '@approved'] },async ({browser}) => {
+        test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
         await expect(async () => {
 
             const bCont = await browser.newContext();
@@ -115,6 +126,7 @@ test.describe('navigation', async () => {
     });
 
     test('resume second', { tag: ['@approveme', '@mattressfirm', '@happy', '@resume'] }, async ({ browser }) => {
+        test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
         await expect(async () => {
 
             if(isApplyPass) {
