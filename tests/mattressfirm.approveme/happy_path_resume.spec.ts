@@ -29,6 +29,7 @@ test.describe('navigation', async () => {
     let nameLastFetched:string;
     let ssnFetched:string;
     let isApplyPass: boolean = false;
+    let splashPageLocal: B_SplashPage;
 
     test('approve first', { tag: ['@approveme', '@mattressfirm', '@happy', '@approved'] },async ({browser}) => {
         await expect(async () => {

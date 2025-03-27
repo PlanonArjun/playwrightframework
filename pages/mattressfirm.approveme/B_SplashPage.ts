@@ -56,13 +56,23 @@ class B_SplashPage {
   async checkLinkPhoto() {
     await this.linkPhotoId.click();
     await this.page.waitForTimeout(250);
-    await expect(this.headingExpectedPhoto).toBeVisible({timeout: 5000});
+    await expect(this.headingExpectedPhoto).toBeVisible({ timeout: 5000 });
+    let buttonCloseConditional = await this.page.getByRole('button', { name: 'Close' });
+    let buttonCount = await buttonCloseConditional.count();
+    if (buttonCount > 0) {
+      await buttonCloseConditional.click();
+    }
   }
 
   async checkLinkBankInfo() {
     await this.linkBankInfo.click();
     await this.page.waitForTimeout(250);
     await expect(this.headingExpectedBankInfo).toBeVisible({timeout: 5000});
+    let buttonCloseConditional = await this.page.getByRole('button', { name: 'Close' });
+    let buttonCount = await buttonCloseConditional.count();
+    if (buttonCount > 0) {
+      await buttonCloseConditional.click();
+    }
   }
 
   async selectCheckbox() {
