@@ -1,5 +1,6 @@
 import {test, expect, BrowserContext, Page} from '@playwright/test';
 import B_SplashPage from "../../pages/mattressfirm.approveme/B_SplashPage";
+import MTFMHealthCheck from './MTFMHealthCheck';
 
 test.describe('navigation', async () => {
 
@@ -8,23 +9,28 @@ test.describe('navigation', async () => {
 
   let bCont: BrowserContext;
   let cPage: Page;
+  let isHealthyLocal: Boolean;
   let splashPageLocal: B_SplashPage;
 
-  test.beforeEach(async ({browser}) => {
+  test.beforeAll(async ({browser}) => {
     bCont = await browser.newContext();
     cPage = await bCont.newPage();
-    splashPageLocal = new B_SplashPage(cPage);
-    await splashPageLocal.navigate();
-
+    isHealthyLocal = await new MTFMHealthCheck(cPage).isHealthy();
   });
 
-  test.afterEach(async () => {
+  test.beforeEach(async () => {
+    splashPageLocal = new B_SplashPage(cPage);
+    await splashPageLocal.navigate();
+  });
+
+  test.afterAll(async () => {
     splashPageLocal = null;
     await cPage.close();
     await bCont.close();
   });
 
   test('photoId', { tag: ['@approveme', '@mattressfirm', '@splashpage', '@linkscheck'] },async () => {
+    test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
     await expect(async () => {
       try {
         await splashPageLocal.checkLinkPhoto();
@@ -36,6 +42,7 @@ test.describe('navigation', async () => {
   });
 
   test('bankInfo', { tag: ['@approveme', '@mattressfirm', '@splashpage', '@linkscheck'] },async () => {
+    test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
     await expect(async () => {
       try {
         await splashPageLocal.checkLinkBankInfo();
@@ -47,6 +54,7 @@ test.describe('navigation', async () => {
   });
 
   test('checkbox', { tag: ['@approveme', '@mattressfirm', '@splashpage', '@linkscheck'] },async () => {
+    test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
     await expect(async () => {
       try {
         await splashPageLocal.selectCheckbox();
@@ -59,6 +67,7 @@ test.describe('navigation', async () => {
   });
 
   test('terms', { tag: ['@approveme', '@mattressfirm', '@splashpage', '@linkscheck'] },async () => {
+    test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
     await expect(async () => {
       try {
         await splashPageLocal.checkLinkTerms();
@@ -70,17 +79,17 @@ test.describe('navigation', async () => {
   });
 
   test('privacy', { tag: ['@approveme', '@mattressfirm', '@splashpage', '@linkscheck'] },async () => {
-    await expect(async () => {
-      try {
-        await splashPageLocal.checkLinkPrivacy();
-        await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason: 'privacy'}})}`);
-      }catch(Error) {
-        await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
-      }
-    }).toPass({timeout: 25000});
+    test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
+    try {
+      await splashPageLocal.checkLinkPrivacy();
+      await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason: 'privacy'}})}`);
+    }catch(Error) {
+      await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
+    }
   });
 
   test('disclosure', { tag: ['@approveme', '@mattressfirm', '@splashpage', '@linkscheck'] },async () => {
+    test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
     await expect(async () => {
       try {
         await splashPageLocal.checkLinkDisclosure();
@@ -92,6 +101,7 @@ test.describe('navigation', async () => {
   });
 
   test('arbitration', { tag: ['@approveme', '@mattressfirm', '@splashpage', '@linkscheck'] },async ({browser}) => {
+    test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
     await expect(async () => {
       try {
         await splashPageLocal.checkLinkArbitration();
