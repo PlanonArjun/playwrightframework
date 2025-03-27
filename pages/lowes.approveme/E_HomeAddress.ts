@@ -2,7 +2,7 @@
 // Lowes Apply Approve me 
 import { type Page, type Locator, expect } from '@playwright/test';
 import B_BeforeStartPage from './B_BeforeStartPage';
-import A_MarketingPage from './A_Marketingpage';
+import A_MarketingPage from './A_MarketingPage';
 
 
 class E_HomeAddress {
@@ -16,7 +16,6 @@ class E_HomeAddress {
     readonly menuState: Locator;
     readonly selectState: Locator;
     readonly zipCode: Locator;
-
 
     constructor(page: Page) {
         this.page = page;
@@ -64,7 +63,6 @@ class E_HomeAddress {
         await this._selectState(dataIn[3]);
         await this.page.waitForTimeout(500);
         await this._enterZip(dataIn[4]);
-
     }
 }
 export default E_HomeAddress;

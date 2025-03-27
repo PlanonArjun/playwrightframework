@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, chromium } from '@playwright/test';
 import A_MarketingPage from "../../pages/lowes.approveme/A_MarketingPage";
 import B_BeforeStartPage from '../../pages/lowes.approveme/B_BeforeStartPage';
 import C_AboutYou1Page from '../../pages/lowes.approveme/C_AboutYou1Page';
@@ -11,18 +11,29 @@ import I_AccountDetails from '../../pages/lowes.approveme/I_AccountDetails';
 import J_LeaseIDVerification from '../../pages/lowes.approveme/J_LeaseIDVerification';
 import K_LeaseStatusPage from '../../pages/lowes.approveme/K_LeaseStatusPage';
 import HappyPathDenied from "../../data/lowes.approveme/HappyPathDenied";
+import LowesHealthCheck from './LowesHealthCheck';
+
+let isHealthyLocal: Boolean;
 
 test.describe('lowes', async () => {
 
   test.describe.configure({ retries: 0 });
   test.describe.configure({ mode: 'serial' });
 
-  test('denied', { tag: ['@lowes', '@approveme', '@happypath', '@denied'] }, async ({ browser }) => {
-    await expect(async () => {
+  test.beforeAll(async () => {
+    let browserTemp = await chromium.launch({ headless: true });
+    let pageTemp = await browserTemp.newPage();
+    isHealthyLocal = await new LowesHealthCheck(pageTemp).isHealthy();
+    await browserTemp.close();
+    await pageTemp.close();
+  });
 
+  test('denied', { tag: ['@lowes', '@approveme', '@happypath', '@denied'] }, async ({ browser }) => {
+    test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
+    await expect(async () => {
       // context and page
-      const bCont = await browser.newContext();
-      const cPage = await bCont.newPage();
+      let bCont = await browser.newContext();
+      let cPage = await bCont.newPage();
 
       // data object
       let happyPathDenied = new HappyPathDenied();

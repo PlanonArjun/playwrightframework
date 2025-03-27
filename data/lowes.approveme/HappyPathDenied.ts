@@ -19,7 +19,7 @@ class HappyPathApproved {
         stateAbbrev: 'Utah',
         zip: '84020',
         /* F_IncomeInfoPage */
-        monthlyIncome: '2999',
+        monthlyIncome: '2777',
         // payFrequency:   'string:Weekly',
         // payFrequency:   'string:BiWeekly',
         // payFrequency:   'string:SemiMonthly',
