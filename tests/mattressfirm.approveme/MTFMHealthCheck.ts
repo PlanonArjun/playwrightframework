@@ -13,9 +13,7 @@ class MTFMHealthCheck {
   constructor(page: Page) {
     this.page = page;
     this.agreeTo = this.page.getByText('I have read and agree to the');
-    // this.agreeTo = this.page.locator('#view-splash > div.row.row-agreeterms.ng-scope > div > label > span.mark-placeholder');
     this.buttonContinue = this.page.getByRole('button', { name: 'Continue' });
-    // this.buttonContinue = this.page.locator('#continue');
   }
 
   async _navigate() {
