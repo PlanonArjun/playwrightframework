@@ -22,7 +22,7 @@ class B_SplashPage {
   readonly textExpectedArbitration: Locator;
   readonly buttonComeBackLater: Locator;
   readonly buttonContinue: Locator;
-  readonly buttonBACK: Locator;
+  readonly buttonCommonBack: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -41,7 +41,7 @@ class B_SplashPage {
     this.linkArbitration = page.getByRole('link', { name: 'Arbitration Provision' });
     this.textExpectedArbitration = page.getByText('This Arbitration Provision (“');
     this.buttonComeBackLater = page.getByRole('button', { name: 'Come Back Later' });
-    this.buttonBACK = page.getByRole('button', { name: 'Back' }).first();
+    this.buttonCommonBack = page.getByRole('button', { name: 'Back' }).first();
     this.buttonContinue = page.getByRole('button', { name: 'Continue' });
   }
 
@@ -50,7 +50,7 @@ class B_SplashPage {
   }
 
   async commonBACK() {
-    await this.buttonBACK.click({timeout: 5000});
+    await this.buttonCommonBack.click({timeout: 5000});
   }
 
   async checkLinkPhoto() {
