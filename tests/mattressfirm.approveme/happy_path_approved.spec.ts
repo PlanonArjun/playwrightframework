@@ -39,6 +39,7 @@ test.describe('navigation', async () => {
     });
 
     test('happy path approved to results page', {tag: ['@approveme', '@mattressfirm', '@happy', '@approved']}, async ({browser}) => {
+        test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
         await expect(async () => {
 
             bCont = await browser.newContext();

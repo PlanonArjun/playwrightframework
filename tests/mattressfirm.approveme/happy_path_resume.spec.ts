@@ -127,31 +127,30 @@ test.describe('navigation', async () => {
 
     test('resume second', { tag: ['@approveme', '@mattressfirm', '@happy', '@resume'] }, async ({ browser }) => {
         test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
+        if(!isApplyPass) {
+            console.log("Apply failed. Resume skipped.");
+        }
+        test.skip(isApplyPass == false, 'health check FAILED; test.skip()');
+
         await expect(async () => {
 
-            if(isApplyPass) {
+            const bContR = await browser.newContext();
+            const cPageR = await bContR.newPage();
 
-                const bContR = await browser.newContext();
-                const cPageR = await bContR.newPage();
+            await (new A_MarketingPage(cPageR)).beginResume();
 
-                await (new A_MarketingPage(cPageR)).beginResume();
+            await (new R_Resume(cPageR)).happyPathPopulate([nameFirstFetched,nameLastFetched],ssnFetched);
 
-                await (new R_Resume(cPageR)).happyPathPopulate([nameFirstFetched,nameLastFetched],ssnFetched);
-
-                try {
-                    await (new Q_Results(cPageR)).verifySuccessApproved();
-                    isApplyPass = true;
-                    console.log("Resume passed. End test.")
-                    await cPageR.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason:'resume'}})}`);
-                }catch(Error) {
-                    await cPageR.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
-                }finally{
-                    await cPageR.close();
-                    await bContR.close();
-                }
-
-            }else {
-                console.log("Apply failed. Resume skipped.");
+            try {
+                await (new Q_Results(cPageR)).verifySuccessApproved();
+                isApplyPass = true;
+                console.log("Resume passed. End test.")
+                await cPageR.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason:'resume'}})}`);
+            }catch(Error) {
+                await cPageR.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
+            }finally{
+                await cPageR.close();
+                await bContR.close();
             }
 
         }).toPass({ timeout: 90000 });

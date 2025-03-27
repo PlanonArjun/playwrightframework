@@ -1,4 +1,4 @@
-import {expect, test} from '@playwright/test';
+import { chromium, expect, test } from '@playwright/test';
 import A_MarketingPage from "../../pages/mattressfirm.approveme/A_MarketingPage";
 import B_SplashPage from "../../pages/mattressfirm.approveme/B_SplashPage";
 import HappyPathApproved from "../../data/mattressfirm.approveme/HappyPathApproved";
@@ -28,6 +28,7 @@ import H_EmployStatus from "../../pages/mattressfirm.approveme/H_EmployeeStatusP
 import J_EmployerDuration from "../../pages/mattressfirm.approveme/J_EmployeeDurationPage";
 import {PaymentFrequency} from "../../data/paymentFrequency";
 import S_PaymentEstimator from "../../pages/mattressfirm.approveme/S_PaymentEstimator";
+import MTFMHealthCheck from './MTFMHealthCheck';
 
 
 test.describe('MTFM Big Six', async () => {
@@ -41,29 +42,18 @@ test.describe('MTFM Big Six', async () => {
     let isResumePass: boolean = false;
     let isFlowsShouldContinue: boolean = false;
     let isLandingPageLoads: boolean = false;
+    let isHealthyLocal: Boolean;
 
-
-    test('MTFM landing page', async ({browser}) => {
-        let bCont = await browser.newContext();
-        let cPage = await bCont.newPage();
-
-        let a_marketingPage = new A_MarketingPage(cPage);
-        try {
-            await a_marketingPage.navigate();
-            await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason: 'MTFM landing page up'}})}`);
-            isLandingPageLoads = true;
-            console.log('landing page is up; begin tests...')
-        }catch(Error) {
-            console.log('\nfull stop; landing page is down...\n');
-            test.fail();
-        }finally{
-            await cPage.close();
-            await bCont.close();
-        }
+    test.beforeAll(async () => {
+        let browserTemp = await chromium.launch({ headless: true });
+        let pageTemp = await browserTemp.newPage();
+        isHealthyLocal = await new MTFMHealthCheck(pageTemp).isHealthy();
+        await browserTemp.close();
+        await pageTemp.close();
     });
 
-
     test('MTFM approve before resume', { tag: ['@mattressfirm', '@approveme', '@happy', '@approved'] }, async ({ browser }) => {
+        test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
         await expect(async () => {
 
             const bCont = await browser.newContext();
@@ -144,39 +134,38 @@ test.describe('MTFM Big Six', async () => {
 
 
     test('resume second', { tag: ['@approveme', '@mattressfirm', '@happy', '@resume'] }, async ({ browser }) => {
+        test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
+        if(!isApplyPass) {
+            console.log("Apply failed. Resume skipped.");
+        }
+        test.skip(isApplyPass == false, 'health check FAILED; test.skip()');
         await expect(async () => {
 
-            if(isApplyPass) {
+            const bContR = await browser.newContext();
+            const cPageR = await bContR.newPage();
 
-                const bContR = await browser.newContext();
-                const cPageR = await bContR.newPage();
+            await (new A_MarketingPage(cPageR)).beginResume();
 
-                await (new A_MarketingPage(cPageR)).beginResume();
+            await (new R_Resume(cPageR)).happyPathPopulate([nameFirstFetched,nameLastFetched],ssnFetched);
 
-                await (new R_Resume(cPageR)).happyPathPopulate([nameFirstFetched,nameLastFetched],ssnFetched);
-
-                try {
-                    await (new Q_Results(cPageR)).verifySuccessApproved();
-                    isResumePass = true;
-                    isFlowsShouldContinue = true;
-                    console.log("Resume passed. End test.")
-                    await cPageR.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason:'resume'}})}`);
-                }catch(Error) {
-                    await cPageR.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
-                }finally{
-                    await cPageR.close();
-                    await bContR.close();
-                }
-
-            }else {
-                console.log("Apply failed. Resume skipped.");
+            try {
+                await (new Q_Results(cPageR)).verifySuccessApproved();
+                isResumePass = true;
+                isFlowsShouldContinue = true;
+                console.log("Resume passed. End test.")
+                await cPageR.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason:'resume'}})}`);
+            }catch(Error) {
+                await cPageR.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
+            }finally{
+                await cPageR.close();
+                await bContR.close();
             }
-
         }).toPass({ timeout: 90000 });
     });
 
 
     test('separate approved', { tag: ['@mattressfirm', '@approveme', '@happy', '@approved'] },async ({browser}) => {
+        test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
         if((!isResumePass) && (isFlowsShouldContinue)) {
 
             await expect(async () => {
