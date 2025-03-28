@@ -12,7 +12,7 @@ class MTFMHealthCheck {
 
   constructor(page: Page) {
     this.page = page;
-    this.agreeTo = this.page.getByText('I have read and agree to theFoo');
+    this.agreeTo = this.page.getByText('I have read and agree to the');
     this.buttonContinue = this.page.getByRole('button', { name: 'Continue' });
   }
 
