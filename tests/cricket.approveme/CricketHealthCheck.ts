@@ -3,7 +3,7 @@ import { type Page, type Locator} from '@playwright/test';
 
 import urls from '../../utils/cricket.utils/urls'
 
-class MTFMHealthCheck {
+class CricketHealthCheck {
 
   readonly page: Page;
   readonly agreeTo: Locator;
@@ -35,4 +35,4 @@ class MTFMHealthCheck {
   }
 
 }
-export default MTFMHealthCheck;
+export default CricketHealthCheck;
