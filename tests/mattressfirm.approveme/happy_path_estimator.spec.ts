@@ -1,10 +1,13 @@
-import test, {BrowserContext, Page} from '@playwright/test';
+import test, { BrowserContext, chromium, Page } from '@playwright/test';
 import A_MarketingPage from '../../pages/mattressfirm.approveme/A_MarketingPage';
 import S_PaymentEstimator from '../../pages/mattressfirm.approveme/S_PaymentEstimator';
 import {PaymentFrequency} from "../../data/paymentFrequency";
+import MTFMHealthCheck from './MTFMHealthCheck';
 
 let bCont: BrowserContext;
 let cPage: Page;
+let isHealthyLocal: Boolean;
+
 let a_marketingPage: A_MarketingPage;
 let s_estimator: S_PaymentEstimator;
 
@@ -13,6 +16,14 @@ test.describe('estimate', async () => {
     test.describe.configure({ retries: 0 });
     test.describe.configure({ mode: 'parallel' });
     test.setTimeout(30000);
+
+    test.beforeAll(async () => {
+        let browserTemp = await chromium.launch({ headless: true });
+        let pageTemp = await browserTemp.newPage();
+        isHealthyLocal = await new MTFMHealthCheck(pageTemp).isHealthy();
+        await browserTemp.close();
+        await pageTemp.close();
+    });
 
     test.beforeEach(async ({browser}) => {
         bCont = await browser.newContext();
@@ -29,6 +40,7 @@ test.describe('estimate', async () => {
     });
 
     test('weekly', { tag: ['@mattressfirm', '@approveme', '@happypath', '@estimate'] }, async () => {
+        test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
         try {
                 await s_estimator.happyPathEstimate('2999', PaymentFrequency.Weekly/*, 'TX'*/);
                 await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason: 'weekly'}})}`);
@@ -38,6 +50,7 @@ test.describe('estimate', async () => {
     });
 
     test('biweekly', { tag: ['@mattressfirm', '@approveme', '@happypath', '@estimate'] }, async () => {
+        test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
             try {
                 await s_estimator.happyPathEstimate('5000', PaymentFrequency.BiWeekly/*, 'ND'*/);
                 await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason: 'biweekly'}})}`);
@@ -47,6 +60,7 @@ test.describe('estimate', async () => {
     });
 
     test('semimonthly', { tag: ['@mattressfirm', '@approveme', '@happypath', '@estimate'] }, async () => {
+        test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
         try {
             await s_estimator.happyPathEstimate('4000', PaymentFrequency.SemiMonthly/*, 'ME'*/);
             await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason: 'semimonthly'}})}`);
@@ -56,6 +70,7 @@ test.describe('estimate', async () => {
     });
 
     test('monthly', { tag: ['@mattressfirm', '@approveme', '@happypath', '@estimate'] }, async () => {
+        test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
         try {
             await s_estimator.happyPathEstimate('3001', PaymentFrequency.Monthly/*, 'UT'*/);
             await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason: 'monthly'}})}`);

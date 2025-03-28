@@ -24,19 +24,19 @@ class Q_Results {
     async verifySuccessApproved() {
         await this.headingCongrats.click({timeout:20000});
         await this.headingApproved.click({timeout:20000});
-        console.log('success - approved');
+        console.log('success - MTFM approved');
     }
 
     async verifySuccessPending() {
         await expect(this.iconPending).toBeVisible({timeout: 30000}); // the Info icon that appears with Pending
         await expect(this.headingPending).toBeVisible({timeout: 30000});
-        console.log('success - pending');
+        console.log('success - MTFM pending');
     }
 
     async verifySuccessDenied() {
         const element = this.page.getByText('Your Progressive Leasing application was unable to be approved.')
         await expect(element).toHaveCount(1,{timeout: 20000})
-        console.log('success - denied');
+        console.log('success - MTFM denied');
     }
 
     async EXIT() {

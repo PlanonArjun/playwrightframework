@@ -1,4 +1,4 @@
-import {test, expect } from '@playwright/test';
+import { test, expect, BrowserContext, Page, chromium } from '@playwright/test';
 import B_SplashPage from "../../pages/mattressfirm.approveme/B_SplashPage";
 import C_StartAppPage from "../../pages/mattressfirm.approveme/C_StartAppPages";
 import D_AboutYouPage from "../../pages/mattressfirm.approveme/D_AboutYouPage";
@@ -17,6 +17,11 @@ import A_MarketingPage from '../../pages/mattressfirm.approveme/A_MarketingPage'
 import H_EmployeeStatusPage from '../../pages/mattressfirm.approveme/H_EmployeeStatusPage';
 import F_RentOwnPage from '../../pages/mattressfirm.approveme/F_RentOwnPage';
 import G_IdTypePage from '../../pages/mattressfirm.approveme/G_IdTypePage';
+import MTFMHealthCheck from './MTFMHealthCheck';
+
+let bCont: BrowserContext;
+let cPage: Page;
+let isHealthyLocal: Boolean;
 
 test.describe('navigation', async () => {
 
@@ -25,11 +30,20 @@ test.describe('navigation', async () => {
 
     let getStartAppData: string[];
 
+    test.beforeAll(async () => {
+        let browserTemp = await chromium.launch({ headless: true });
+        let pageTemp = await browserTemp.newPage();
+        isHealthyLocal = await new MTFMHealthCheck(pageTemp).isHealthy();
+        await browserTemp.close();
+        await pageTemp.close();
+    });
+
     test('happy path approved to results page', {tag: ['@approveme', '@mattressfirm', '@happy', '@approved']}, async ({browser}) => {
+        test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
         await expect(async () => {
 
-            const bCont = await browser.newContext();
-            const cPage = await bCont.newPage();
+            bCont = await browser.newContext();
+            cPage = await bCont.newPage();
 
             let a_marketingPage = new A_MarketingPage(cPage);
             await a_marketingPage.navigate()
@@ -91,15 +105,14 @@ test.describe('navigation', async () => {
 
             try {
                 await (new Q_Results(cPage)).verifySuccessApproved();
-                console.log("approved passed");
-                await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason: 'approved'}})}`);
+                console.log("MTFM separate approved passed");
+                await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason: 'MTFM separate approved'}})}`);
             }catch(Error) {
                 await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
             }finally {
                 await cPage.close();
                 await bCont.close();
             }
-
         }).toPass({timeout: 120000});
     });
 });

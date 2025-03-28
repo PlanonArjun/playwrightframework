@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, BrowserContext, Page, chromium } from '@playwright/test';
 import A_MarketingPage from "../../pages/mattressfirm.approveme/A_MarketingPage";
 import B_SplashPage from "../../pages/mattressfirm.approveme/B_SplashPage";
 import C_StartAppPage from "../../pages/mattressfirm.approveme/C_StartAppPages";
@@ -17,19 +17,31 @@ import O_PaymentCardPage from '../../pages/mattressfirm.approveme/O_PaymentCardP
 import HappyPathDenied from '../../data/mattressfirm.approveme/HappyPathDenied';
 import D_AboutYouPage from '../../pages/mattressfirm.approveme/D_AboutYouPage';
 import E_AboutYouPage from '../../pages/mattressfirm.approveme/E_AboutYouPage';
+import MTFMHealthCheck from './MTFMHealthCheck';
+
+let bCont: BrowserContext;
+let cPage: Page;
+let isHealthyLocal: Boolean;
 
 test.describe('MTFM', async () => {
 
   test.describe.configure({ retries: 0 });
   test.describe.configure({ mode: 'serial' });
 
-  let getStartAppData: string[];
+  test.beforeAll(async () => {
+    let browserTemp = await chromium.launch({ headless: true });
+    let pageTemp = await browserTemp.newPage();
+    isHealthyLocal = await new MTFMHealthCheck(pageTemp).isHealthy();
+    await browserTemp.close();
+    await pageTemp.close();
+  });
 
   test('denied', {tag: ['@approveme', '@mattressfirm', '@happy', '@denied']}, async ({browser}) => {
+    test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
     await expect(async () => {
 
-      const bCont = await browser.newContext();
-      const cPage = await bCont.newPage();
+      bCont = await browser.newContext();
+      cPage = await bCont.newPage();
 
       let a_marketingPage = new A_MarketingPage(cPage);
       await a_marketingPage.navigate()
@@ -41,9 +53,9 @@ test.describe('MTFM', async () => {
 
       let happyPathDenied = new HappyPathDenied();
 
-      let c_startAppPage = new C_StartAppPage(cPage);
+      let getStartAppData: string[] =  happyPathDenied.getStartAppData;
 
-      getStartAppData = happyPathDenied.getStartAppData;
+      let c_startAppPage = new C_StartAppPage(cPage);
 
       for(let value in getStartAppData) { // optional, helpful
         console.log(getStartAppData[value] + "\t");
@@ -91,7 +103,7 @@ test.describe('MTFM', async () => {
 
       try {
         await (new Q_Results(cPage)).verifySuccessDenied();
-        console.log("denied passed");
+        console.log("MTFM denied passed");
         await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason: 'denied'}})}`);
       }catch(Error) {
         await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
@@ -99,7 +111,6 @@ test.describe('MTFM', async () => {
         await cPage.close();
         await bCont.close();
       }
-
     }).toPass({ timeout: 120000 });
   });
 });

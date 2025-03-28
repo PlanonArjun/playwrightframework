@@ -1,4 +1,4 @@
-import {test, expect } from '@playwright/test';
+import { test, expect, chromium } from '@playwright/test';
 import B_SplashPage from "../../pages/mattressfirm.approveme/B_SplashPage";
 import C_StartAppPage from "../../pages/mattressfirm.approveme/C_StartAppPages";
 import D_AboutYouPage from "../../pages/mattressfirm.approveme/D_AboutYouPage";
@@ -18,6 +18,7 @@ import H_EmployeeStatusPage from '../../pages/mattressfirm.approveme/H_EmployeeS
 import F_RentOwnPage from '../../pages/mattressfirm.approveme/F_RentOwnPage';
 import G_IdTypePage from '../../pages/mattressfirm.approveme/G_IdTypePage';
 import R_Resume from "../../pages/mattressfirm.approveme/R_Resume";
+import MTFMHealthCheck from './MTFMHealthCheck';
 
 test.describe('navigation', async () => {
 
@@ -29,8 +30,19 @@ test.describe('navigation', async () => {
     let nameLastFetched:string;
     let ssnFetched:string;
     let isApplyPass: boolean = false;
+    let splashPageLocal: B_SplashPage;
+    let isHealthyLocal: Boolean;
+
+    test.beforeAll(async () => {
+        let browserTemp = await chromium.launch({ headless: true });
+        let pageTemp = await browserTemp.newPage();
+        isHealthyLocal = await new MTFMHealthCheck(pageTemp).isHealthy();
+        await browserTemp.close();
+        await pageTemp.close();
+    });
 
     test('approve first', { tag: ['@approveme', '@mattressfirm', '@happy', '@approved'] },async ({browser}) => {
+        test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
         await expect(async () => {
 
             const bCont = await browser.newContext();
@@ -114,31 +126,31 @@ test.describe('navigation', async () => {
     });
 
     test('resume second', { tag: ['@approveme', '@mattressfirm', '@happy', '@resume'] }, async ({ browser }) => {
+        test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
+        if(!isApplyPass) {
+            console.log("Apply failed. Resume skipped.");
+        }
+        test.skip(isApplyPass == false, 'health check FAILED; test.skip()');
+
         await expect(async () => {
 
-            if(isApplyPass) {
+            const bContR = await browser.newContext();
+            const cPageR = await bContR.newPage();
 
-                const bContR = await browser.newContext();
-                const cPageR = await bContR.newPage();
+            await (new A_MarketingPage(cPageR)).beginResume();
 
-                await (new A_MarketingPage(cPageR)).beginResume();
+            await (new R_Resume(cPageR)).happyPathPopulate([nameFirstFetched,nameLastFetched],ssnFetched);
 
-                await (new R_Resume(cPageR)).happyPathPopulate([nameFirstFetched,nameLastFetched],ssnFetched);
-
-                try {
-                    await (new Q_Results(cPageR)).verifySuccessApproved();
-                    isApplyPass = true;
-                    console.log("Resume passed. End test.")
-                    await cPageR.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason:'resume'}})}`);
-                }catch(Error) {
-                    await cPageR.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
-                }finally{
-                    await cPageR.close();
-                    await bContR.close();
-                }
-
-            }else {
-                console.log("Apply failed. Resume skipped.");
+            try {
+                await (new Q_Results(cPageR)).verifySuccessApproved();
+                isApplyPass = true;
+                console.log("Resume passed. End test.")
+                await cPageR.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason:'resume'}})}`);
+            }catch(Error) {
+                await cPageR.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
+            }finally{
+                await cPageR.close();
+                await bContR.close();
             }
 
         }).toPass({ timeout: 90000 });
