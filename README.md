@@ -2,6 +2,7 @@
 Test Repo for all things e2e, will be using this for our e2e project initiative
 
 First time setup (run in terminal in the playwright-e2e-tests directory):
+* NOTE! YOU WILL NEED TO DOWNLOAD AQUA IF YOU DON'T HAVE THE PAID VERSION OF INTELLIJ www.jetbrains.com/aqua/download
 1. Set registry: `npm config set registry https://art.proginternal.net/artifactory/api/npm/nmpjs.org/`
 2. `npm login` (if you get an error about a certificate you can disable certs with this command: (npm config set strict-ssl false)
 3. Enter username and password
