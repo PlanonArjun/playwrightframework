@@ -1,4 +1,4 @@
-import {expect, test} from '@playwright/test';
+import { chromium, expect, test } from '@playwright/test';
 import HappyPathApproved from "../../data/cricket.approveme/HappyPathApproved"; // data object
 import A_MarketingPage from "../../pages/cricket.approveme/A_MarketingPage";
 import B_SplashPage from "../../pages/cricket.approveme/B_SplashPage";
@@ -12,8 +12,9 @@ import I_PaymentCardPage from '$pages/cricket.approveme/I_PaymentCardPage';
 import J_ReviewAndSubmitPage from '$pages/cricket.approveme/J_ReviewAndSubmitPage';
 import K_ResultsPage from "$pages/cricket.approveme/K_ResultsPage";
 import Q_ResumeApplication from "$pages/cricket.approveme/L_ResumeApplication";
+import CricketHealthCheck from './CricketHealthCheck';
 
-test.describe('happy path resume', async () => {
+test.describe('happy path approved-resume', async () => {
 
   test.describe.configure({ retries: 0 }); // do not change
   test.describe.configure({ mode: 'serial' }); // do not change
@@ -30,21 +31,24 @@ test.describe('happy path resume', async () => {
   let monthsOpen:string;
 
   let isApplyPass: boolean = false;
+  let isHealthyLocal: Boolean;
 
+  test.beforeAll(async () => {
+    let browserTemp = await chromium.launch({ headless: true });
+    let pageTemp = await browserTemp.newPage();
+    isHealthyLocal = await new CricketHealthCheck(pageTemp).isHealthy();
+    await browserTemp.close();
+    await pageTemp.close();
+  });
 
   test('approve first', { tag: ['@approveme', '@cricketwireless', '@happy', '@resume'] },async ({browser}) => {
+    test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
     await expect(async () => {
 
       let bCont = await browser.newContext();
       let cPage = await bCont.newPage();
 
-      let a_marketingPage = new A_MarketingPage(cPage);
-      await a_marketingPage.navigate();
-      await a_marketingPage.beginApply();
-      await cPage.waitForTimeout(500);
-
-      let b_splashPage = new B_SplashPage(cPage);
-      await b_splashPage.continue();
+      await (new B_SplashPage(cPage)).continue();
 
       let happyPathApproved = new HappyPathApproved();
 
@@ -94,7 +98,7 @@ test.describe('happy path resume', async () => {
       try {
         await (new K_ResultsPage(cPage)).verifyApproved();
         isApplyPass = true;
-        console.log("Apply passed. Resume up next.")
+        console.log("Initial apply passed. Resume up next.")
         await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason:'initial apply'}})}`);
       }catch(Error) {
         await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
@@ -102,42 +106,48 @@ test.describe('happy path resume', async () => {
         await cPage.close();
         await bCont.close();
       }
-
     }).toPass({timeout: 120000});
   });
 
   test('resume second', { tag: ['@approveme', '@cricketwireless', '@happy', '@resume'] },async ({browser}) => {
+    test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
+    if(!isApplyPass) {
+      console.log("Initial apply failed. Resume skipped.");
+    }
+    test.skip(isApplyPass == false);
+
     await expect(async () => {
 
-      if(isApplyPass) {
+      let bContR = await browser.newContext();
+      let cPageR = await bContR.newPage();
 
-        const bContR = await browser.newContext();
-        const cPageR = await bContR.newPage();
+      let marketingPageR = new A_MarketingPage(cPageR);
+      await marketingPageR.navigate();
+      await marketingPageR.beginResume();
 
-        let marketingPageR = new A_MarketingPage(cPageR);
-        await marketingPageR.navigate();
-        await marketingPageR.beginResume();
+      let resumePage = new Q_ResumeApplication(cPageR);
+      await resumePage.happyPathPopulate([nameFirstFetched, nameLastFetched], ssnFetched);
 
-        let resumePage = new Q_ResumeApplication(cPageR);
-        await resumePage.happyPathPopulate([nameFirstFetched,nameLastFetched],ssnFetched);
+      let k_resultsPage: K_ResultsPage = new K_ResultsPage(cPageR);
 
-        let k_resultsPage: K_ResultsPage = new K_ResultsPage(cPageR);
-
-        try {
-          await k_resultsPage.verifyApproved();
-          console.log("Resume passed. End test.")
-          await cPageR.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason:'resume'}})}`);
-        }catch(Error) {
-          await cPageR.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
-        }finally{
-          await cPageR.close();
-          await bContR.close();
-        }
-      }else {
-        console.log("Apply failed. Resume skipped.");
+      try {
+        await k_resultsPage.verifyApproved();
+        console.log('Resume passed. End test.');
+        await cPageR.evaluate(_ => {
+        }, `browserstack_executor: ${JSON.stringify({
+          action: 'setSessionStatus',
+          arguments: { status: 'passed', reason: 'resume' },
+        })}`);
+      } catch (Error) {
+        await cPageR.evaluate(_ => {
+        }, `browserstack_executor: ${JSON.stringify({
+          action: 'setSessionStatus',
+          arguments: { status: 'failed', reason: Error.toString() },
+        })}`);
+      } finally {
+        await cPageR.close();
+        await bContR.close();
       }
-
-    }).toPass({timeout: 90000});
+    }).toPass({ timeout: 90000 });
   });
-
 });

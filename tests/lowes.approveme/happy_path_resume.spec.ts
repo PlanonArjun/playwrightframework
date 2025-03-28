@@ -1,7 +1,6 @@
 import { test, expect, BrowserContext, Page, chromium } from '@playwright/test';
 
 import HappyPathApproved from '../../data/lowes.approveme/HappyPathApproved';
-import A_MarketingPage from "../../pages/lowes.approveme/A_MarketingPage";
 import B_BeforeStartPage from '../../pages/lowes.approveme/B_BeforeStartPage';
 import C_AboutYou1Page from '../../pages/lowes.approveme/C_AboutYou1Page';
 import D_AboutYou2Page from '../../pages/lowes.approveme/D_AboutYou2Page';
@@ -17,8 +16,9 @@ import LowesHealthCheck from './LowesHealthCheck';
 
 let ssnFetched:string;
 let phoneFetched:string;
-let isApplyPass: boolean = false;
+
 let isHealthyLocal: Boolean;
+let isApplyPass: boolean = false;
 
 test.describe('happy path resume', async () => {
 
@@ -41,48 +41,43 @@ test.describe('happy path resume', async () => {
       let cPage: Page = await bCont.newPage();
 
       // data object
-      let happyPathApproved = new HappyPathApproved();
+      let approvedDataset = new HappyPathApproved();
 
       // navigate
-      let marketingPage = new A_MarketingPage(cPage);
-      await marketingPage.navigateMarketing();
-      await marketingPage.beginApply();
-
       // agree to terms and begin application
-      let beforeStartPage = new B_BeforeStartPage(cPage);
-      await beforeStartPage.continue();
+      await (new B_BeforeStartPage(cPage)).continue();
 
       // name dob ssn
       let aboutYou1Page = new C_AboutYou1Page(cPage);
-      await aboutYou1Page.happyPathPopulate(happyPathApproved.getStartAppData);
-      ssnFetched = happyPathApproved.getStartAppData[3].substring(5,9);
+      await aboutYou1Page.happyPathPopulate(approvedDataset.getStartAppData);
+      ssnFetched = approvedDataset.getStartAppData[3].substring(5,9);
       console.log('SSN last four digits fetched from approved flow ', ssnFetched);
 
       // phone email
       let aboutYou2Page = new D_AboutYou2Page(cPage);
-      await aboutYou2Page.happyPathPopulate(happyPathApproved.getAboutYou1);
-      phoneFetched = happyPathApproved.getAboutYou1[0];
+      await aboutYou2Page.happyPathPopulate(approvedDataset.getAboutYou1);
+      phoneFetched = approvedDataset.getAboutYou1[0];
       console.log('Phone number fetched from approved flow ', phoneFetched);
 
       // address city state zip
       let homeAddress = new E_HomeAddress(cPage);
-      await homeAddress.happyPathPopulate(happyPathApproved.getHomeAddress);
+      await homeAddress.happyPathPopulate(approvedDataset.getHomeAddress);
 
       // pay freq pay dates income
       let incomePage = new F_IncomePage(cPage);
-      await incomePage.happyPathPopulate(happyPathApproved.getIncomeInfo);
+      await incomePage.happyPathPopulate(approvedDataset.getIncomeInfo);
 
       // payment card
       let creditCardDetails = new G_CreditCardDetailsPage(cPage);
-      await creditCardDetails.happyPathPopulate(happyPathApproved.getCreditCardInfo);
+      await creditCardDetails.happyPathPopulate(approvedDataset.getCreditCardInfo);
 
       // billing address
       let billingAddress = new H_BillingAddress(cPage);
-      await billingAddress.happyPathPopulate(happyPathApproved.getHomeAddress);
+      await billingAddress.happyPathPopulate(approvedDataset.getHomeAddress);
 
       // bank info
       let accountDetails = new I_AccountDetails(cPage);
-      await accountDetails.happyPathPopulate(happyPathApproved.getBankInfo1);
+      await accountDetails.happyPathPopulate(approvedDataset.getBankInfo1);
 
       // accept and proceed - finish
       let leaseIdVerification = new J_LeaseIDVerification(cPage);
@@ -110,13 +105,15 @@ test.describe('happy path resume', async () => {
 
   test('resume second', { tag: ['@lowes', '@approveme', '@happypath', '@resume'] }, async ({ browser }) => {
     test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
-    test.skip(isApplyPass == false, 'initial apply FAILED; test.skip()');
+    if(!isApplyPass) {
+      console.log('Initial apply failed. Resume skipped.');
+      test.skip(isApplyPass == false, 'initial apply FAILED; test.skip()');
+    }
+
     await expect(async () => {
 
-      if(isApplyPass) {
-
-        const bContR = await browser.newContext();
-        const cPageR = await bContR.newPage();
+        let bContR = await browser.newContext();
+        let cPageR = await bContR.newPage();
 
         const resumePageR =  new L_ResumeApplication(cPageR);
         await resumePageR.navigateResume();
@@ -133,12 +130,6 @@ test.describe('happy path resume', async () => {
           await cPageR.close();
           await bContR.close();
         }
-      }else {
-        console.log("Initial apply failed. Resume skipped.");
-      }
     }).toPass({ timeout: 90000 });
-
   });
-
-
 });

@@ -1,7 +1,8 @@
-import {test, BrowserContext, Page} from '@playwright/test';
+import { test, BrowserContext, Page, chromium } from '@playwright/test';
 import A_MarketingPage from "../../pages/cricket.approveme/A_MarketingPage";
 import R_PaymentEstimator from "$pages/cricket.approveme/M_PaymentEstimator";
 import {PaymentFrequency} from "../../data/paymentFrequency";
+import CricketHealthCheck from './CricketHealthCheck';
 
 test.describe('Cricket estimator', async () => {
 
@@ -10,12 +11,22 @@ test.describe('Cricket estimator', async () => {
 
   let bCont: BrowserContext;
   let cPage: Page;
-  let a_marketingPage: A_MarketingPage;
   let r_estimator: R_PaymentEstimator;
+  let isHealthyLocal: Boolean;
+
+  test.beforeAll(async () => {
+    let browserTemp = await chromium.launch({ headless: true });
+    let pageTemp = await browserTemp.newPage();
+    isHealthyLocal = await new CricketHealthCheck(pageTemp).isHealthy();
+    await browserTemp.close();
+    await pageTemp.close();
+  });
 
   test.beforeEach(async ({browser}) => {
     bCont = await browser.newContext();
     cPage = await bCont.newPage();
+    await (new A_MarketingPage(cPage)).beginEstimate();
+    r_estimator = new R_PaymentEstimator(cPage);
   });
 
   test.afterEach(async () => {
@@ -24,9 +35,7 @@ test.describe('Cricket estimator', async () => {
   });
 
   test('weekly', { tag: ['@approveme', '@cricketwireless', '@estimator'] },async () => {
-    a_marketingPage = new A_MarketingPage(cPage);
-    await a_marketingPage.beginEstimate();
-    r_estimator = new R_PaymentEstimator(cPage);
+    test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
     try {
       await r_estimator.happyPathEstimate('3001',PaymentFrequency.Weekly);
       await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason:'weekly'}})}`);
@@ -36,9 +45,7 @@ test.describe('Cricket estimator', async () => {
   });
 
   test('monthly', { tag: ['@approveme', '@cricketwireless', '@estimator'] },async () => {
-    a_marketingPage = new A_MarketingPage(cPage);
-    await a_marketingPage.beginEstimate();
-    r_estimator = new R_PaymentEstimator(cPage);
+    test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
     try {
       await r_estimator.happyPathEstimate('3001',PaymentFrequency.Monthly);
       await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason:'monthly'}})}`);
@@ -48,9 +55,7 @@ test.describe('Cricket estimator', async () => {
   });
 
   test('semimonthly', { tag: ['@approveme', '@cricketwireless', '@estimator'] },async () => {
-    a_marketingPage = new A_MarketingPage(cPage);
-    await a_marketingPage.beginEstimate();
-    r_estimator = new R_PaymentEstimator(cPage);
+    test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
     try {
       await r_estimator.happyPathEstimate('3001',PaymentFrequency.SemiMonthly);
       await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason:'semimonthly'}})}`);
@@ -60,9 +65,7 @@ test.describe('Cricket estimator', async () => {
   });
 
   test('biweekly', { tag: ['@approveme', '@cricketwireless', '@estimator'] },async () => {
-    a_marketingPage = new A_MarketingPage(cPage);
-    await a_marketingPage.beginEstimate();
-    r_estimator = new R_PaymentEstimator(cPage);
+    test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
     try {
       await r_estimator.happyPathEstimate('3001',PaymentFrequency.BiWeekly);
       await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason:'biweekly'}})}`);

@@ -1,4 +1,4 @@
-import {expect, test} from '@playwright/test';
+import { chromium, expect, test } from '@playwright/test';
 import A_MarketingPage from "../../pages/cricket.approveme/A_MarketingPage";
 import B_SplashPage from "../../pages/cricket.approveme/B_SplashPage";
 import C_StartAppPage from "../../pages/cricket.approveme/C_StartAppPage";
@@ -11,11 +11,14 @@ import I_PaymentCardPage from '$pages/cricket.approveme/I_PaymentCardPage';
 import J_ReviewAndSubmitPage from '$pages/cricket.approveme/J_ReviewAndSubmitPage';
 import K_ResultsPage from "$pages/cricket.approveme/K_ResultsPage";
 import HappyPathDenied from "../../data/cricket.approveme/HappyPathDenied";
+import CricketHealthCheck from './CricketHealthCheck';
 
 test.describe('cricket', async () => {
 
   test.describe.configure({ retries: 0 }); // do not change
   test.describe.configure({ mode: 'serial' }); // do not change
+
+  let isHealthyLocal: Boolean;
 
   let getStartAppData: string[];
   let nameFirstFetched:string;
@@ -28,19 +31,22 @@ test.describe('cricket', async () => {
   let yearsOpen:string;
   let monthsOpen:string;
 
+  test.beforeAll(async () => {
+    let browserTemp = await chromium.launch({ headless: true });
+    let pageTemp = await browserTemp.newPage();
+    isHealthyLocal = await new CricketHealthCheck(pageTemp).isHealthy();
+    await browserTemp.close();
+    await pageTemp.close();
+  });
+
   test('denied', { tag: ['@approveme', '@cricketwireless', '@happy', '@denied'] },async ({browser}) => {
+    test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
     await expect(async () => {
 
       let bCont = await browser.newContext();
       let cPage = await bCont.newPage();
 
-      let a_marketingPage = new A_MarketingPage(cPage);
-      await a_marketingPage.navigate();
-      await a_marketingPage.beginApply();
-      await cPage.waitForTimeout(500);
-
-      let b_splashPage = new B_SplashPage(cPage);
-      await b_splashPage.continue();
+      await (new B_SplashPage(cPage)).continue();
 
       let happyPathDenied = new HappyPathDenied();
 
