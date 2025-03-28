@@ -89,6 +89,7 @@ class B_SplashPage {
     }
 
     async continue() {
+        await this.navigate();
         await this.selectCheckbox(); // required before CONTINUE button enabled
         await this.buttonContinue.click();
     }

@@ -1,5 +1,4 @@
-import {expect, test} from '@playwright/test';
-import A_MarketingPage from "../../pages/cricket.approveme/A_MarketingPage";
+import { chromium, expect, test } from '@playwright/test';
 import B_SplashPage from "../../pages/cricket.approveme/B_SplashPage";
 import C_StartAppPage from "../../pages/cricket.approveme/C_StartAppPage";
 import D_AboutYou1Page from "../../pages/cricket.approveme/D_AboutYou1Page";
@@ -10,12 +9,15 @@ import H_DirDepPage from '$pages/cricket.approveme/H_DirectDepositPage';
 import I_PaymentCardPage from '$pages/cricket.approveme/I_PaymentCardPage';
 import J_ReviewAndSubmitPage from '$pages/cricket.approveme/J_ReviewAndSubmitPage';
 import K_ResultsPage from "$pages/cricket.approveme/K_ResultsPage";
-import HappyPathPending from "../../data/cricket.approveme/HappyPathPending"; // data object
+import HappyPathPending from "../../data/cricket.approveme/HappyPathPending";
+import CricketHealthCheck from './CricketHealthCheck'; // data object
 
 test.describe('happy path pending', async () => {
 
   test.describe.configure({ retries: 0 }); // do not change
   test.describe.configure({ mode: 'serial' }); // do not change
+
+  let isHealthyLocal: Boolean;
 
   let getStartAppData: string[];
   let nameFirstFetched:string;
@@ -28,19 +30,22 @@ test.describe('happy path pending', async () => {
   let yearsOpen:string;
   let monthsOpen:string;
 
+  test.beforeAll(async () => {
+    let browserTemp = await chromium.launch({ headless: true });
+    let pageTemp = await browserTemp.newPage();
+    isHealthyLocal = await new CricketHealthCheck(pageTemp).isHealthy();
+    await browserTemp.close();
+    await pageTemp.close();
+  });
+
   test('pending', { tag: ['@approveme', '@cricketwireless', '@happy', '@pending'] },async ({browser}) => {
+    test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
     await expect(async () => {
 
       let bCont = await browser.newContext();
       let cPage = await bCont.newPage();
 
-      let a_marketingPage = new A_MarketingPage(cPage);
-      await a_marketingPage.navigate();
-      await a_marketingPage.beginApply();
-      await cPage.waitForTimeout(500);
-
-      let b_splashPage = new B_SplashPage(cPage);
-      await b_splashPage.continue();
+      await (new B_SplashPage(cPage)).continue();
 
       let happyPathPending = new HappyPathPending();
 
