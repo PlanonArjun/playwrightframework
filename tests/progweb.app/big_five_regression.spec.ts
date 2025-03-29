@@ -456,7 +456,7 @@ let bCont: BrowserContext = await browser.newContext();
       let linksCheck = new J_LinksCheck(cPage);
       
         try {
-          await linksCheck.checkApplicationDiscloser();
+          await linksCheck.checkApplicationDisclosure();
           isLinksBankInfoPass = true;
           await cPage.evaluate(_ => {
           }, `browserstack_executor: ${JSON.stringify({
@@ -499,7 +499,7 @@ let bCont: BrowserContext = await browser.newContext();
       let linksCheck = new J_LinksCheck(cPage);
       
         try {
-          await linksCheck.checkEsignDiscloser();
+          await linksCheck.checkESignDisclosure();
           isLinksTermsPass = true;
           await cPage.evaluate(_ => {
           }, `browserstack_executor: ${JSON.stringify({
@@ -585,7 +585,7 @@ let bCont: BrowserContext = await browser.newContext();
       
 
         try {
-          await linksCheck.checkPriavacyPolicy();
+          await linksCheck.checkPrivacyPolicy();
           isLinksDisclosurePass = true;
           await cPage.evaluate(_ => {
           }, `browserstack_executor: ${JSON.stringify({

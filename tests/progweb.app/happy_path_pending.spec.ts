@@ -8,9 +8,7 @@ import F_CreditCardDetails from '../../pages/progweb.app/F_CreditCardDetails';
 import G_BankingInfo from '../../pages/progweb.app/G_BankingInfo';
 import H_SubmitApplication from '../../pages/progweb.app/H_SubmitApplication';
 import I_ResultsPage from '../../pages/progweb.app/I_ResultsPage';
-import { cp } from 'fs';
 import HappyPathPending from '../../data/progweb.approveme/HappyPathPending';
-
 
 test.describe('navigation', async () => {
 
@@ -54,10 +52,15 @@ test.describe('navigation', async () => {
       await cPage.waitForTimeout(15000);
 
       let resultsPage = new I_ResultsPage(cPage);
-      await resultsPage.verifySuccessPending();
-
-      await cPage.close();
-      await bCont.close();
+      try {
+        await resultsPage.verifySuccessPending();
+        await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason: 'pending'}})}`);
+      }catch(Error) {
+        await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
+      }finally  {
+        await cPage.close();
+        await bCont.close();
+      }
 
     }).toPass({ timeout: 500000 });
   });

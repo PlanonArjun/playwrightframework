@@ -95,8 +95,9 @@
     "test:mattressfirm:estimator:android": "npx browserstack-node-sdk playwright test --workers=4 --retries=0 -g mattressfirm.approveme/happy_path_estimator.spec.ts --browserstack.config=./browserstack.android.yml --config=./playwright.config.ts",
     "test:apiExample:api": "npx browserstack-node-sdk playwright test --workers=16 --retries=0 -g apiExample.spec.ts --browserstack.config=./browserstack.api.yml --config=./playwright.api.config.ts",
     "test:connect:happy-path:desktop": "npx browserstack-node-sdk playwright test --workers=1 --retries=0 -g happy-path.spec.ts --browserstack.config=./browserstack.desktop.yml --config=./playwright.config.ts",
-    "test:progweb:linkscheck:ios": "npx browserstack-node-sdk playwright test --workers=7 --retries=0 -g progweb.app/links_check.spec.ts --browserstack.config=./browserstack.ios.yml --config=./playwright.ios.config.ts",
-    "test:progweb:linkscheck:android": "npx browserstack-node-sdk playwright test --workers=7 --retries=0 -g progweb.app/links_check.spec.ts --browserstack.config=./browserstack.android.yml --config=./playwright.config.ts",
+    "test:progweb:linkscheck:ios": "npx browserstack-node-sdk playwright test --workers=5 --retries=0 -g progweb.app/links_check.spec.ts --browserstack.config=./browserstack.ios.yml --config=./playwright.ios.config.ts",
+    "test:progweb:linkscheck:android": "npx browserstack-node-sdk playwright test --workers=5 --retries=0 -g progweb.app/links_check.spec.ts --browserstack.config=./browserstack.android.yml --config=./playwright.config.ts",
+    "test:progweb:linkscheck:desktop": "npx browserstack-node-sdk playwright test --workers=5 --retries=0 -g progweb.app/links_check.spec.ts --browserstack.config=./browserstack.desktop.yml --config=./playwright.config.ts",
     "test:progweb:estimator:ios": "npx browserstack-node-sdk playwright test --workers=4 --retries=0 -g progweb.app/happy_path_estimator.spec.ts --browserstack.config=./browserstack.ios.yml --config=./playwright.ios.config.ts",
     "test:progweb:estimator:android": "npx browserstack-node-sdk playwright test --workers=4 --retries=0 -g progweb.app/happy_path_estimator.spec.ts --browserstack.config=./browserstack.android.yml --config=./playwright.config.ts",
     "test:progweb:estimator:desktop": "npx browserstack-node-sdk playwright test --workers=4 --retries=0 -g progweb.app/happy_path_estimator.spec.ts --browserstack.config=./browserstack.desktop.yml --config=./playwright.config.ts",
@@ -110,7 +111,8 @@
     "test:progweb:pending:desktop": "npx browserstack-node-sdk playwright test --retries=0 -g progweb.app/happy_path_pending.spec.ts --browserstack.config=./browserstack.desktop.yml --config=./playwright.config.ts",
     "test:progweb:approved:ios": "npx browserstack-node-sdk playwright test --retries=0 -g progweb.app/happy_path_approved.spec.ts --browserstack.config=./browserstack.ios.yml --config=./playwright.ios.config.ts",
     "test:progweb:approved:android": "npx browserstack-node-sdk playwright test --retries=0 -g progweb.app/happy_path_approved.spec.ts --browserstack.config=./browserstack.android.yml --config=./playwright.config.ts",
-    "test:progweb:approved:desktop": "npx browserstack-node-sdk playwright test --retries=0 -g progweb.app/happy_path_approved.spec.ts --browserstack.config=./browserstack.desktop.yml --config=./playwright.config.ts"
+    "test:progweb:approved:desktop": "npx browserstack-node-sdk playwright test --retries=0 -g progweb.app/happy_path_approved.spec.ts --browserstack.config=./browserstack.desktop.yml --config=./playwright.config.ts",
+    "test:connect:approved:desktop": "npx browserstack-node-sdk playwright test --retries=0 -g connect/widget/happy-path.spec.ts --browserstack.config=./browserstack.desktop.yml --config=./playwright.config.ts"
   },
   "repository": {
     "type": "git",
