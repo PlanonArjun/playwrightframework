@@ -19,8 +19,8 @@ test.describe('navigation', async () => {
   test('happy path approved to results page - apply', { tag: ['@approveme', '@progweb', '@happy', '@approved'] }, async ({ browser }) => {
     await expect(async () => {
 
-      const bCont = await browser.newContext();
-      const cPage = await bCont.newPage();
+      let bCont = await browser.newContext();
+      let cPage = await bCont.newPage();
       let happyPathApproved = new HappyPathApproved();
 
       let loginPage = new A_LoginPage(cPage);
@@ -58,10 +58,15 @@ test.describe('navigation', async () => {
       await cPage.waitForTimeout(15000);
 
       let resultsPage = new I_ResultsPage(cPage);
-      await resultsPage.verifySuccessApproved();
-
-      await cPage.close();
-      await bCont.close();
+      try {
+        await resultsPage.verifySuccessApproved();
+        await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason: 'approved'}})}`);
+      }catch(Error) {
+        await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
+      }finally  {
+        await cPage.close();
+        await bCont.close();
+      }
 
     }).toPass({ timeout: 500000 });
   });

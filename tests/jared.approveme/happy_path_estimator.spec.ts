@@ -22,7 +22,7 @@ test.describe('Jared estimator', async () => {
         isHealthyLocal = await new JaredHealthCheck(cPage).isHealthy();
     });
 
-    test.beforeEach(async ({browser}) => {
+    test.beforeEach(async () => {
         a_marketingPage = new A_MarketingPage(cPage);
         await a_marketingPage.navigate();
         s_estimator = new S_PaymentEstimator(cPage);

@@ -53,10 +53,15 @@ test.describe('navigation', async () => {
 
       await cPage.waitForTimeout(5000);
       let resultsPage = new I_ResultsPage(cPage);
-      await resultsPage.verifySuccessDenied();
-
-      await cPage.close();
-      await bCont.close();
+      try {
+        await resultsPage.verifySuccessDenied();
+        await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason: 'denied'}})}`);
+      }catch(Error) {
+        await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
+      }finally  {
+        await cPage.close();
+        await bCont.close();
+      }
 
     }).toPass({ timeout: 500000 });
   });

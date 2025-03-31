@@ -20,7 +20,7 @@ class J_LinksCheck {
         this.termsOfUse = page.getByRole('link', { name: 'Terms of Use.' });
     }
 
-    async checkApplicationDiscloser() {
+    async checkApplicationDisclosure() {
         const page1Promise = this.page.waitForEvent('popup');
         await this.applicationDiscloser.click();
         const newPage = await page1Promise;
@@ -28,7 +28,7 @@ class J_LinksCheck {
         newPage.close();
     }
 
-    async checkEsignDiscloser() {
+    async checkESignDisclosure() {
         const page1Promise = this.page.waitForEvent('popup');
         await this.eSignDiscloser.click();
         const newPage = await page1Promise;
@@ -44,7 +44,7 @@ class J_LinksCheck {
         newPage.close();
     }
 
-    async checkPriavacyPolicy() {
+    async checkPrivacyPolicy() {
         const page1Promise = this.page.waitForEvent('popup');
         await this.priavacyPolicy.click();
         const newPage = await page1Promise;
