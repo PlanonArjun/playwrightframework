@@ -1,7 +1,7 @@
 // Lowes Apply Approve me
 import { type Page, type Locator, expect } from '@playwright/test';
 import B_BeforeStartPage from './B_BeforeStartPage';
-import A_MarketingPage from './A_Marketingpage';
+import A_MarketingPage from './A_MarketingPage';
 
 class J_LeaseIDVerification {
     readonly page: Page;

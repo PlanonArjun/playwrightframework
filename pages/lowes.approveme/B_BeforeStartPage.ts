@@ -1,5 +1,6 @@
 // lowes apply approve me
 import { type Page, type Locator, expect } from '@playwright/test';
+import urls from '$utils/lowes.utils/urls';
 
 class B_BeforeStartPage {
 
@@ -60,6 +61,7 @@ class B_BeforeStartPage {
     }
 
     async continue() {
+        await this.page.goto(urls.beforeYouStart.beforeYouStart);
         await this.selectCheckbox(); // required before CONTINUE button enabled
         await this.buttonContinue.click();
         await this.page.waitForTimeout(250); // may need this quarter second here...
