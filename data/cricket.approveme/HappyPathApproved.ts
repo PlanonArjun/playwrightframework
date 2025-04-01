@@ -18,8 +18,8 @@ class HappyPathApproved {
         monthsAddress:       '5',
         isRent: true, // else isOwn
         payFrequency:   'string:Monthly',
-        lastPayDate:    '03012025',
-        nextPayDate:    '04012025',
+        lastPayDate:    '04012025',
+        nextPayDate:    '05012025',
         routingNumber:  '000000000',
         accountNumber:  123765098,
         yearsOpen:      5,

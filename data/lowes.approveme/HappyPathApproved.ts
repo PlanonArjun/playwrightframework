@@ -19,13 +19,13 @@ class HappyPathApproved {
         stateAbbrev: 'Utah',
         zip: '84020',
         /* F_IncomeInfoPage */
-        monthlyIncome: '2999',
+        monthlyIncome: '3555',
         // payFrequency:   'string:Weekly',
         // payFrequency:   'string:BiWeekly',
         // payFrequency:   'string:SemiMonthly',
         payFrequency: 'Monthly',
-        lastPayDate: '03012025',
-        nextPayDate: '04012025',
+        lastPayDate: '04012025',
+        nextPayDate: '05012025',
         /* G_BankInfo1Page */
         routingNumber: '000000000',
         accountNumber: 123765098,
