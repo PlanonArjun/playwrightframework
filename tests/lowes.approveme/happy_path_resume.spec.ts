@@ -13,6 +13,7 @@ import J_LeaseIDVerification from '../../pages/lowes.approveme/J_LeaseIDVerifica
 import K_LeaseStatusPage from '../../pages/lowes.approveme/K_LeaseStatusPage';
 import L_ResumeApplication from '$pages/lowes.approveme/L_ResumeApplication';
 import LowesHealthCheck from './LowesHealthCheck';
+import urls from '$utils/lowes.utils/urls';
 
 let ssnFetched:string;
 let phoneFetched:string;

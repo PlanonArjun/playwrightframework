@@ -1,7 +1,7 @@
 // Lowes Apply Approve me
 import { type Page, type Locator, expect } from '@playwright/test';
 import B_BeforeStartPage from './B_BeforeStartPage';
-import A_MarketingPage from './A_Marketingpage';
+import A_MarketingPage from './A_MarketingPage';
 
 class I_AccountDetails {
     readonly page: Page;
@@ -48,6 +48,7 @@ class I_AccountDetails {
         await this._enterAccountNumber(dataIn[1]);
         await this._enterAccountYears(dataIn[2]);
         await this._enterAccountMonths(dataIn[3]);
+        await this.accountInfoMonths.press('Tab');
     }
 }
 export default I_AccountDetails;
