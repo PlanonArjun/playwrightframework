@@ -11,7 +11,7 @@ accessKey: YOUR_ACCESS_KEY
 # ======================
 # The following capabilities are used to set up reporting on BrowserStack:
 # Set 'projectName' to the name of your project. Example, Marketing Website
-projectName: MTFM denied Android
+projectName: not_set
 
 # =======================================
 # Platforms (Browsers / Devices to test)
@@ -19,21 +19,21 @@ projectName: MTFM denied Android
 # Platforms object contains all the browser / device combinations you want to test on.
 # Entire list available here -> (https://www.browserstack.com/list-of-browsers-and-platforms/automate)
 platforms:
-#  - deviceName: Galaxy S24
-#    osVersion: 14.0
-#    deviceOrientation: portrait
+  - deviceName: Galaxy S24
+    osVersion: 14.0
+    deviceOrientation: portrait
   - deviceName: Galaxy S21
     osVersion: 11.0
     deviceOrientation: portrait
-#  - deviceName: Galaxy Note 20
-#    osVersion: 10.0
-#    deviceOrientation: landscape
-#  - deviceName: Galaxy Tab S8
-#    osVersion: 12.0
-#    deviceOrientation: portrait
-#  - deviceName: Pixel 9
-#    osVersion: 15.0
-#    deviceOrientation: landscape
+  - deviceName: Galaxy Note 20
+    osVersion: 10.0
+    deviceOrientation: landscape
+  - deviceName: Galaxy Tab S8
+    osVersion: 12.0
+    deviceOrientation: portrait
+  - deviceName: Pixel 9
+    osVersion: 15.0
+    deviceOrientation: landscape
 # =======================
 # Parallels per Platform
 # =======================
@@ -61,7 +61,7 @@ browserstackLocal: true # <boolean> (Default false)
   # forceLocal: true  # <boolean> (Default: false) Set to true if you need to resolve all your traffic via BrowserStack Local tunnel.
   # Entire list of arguments available here -> https://www.browserstack.com/docs/automate/selenium/manage-incoming-connections
 # Set `buildName` as the name of the job / testsuite being run
-buildName: MTFM denied Android
+buildName: not_set
 # `buildIdentifier` is a unique id to differentiate every execution that gets appended to
 # buildName. Choose your buildIdentifier format from the available expressions:
 # ${BUILD_NUMBER} (Default): Generates an incremental counter with every execution
