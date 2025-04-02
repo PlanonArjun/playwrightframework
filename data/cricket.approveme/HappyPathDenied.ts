@@ -1,4 +1,5 @@
 import {FetchSSN} from "playwright-qe-core/dist/utils/fetchSSN";
+import { daysFromNow } from '$utils/progConnect.utils/date-helper';
 
 class HappyPathDenied {
 
@@ -21,12 +22,12 @@ class HappyPathDenied {
         // payFrequency:   'string:BiWeekly',
         // payFrequency:   'string:SemiMonthly',
         payFrequency:   'string:Monthly',
-        lastPayDate:    '03012025',
-        nextPayDate:    '04012025',
+        lastPayDate: daysFromNow(0),
+        nextPayDate: daysFromNow(30),
         routingNumber:  '000000000',
         accountNumber:  123765098,
         yearsOpen:      7,
-        monthsOpen:     6,
+        monthsOpen:     7,
         directDeposit:  true,
         paymentCardNumber:   4111111111111111,
         employerName: 'Thorn Creek Kennel',

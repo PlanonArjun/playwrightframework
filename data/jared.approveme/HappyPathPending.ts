@@ -1,4 +1,5 @@
 import {FetchSSN} from "playwright-qe-core/dist/utils/fetchSSN";
+import { daysFromNow } from "$utils/progConnect.utils/date-helper";
 
 class HappyPathPending {
 
@@ -25,14 +26,14 @@ class HappyPathPending {
         zipCode: '84020',
         yrsEmployed: '6',
         monthsEmployed: '6',
-        income: '3555',
+        income: '3666',
         payFrequency: 'string:Monthly',
-        lastPayDate: '03012025',
-        nextPayDate: '04012025',
+        lastPayDate: daysFromNow(0),
+        nextPayDate: daysFromNow(30),
         routingNumber: '000000000',
         accountNumber: 123765098,
-        yearsOpen: 5,
-        monthsOpen: 5,
+        yearsOpen: 6,
+        monthsOpen: 6,
         isDirectDeposit: true,
         cardNumber: '4653584876987657',
         monthExpiration: '12 - December',

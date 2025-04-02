@@ -1,4 +1,5 @@
 import {FetchSSN} from "playwright-qe-core/dist/utils/fetchSSN";
+import { daysFromNow } from "$utils/progConnect.utils/date-helper";
 
 class HappyPathApproved {
 
@@ -27,8 +28,8 @@ class HappyPathApproved {
         monthsEmployed: '5',
         income: '3555',
         payFrequency: 'string:Monthly',
-        lastPayDate: '03012025',
-        nextPayDate: '04012025',
+        lastPayDate: daysFromNow(0),
+        nextPayDate: daysFromNow(30),
         routingNumber: '000000000',
         accountNumber: 123765098,
         yearsOpen: 5,
