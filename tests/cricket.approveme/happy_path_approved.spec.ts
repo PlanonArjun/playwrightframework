@@ -1,16 +1,23 @@
 import { chromium, expect, test } from '@playwright/test';
-import B_SplashPage from "../../pages/cricket.approveme/B_SplashPage";
-import C_StartAppPage from "../../pages/cricket.approveme/C_StartAppPage";
-import D_AboutYou1Page from "../../pages/cricket.approveme/D_AboutYou1Page";
-import E_AboutYou2Page from "../../pages/cricket.approveme/E_AboutYou2Page";
-import F_IncomeInfoPage from '$pages/cricket.approveme/F_IncomeInfoPage';
-import G_BankAcctInfoPage from '$pages/cricket.approveme/G_BankAcctInfoPage';
-import H_DirDepPage from '$pages/cricket.approveme/H_DirectDepositPage';
-import I_PaymentCardPage from '$pages/cricket.approveme/I_PaymentCardPage';
-import J_ReviewAndSubmitPage from '$pages/cricket.approveme/J_ReviewAndSubmitPage';
-import K_ResultsPage from "$pages/cricket.approveme/K_ResultsPage";
-import HappyPathApproved from "../../data/cricket.approveme/HappyPathApproved";
+import B_SplashPage from '../../pages/cricket.approveme/B_SplashPage';
+import C_StartAppPage from '../../pages/cricket.approveme/C_StartAppPage';
+import D_AboutYou1EmailPhonePage from '$pages/cricket.approveme/D_AboutYou1EmailPhonePage';
+import E_AboutYou2HomeAddressPage from '$pages/cricket.approveme/E_AboutYou2HomeAddressPage';
+import HappyPathApproved from '../../data/cricket.approveme/HappyPathApproved';
 import CricketHealthCheck from './CricketHealthCheck';
+import F_AboutYou3RentOwnPage from '$pages/cricket.approveme/F_AboutYou3RentOwnPage';
+import G_AboutYou4IDTypePage from '$pages/cricket.approveme/G_AboutYou4IDTypePage';
+import H_IncomeSourcePage from '$pages/cricket.approveme/H_IncomeSourcePage';
+import { IncomeSource } from '$utils/IncomeSource';
+import I_EmployerInfoPage from '$pages/cricket.approveme/I_EmployerInfoPage';
+import J_EmploymentHistoryPage from '$pages/cricket.approveme/J_EmploymentHistoryPage';
+import K_IncomeInfoPage from '$pages/cricket.approveme/K_IncomeInfoPage';
+import { IncomeFrequency } from '$utils/IncomeFrequency';
+import L_BankAcctInfoPage from '$pages/cricket.approveme/L_BankAcctInfoPage';
+import M_DirectDepositPage from '$pages/cricket.approveme/M_DirectDepositPage';
+import N_PaymentCardPage from '$pages/cricket.approveme/N_PaymentCardPage';
+import O_ConfirmAndSubmitPage from '$pages/cricket.approveme/O_ConfirmAndSubmitPage';
+import P_ResultsPage from '$pages/cricket.approveme/P_ResultsPage';
 
 test.describe('cricket', async () => {
 
@@ -63,37 +70,38 @@ test.describe('cricket', async () => {
 
       await c_startAppPage.happyPathPopulate(getStartAppData);
 
-      let d_aboutYou1Page = new D_AboutYou1Page(cPage);
+      let d_aboutYou1Page = new D_AboutYou1EmailPhonePage(cPage);
       await d_aboutYou1Page.happyPathPopulate(approvedDataset.getAboutYou1);
 
-      let e_aboutYou2Page = new E_AboutYou2Page(cPage);
+      let e_aboutYou2Page = new E_AboutYou2HomeAddressPage(cPage);
       await e_aboutYou2Page.happyPathPopulate(approvedDataset.getAboutYou2);
 
-      let f_incomeInfoPage: F_IncomeInfoPage = new F_IncomeInfoPage(cPage);
-      await f_incomeInfoPage.happyPathPopulate(approvedDataset.getIncomeInfo);
+      /*
+      They move this rent-own frame in and out of the flow from time to time...
+       */
+      await (new F_AboutYou3RentOwnPage(cPage)).setIsOwn(true);
 
-      let g_bankAcctInfoPage: G_BankAcctInfoPage = new G_BankAcctInfoPage(cPage);
+      await (new G_AboutYou4IDTypePage(cPage)).doHappyPathWithPassport(); // ID type, ID number, State (if applicable)
 
-      bankInfo1Data = approvedDataset.getBankInfo1;
-      routing = bankInfo1Data[0];
-      checking = bankInfo1Data[1];
-      yearsOpen = bankInfo1Data[2];
-      monthsOpen = bankInfo1Data[3];
+      // await (new H_IncomeSourcePage(cPage)).doHappyPathFullTime();
+      await (new H_IncomeSourcePage(cPage)).doHappyPathSpecified(IncomeSource.FULL_TIME); // IncomeSource.ts enum
 
-      for(let value in bankInfo1Data) { // optional, helpful
-        console.log(bankInfo1Data[value] + "\t");
-      }
+      await (new I_EmployerInfoPage(cPage)).doHappyPath(approvedDataset.getEmployerContactInfo); // employer name, phone, zip
 
-      await g_bankAcctInfoPage.happyPathPopulate(bankInfo1Data);
+      await (new J_EmploymentHistoryPage(cPage)).doHappyPath(approvedDataset.getEmploymentHistory); // employedYears employedMonths monthlyIncome
 
-      await (new H_DirDepPage(cPage,true)).happyPathGo();
+      await (new K_IncomeInfoPage(cPage)).doHappyPath(IncomeFrequency.MONTHLY, approvedDataset.getLastPayDate, approvedDataset.getNextPayDate); // how often paid [weekly biweekly semimontly montly]; last and next paydays
 
-      await (new I_PaymentCardPage(cPage).enterCardNumberFirstSix(approvedDataset.getPaymentCardFirstSix));
+      await (new L_BankAcctInfoPage(cPage)).happyPathPopulate(approvedDataset.getPaymentAccountInfo); // routing checking yearsOpen monthsOpen
 
-      await (new J_ReviewAndSubmitPage(cPage)).happyPathGo();
+      await (new M_DirectDepositPage(cPage, true)).happyPathGo();
+
+      await (new N_PaymentCardPage(cPage)).enterCardNumberFirstSix('411111');
+
+      await (new O_ConfirmAndSubmitPage(cPage)).happyPathGo();
 
       try {
-        await (new K_ResultsPage(cPage)).verifyApproved();
+        await (new P_ResultsPage(cPage)).verifyApproved();
         await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason:'cricket approved'}})}`);
       }catch(Error) {
         await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
@@ -102,6 +110,6 @@ test.describe('cricket', async () => {
         await bCont.close();
       }
 
-    }).toPass({timeout: 120000});
+    }).toPass({timeout: 130000});
   });
 });

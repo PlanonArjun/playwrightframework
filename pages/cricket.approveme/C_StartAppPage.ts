@@ -19,10 +19,17 @@ class C_StartAppPage {
     constructor(page: Page) {
         this.page = page;
         this.b_splashPage = new B_SplashPage(this.page);
-        this.fieldNameFirst = page.getByPlaceholder('first');
+
+        this.fieldNameFirst = page.getByRole('textbox', { name: 'Name:' });
+
         this.fieldNameLast = page.getByPlaceholder('last');
-        this.fieldDOB = page.getByPlaceholder('MM/DD/YYYY');
-        this.fieldSSN = page.getByPlaceholder('-45-6789');
+        // this.fieldDOB = page.getByPlaceholder('MM/DD/YYYY');
+
+        this.fieldDOB = page.getByRole('textbox', { name: 'Date of birth:' });
+
+        // this.fieldSSN = page.getByPlaceholder('-45-6789');
+        this.fieldSSN = page.getByRole('textbox', { name: 'Social Security number or' });
+
         this.buttonPREVIOUS = page.getByRole('link', { name: 'Privacy Policy' });
         this.buttonNEXT = page.getByRole('button', { name: 'Next' });
         this.buttonEXIT = page.getByRole('button', { name: 'Exit' });

@@ -3,16 +3,17 @@ import HappyPathApproved from "../../data/cricket.approveme/HappyPathApproved"; 
 import A_MarketingPage from "../../pages/cricket.approveme/A_MarketingPage";
 import B_SplashPage from "../../pages/cricket.approveme/B_SplashPage";
 import C_StartAppPage from "../../pages/cricket.approveme/C_StartAppPage";
-import D_AboutYou1Page from "../../pages/cricket.approveme/D_AboutYou1Page";
-import E_AboutYou2Page from "../../pages/cricket.approveme/E_AboutYou2Page";
-import F_IncomeInfoPage from '$pages/cricket.approveme/F_IncomeInfoPage';
-import G_BankAcctInfoPage from '$pages/cricket.approveme/G_BankAcctInfoPage';
-import H_DirDepPage from '$pages/cricket.approveme/H_DirectDepositPage';
-import I_PaymentCardPage from '$pages/cricket.approveme/I_PaymentCardPage';
-import J_ReviewAndSubmitPage from '$pages/cricket.approveme/J_ReviewAndSubmitPage';
-import K_ResultsPage from "$pages/cricket.approveme/K_ResultsPage";
-import Q_ResumeApplication from "$pages/cricket.approveme/L_ResumeApplication";
+import D_AboutYou1EmailPhonePage from "$pages/cricket.approveme/D_AboutYou1EmailPhonePage";
+import E_AboutYou2HomeAddressPage from "$pages/cricket.approveme/E_AboutYou2HomeAddressPage";
+import K_IncomeInfoPage from '$pages/cricket.approveme/K_IncomeInfoPage';
+import L_BankAcctInfoPage from '$pages/cricket.approveme/L_BankAcctInfoPage';
+import H_DirDepPage from '$pages/cricket.approveme/M_DirectDepositPage';
+import N_PaymentCardPage from '$pages/cricket.approveme/N_PaymentCardPage';
+import J_ReviewAndSubmitPage from '$pages/cricket.approveme/O_ConfirmAndSubmitPage';
+import P_ResultsPage from "$pages/cricket.approveme/P_ResultsPage";
+import Q_ResumeApplication from "$pages/cricket.approveme/ResumeApplication";
 import CricketHealthCheck from './CricketHealthCheck';
+import F_AboutYou3RentOwnPage from '$pages/cricket.approveme/F_AboutYou3RentOwnPage';
 
 test.describe('happy path approved-resume', async () => {
 
@@ -66,16 +67,15 @@ test.describe('happy path approved-resume', async () => {
 
       await c_startAppPage.happyPathPopulate(getStartAppData);
 
-      let d_aboutYou1Page = new D_AboutYou1Page(cPage);
+      let d_aboutYou1Page = new D_AboutYou1EmailPhonePage(cPage);
       await d_aboutYou1Page.happyPathPopulate(happyPathApproved.getAboutYou1);
 
-      let e_aboutYou2Page = new E_AboutYou2Page(cPage);
+      let e_aboutYou2Page = new E_AboutYou2HomeAddressPage(cPage);
       await e_aboutYou2Page.happyPathPopulate(happyPathApproved.getAboutYou2);
 
-      let f_incomeInfoPage: F_IncomeInfoPage = new F_IncomeInfoPage(cPage);
-      await f_incomeInfoPage.happyPathPopulate(happyPathApproved.getIncomeInfo);
+      await (new F_AboutYou3RentOwnPage(cPage)).setIsOwn(true);
 
-      let g_bankAcctInfoPage: G_BankAcctInfoPage = new G_BankAcctInfoPage(cPage);
+      let g_bankAcctInfoPage: L_BankAcctInfoPage = new L_BankAcctInfoPage(cPage);
 
       bankInfo1Data = happyPathApproved.getBankInfo1;
       routing = bankInfo1Data[0];
@@ -91,12 +91,12 @@ test.describe('happy path approved-resume', async () => {
 
       await (new H_DirDepPage(cPage,true)).happyPathGo();
 
-      await (new I_PaymentCardPage(cPage).enterCardNumberFirstSix(happyPathApproved.getPaymentCardFirstSix));
+      await (new N_PaymentCardPage(cPage).enterCardNumberFirstSix(happyPathApproved.getPaymentCardFirstSix));
 
       await (new J_ReviewAndSubmitPage(cPage)).happyPathGo();
 
       try {
-        await (new K_ResultsPage(cPage)).verifyApproved();
+        await (new P_ResultsPage(cPage)).verifyApproved();
         isApplyPass = true;
         console.log("Initial apply passed. Resume up next.")
         await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason:'initial apply'}})}`);
@@ -106,7 +106,7 @@ test.describe('happy path approved-resume', async () => {
         await cPage.close();
         await bCont.close();
       }
-    }).toPass({timeout: 120000});
+    }).toPass({timeout: 130000});
   });
 
   test('resume second', { tag: ['@approveme', '@cricketwireless', '@happy', '@resume'] },async ({browser}) => {
@@ -128,7 +128,7 @@ test.describe('happy path approved-resume', async () => {
       let resumePage = new Q_ResumeApplication(cPageR);
       await resumePage.happyPathPopulate([nameFirstFetched, nameLastFetched], ssnFetched);
 
-      let k_resultsPage: K_ResultsPage = new K_ResultsPage(cPageR);
+      let k_resultsPage: P_ResultsPage = new P_ResultsPage(cPageR);
 
       try {
         await k_resultsPage.verifyApproved();
@@ -148,6 +148,6 @@ test.describe('happy path approved-resume', async () => {
         await cPageR.close();
         await bContR.close();
       }
-    }).toPass({ timeout: 90000 });
+    }).toPass({ timeout: 100000 });
   });
 });

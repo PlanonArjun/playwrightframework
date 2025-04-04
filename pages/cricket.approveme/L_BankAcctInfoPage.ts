@@ -1,6 +1,6 @@
 import { type Page, type Locator , expect } from '@playwright/test';
 
-class G_BankAcctInfoPage {
+class L_BankAcctInfoPage {
     readonly page: Page;
     readonly fieldRouting: Locator;
     readonly fieldChecking: Locator;
@@ -62,4 +62,4 @@ class G_BankAcctInfoPage {
     }
 
 }
-export default G_BankAcctInfoPage;
+export default L_BankAcctInfoPage;

@@ -1,7 +1,7 @@
 // cricket wireless approve me
 import { type Page, type Locator , expect } from '@playwright/test';
 
-class D_AboutYou1Page { // email phone marComm additionalPhone
+class D_AboutYou1EmailPhonePage { // email phone marComm additionalPhone
 
     readonly page: Page;
 
@@ -13,8 +13,13 @@ class D_AboutYou1Page { // email phone marComm additionalPhone
 
     constructor(page: Page) {
         this.page = page;
+
         this.fieldEmail = page.locator('#Customer_Email');
+        // this.fieldEmail = page.getByRole('searchbox', { name: 'Email:' });
+
         this.fieldPhone = page.locator('#PrimaryPhone_Number');
+        // this.fieldPhone = page.getByRole('textbox', { name: 'Mobile Phone:' })
+
         this.buttonNEXT = page.getByRole('button', { name: 'Next' });
         this.buttonEXIT = page.getByRole('button', { name: 'Exit' });
         this.buttonEXITConfirm = page.locator('div').filter({ hasText: /^Exit$/ }).getByRole('button');
@@ -48,4 +53,4 @@ class D_AboutYou1Page { // email phone marComm additionalPhone
     }
 
 }
-export default D_AboutYou1Page;
+export default D_AboutYou1EmailPhonePage;

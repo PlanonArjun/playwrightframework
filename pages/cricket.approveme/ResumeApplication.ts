@@ -1,7 +1,7 @@
 // cricket approve me resume
 import { type Page, type Locator, expect } from '@playwright/test';
 
-class L_ResumeApplication {
+class ResumeApplication {
 
     readonly page: Page;
 
@@ -58,4 +58,4 @@ class L_ResumeApplication {
     }
 
 }
-export default L_ResumeApplication;
+export default ResumeApplication;

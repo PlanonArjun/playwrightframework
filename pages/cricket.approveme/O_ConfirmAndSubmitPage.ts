@@ -1,6 +1,6 @@
 import { type Page, type Locator , expect } from '@playwright/test';
 
-class J_ReviewQAndSubmitPage {
+class O_ConfirmAndSubmitPage {
     readonly page: Page;
     readonly checkboxHaveReadAndAgree: Locator;
     readonly buttonSUBMIT_APPLICATION: Locator;
@@ -30,4 +30,4 @@ class J_ReviewQAndSubmitPage {
     }
 
 }
-export default J_ReviewQAndSubmitPage;
+export default O_ConfirmAndSubmitPage;

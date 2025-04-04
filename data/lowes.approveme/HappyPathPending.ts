@@ -10,16 +10,16 @@ class HappyPathApproved {
         DOB: '09131984',
         SSN: new FetchSSN(6).getRandomSSN(),
         SSNLastFour: '3547',
-        /* D_AboutYou1Page */
+        /* D_AboutYou1EmailPhonePage */
         email: '006@test.com',
         phone: '8018316666',
-        /* E_AboutYou2Page */
+        /* E_AboutYou2HomeAddressPage */
         streetAddress1: '256 W Data Dr',
         streetAddress2: 'Ste 105',
         city: 'Draper',
         stateAbbrev: 'Utah',
         zip: '84020',
-        /* F_IncomeInfoPage */
+        /* K_IncomeInfoPage */
         monthlyIncome: '2666',
         // payFrequency:   'string:Weekly',
         // payFrequency:   'string:BiWeekly',
@@ -34,7 +34,7 @@ class HappyPathApproved {
         monthsOpen: 6,
         /* H_BankInfo2Page */
         isDirectDeposit: true,
-        /* I_PaymentCardPage */
+        /* N_PaymentCardPage */
         creditCardNumber: '4653584876987657',
         creditCardMonth: '12 - December',
         creditCardYear: '2025',
