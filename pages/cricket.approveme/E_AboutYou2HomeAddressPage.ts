@@ -1,7 +1,7 @@
 // cricket wireless approve me
 import { type Page, type Locator , expect } from '@playwright/test';
 
-class E_AboutYou2Page { // home address city state zip years & months at address
+class E_AboutYou2HomeAddressPage { // home address city state zip years & months at address
 
     readonly page: Page;
 
@@ -60,7 +60,6 @@ class E_AboutYou2Page { // home address city state zip years & months at address
     }
 
     /* Leave this in here in case they put it back in this frame. */
-    /*
     async _enterTimeAddAddress(years: string, months: string) {
         await this.fieldYearsAtAddress.click();
         await this.fieldYearsAtAddress.fill(years);
@@ -69,7 +68,6 @@ class E_AboutYou2Page { // home address city state zip years & months at address
         await this.fieldMonthsAtAddress.fill(months);
         await this.fieldMonthsAtAddress.press('Tab');
     }
-     */
 
     async _NEXT() {
         await this.buttonNEXT.click();
@@ -85,8 +83,14 @@ class E_AboutYou2Page { // home address city state zip years & months at address
         await this._enterCity(dataIn[2]);
         await this._selectState(dataIn[3]);
         await this._enterZip(dataIn[4]);
+
+        /*
+        They move this in and out of this frame from time to time...
+         */
+        await this._enterTimeAddAddress(dataIn[5],dataIn[6]);
+
         await this._NEXT();
     }
 
 }
-export default E_AboutYou2Page;
+export default E_AboutYou2HomeAddressPage;

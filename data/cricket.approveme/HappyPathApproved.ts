@@ -66,13 +66,22 @@ class HappyPathApproved {
         return this._aboutYou2;
     }
 
+    private _employmentHistory: Array<string> = [
+      this.approvedDatasetFull.yearsOpen.toString(),
+      this.approvedDatasetFull.monthsOpen.toString(),
+      this.approvedDatasetFull.monthlyIncome,
+    ]
+    get getEmploymentHistory(): string[] {
+        return this._employmentHistory;
+    }
+
     private _incomeInfo = [
-        this.approvedDatasetFull.monthlyIncome, // already a string
-        this.approvedDatasetFull.payFrequency.toString(),
-        this.approvedDatasetFull.lastPayDate.toString(),
-        this.approvedDatasetFull.nextPayDate.toString(),
+        // this.approvedDatasetFull.monthlyIncome, // already a string
+        this.approvedDatasetFull.lastPayDate,
+        this.approvedDatasetFull.yearsEmployed,
+        this.approvedDatasetFull.monthsEmployed,
     ];
-    get getIncomeInfo(): string[] {
+    get getIncomeInfo() {
         return this._incomeInfo;
     }
 
@@ -133,6 +142,13 @@ class HappyPathApproved {
     get getPaymentCardFirstSix(): string {
         let cardNumberLocal = this.getPaymentCard.toString();
         return cardNumberLocal.slice(0,6);
+    }
+
+    get getLastPayDate(): string {
+        return this.approvedDatasetFull.lastPayDate;
+    }
+    get getNextPayDate(): string {
+        return this.approvedDatasetFull.nextPayDate;
     }
 
 }

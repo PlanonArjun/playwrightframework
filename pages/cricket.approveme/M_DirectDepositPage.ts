@@ -1,6 +1,6 @@
 import { type Page, type Locator , expect } from '@playwright/test';
 
-class H_DirDepPage {
+class M_DirectDepositPage {
     readonly page: Page;
     readonly buttonDirectDepositYes: Locator;
     readonly buttonDirectDepositNo: Locator;
@@ -14,6 +14,7 @@ class H_DirDepPage {
     }
 
     async happyPathGo() {
+        await this.page.waitForTimeout(500);
         if (this.isDirectDeposit) {
             await this.buttonDirectDepositYes.click();
         } else {
@@ -23,4 +24,4 @@ class H_DirDepPage {
     }
 
 }
-export default H_DirDepPage;
+export default M_DirectDepositPage;

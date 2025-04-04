@@ -68,6 +68,15 @@ class HappyPathDenied {
         return this._aboutYou2;
     }
 
+    private _employmentHistory: Array<string> = [
+        this.deniedDatasetFull.yearsOpen.toString(),
+        this.deniedDatasetFull.monthsOpen.toString(),
+        this.deniedDatasetFull.monthlyIncome,
+    ]
+    get getEmploymentHistory(): string[] {
+        return this._employmentHistory;
+    }
+
     private _incomeInfo = [
         this.deniedDatasetFull.monthlyIncome, // already a string
         this.deniedDatasetFull.payFrequency.toString(),
@@ -137,6 +146,12 @@ class HappyPathDenied {
         return cardNumberLocal.slice(0,6);
     }
 
+    get getLastPayDate(): string {
+        return this.deniedDatasetFull.lastPayDate;
+    }
+    get getNextPayDate(): string {
+        return this.deniedDatasetFull.nextPayDate;
+    }
 
 }
 export default HappyPathDenied;

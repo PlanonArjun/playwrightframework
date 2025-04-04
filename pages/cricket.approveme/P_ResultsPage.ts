@@ -1,6 +1,6 @@
 import { type Page, type Locator , expect } from '@playwright/test';
 
-class K_ResultsPage {
+class P_ResultsPage {
     readonly page: Page;
     readonly buttonNEXT: Locator;
     readonly buttonEXIT: Locator;
@@ -16,14 +16,17 @@ class K_ResultsPage {
     async verifyApproved() {
         await this.page.getByText('Congratulations!').click();
         await this.page.getByText('Approved', { exact: true }).click();
+        console.log('success - approved');
     }
 
     async verifyPending() {
         await this.page.getByRole('heading', { name: 'Your application is pending.' }).click({timeout:10000});
+        console.log('success - pending');
     }
 
     async verifyDenied() {
         await this.page.getByRole('heading', { name: 'Your Progressive Leasing' }).click({timeout:10000});
+        console.log('success - denied');
     }
 
     async EXIT() {
@@ -32,4 +35,4 @@ class K_ResultsPage {
     }
 
 }
-export default K_ResultsPage;
+export default P_ResultsPage;

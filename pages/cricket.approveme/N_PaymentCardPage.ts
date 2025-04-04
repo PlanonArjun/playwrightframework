@@ -1,5 +1,5 @@
 import { type Page, type Locator , expect } from '@playwright/test';
-class I_PaymentCardPage {
+class N_PaymentCardPage {
 
     readonly page: Page;
 
@@ -43,4 +43,4 @@ class I_PaymentCardPage {
     }
 
 }
-export default I_PaymentCardPage
+export default N_PaymentCardPage

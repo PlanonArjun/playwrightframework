@@ -1,6 +1,6 @@
 import { test, BrowserContext, Page, chromium } from '@playwright/test';
 import A_MarketingPage from "../../pages/cricket.approveme/A_MarketingPage";
-import R_PaymentEstimator from "$pages/cricket.approveme/M_PaymentEstimator";
+import R_PaymentEstimator from "$pages/cricket.approveme/PaymentEstimator";
 import {PaymentFrequency} from "../../data/paymentFrequency";
 import CricketHealthCheck from './CricketHealthCheck';
 
