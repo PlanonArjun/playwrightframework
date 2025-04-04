@@ -5,20 +5,30 @@ import B_SplashPage from "../../pages/cricket.approveme/B_SplashPage";
 import C_StartAppPage from "../../pages/cricket.approveme/C_StartAppPage";
 import D_AboutYou1EmailPhonePage from "$pages/cricket.approveme/D_AboutYou1EmailPhonePage";
 import E_AboutYou2HomeAddressPage from "$pages/cricket.approveme/E_AboutYou2HomeAddressPage";
+import F_AboutYou3RentOwnPage from '$pages/cricket.approveme/F_AboutYou3RentOwnPage';
+import G_AboutYou4IDTypePage from '$pages/cricket.approveme/G_AboutYou4IDTypePage';
+import H_IncomeSourcePage from '$pages/cricket.approveme/H_IncomeSourcePage';
+import I_EmployerInfoPage from '$pages/cricket.approveme/I_EmployerInfoPage';
+import J_EmploymentHistoryPage from '$pages/cricket.approveme/J_EmploymentHistoryPage';
 import K_IncomeInfoPage from '$pages/cricket.approveme/K_IncomeInfoPage';
 import L_BankAcctInfoPage from '$pages/cricket.approveme/L_BankAcctInfoPage';
-import H_DirDepPage from '$pages/cricket.approveme/M_DirectDepositPage';
+import M_DirectDepositPage from '$pages/cricket.approveme/M_DirectDepositPage';
 import N_PaymentCardPage from '$pages/cricket.approveme/N_PaymentCardPage';
-import J_ReviewAndSubmitPage from '$pages/cricket.approveme/O_ConfirmAndSubmitPage';
-import P_ResultsPage from "$pages/cricket.approveme/P_ResultsPage";
+import O_ConfirmAndSubmitPage from '$pages/cricket.approveme/O_ConfirmAndSubmitPage';
+import P_ResultsPage from '$pages/cricket.approveme/P_ResultsPage';
 import Q_ResumeApplication from "$pages/cricket.approveme/ResumeApplication";
 import CricketHealthCheck from './CricketHealthCheck';
-import F_AboutYou3RentOwnPage from '$pages/cricket.approveme/F_AboutYou3RentOwnPage';
+import { IncomeFrequency } from '$utils/IncomeFrequency';
+import ResumeApplication from '$pages/cricket.approveme/ResumeApplication';
+import { IncomeSource } from '$utils/IncomeSource';
 
 test.describe('happy path approved-resume', async () => {
 
   test.describe.configure({ retries: 0 }); // do not change
   test.describe.configure({ mode: 'serial' }); // do not change
+
+  let isHealthyLocal: Boolean;
+  let isApplyPass: boolean = false;
 
   let getStartAppData: string[];
   let nameFirstFetched:string;
@@ -30,9 +40,6 @@ test.describe('happy path approved-resume', async () => {
   let checking:string;
   let yearsOpen:string;
   let monthsOpen:string;
-
-  let isApplyPass: boolean = false;
-  let isHealthyLocal: Boolean;
 
   test.beforeAll(async () => {
     let browserTemp = await chromium.launch({ headless: true });
@@ -73,27 +80,29 @@ test.describe('happy path approved-resume', async () => {
       let e_aboutYou2Page = new E_AboutYou2HomeAddressPage(cPage);
       await e_aboutYou2Page.happyPathPopulate(happyPathApproved.getAboutYou2);
 
+      /*
+      They move this rent-own frame in and out of the flow from time to time...
+       */
       await (new F_AboutYou3RentOwnPage(cPage)).setIsOwn(true);
 
-      let g_bankAcctInfoPage: L_BankAcctInfoPage = new L_BankAcctInfoPage(cPage);
+      await (new G_AboutYou4IDTypePage(cPage)).doHappyPathWithPassport(); // ID type, ID number, State (if applicable)
 
-      bankInfo1Data = happyPathApproved.getBankInfo1;
-      routing = bankInfo1Data[0];
-      checking = bankInfo1Data[1];
-      yearsOpen = bankInfo1Data[2];
-      monthsOpen = bankInfo1Data[3];
+      await (new H_IncomeSourcePage(cPage)).doHappyPathFullTime();
+      // await (new H_IncomeSourcePage(cPage)).doHappyPathSpecified(IncomeSource.FULL_TIME); // IncomeSource.ts enum
 
-      for(let value in bankInfo1Data) { // optional, helpful
-        console.log(bankInfo1Data[value] + "\t");
-      }
+      await (new I_EmployerInfoPage(cPage)).doHappyPath(happyPathApproved.getEmployerContactInfo); // employer name, phone, zip
 
-      await g_bankAcctInfoPage.happyPathPopulate(bankInfo1Data);
+      await (new J_EmploymentHistoryPage(cPage)).doHappyPath(happyPathApproved.getEmploymentHistory); // employedYears employedMonths monthlyIncome
 
-      await (new H_DirDepPage(cPage,true)).happyPathGo();
+      await (new K_IncomeInfoPage(cPage)).doHappyPath(IncomeFrequency.MONTHLY, happyPathApproved.getLastPayDate, happyPathApproved.getNextPayDate); // how often paid [weekly biweekly semimontly montly]; last and next paydays
+
+      await (new L_BankAcctInfoPage(cPage)).happyPathPopulate(happyPathApproved.getPaymentAccountInfo); // routing checking yearsOpen monthsOpen
+
+      await (new M_DirectDepositPage(cPage, true)).happyPathGo();
 
       await (new N_PaymentCardPage(cPage).enterCardNumberFirstSix(happyPathApproved.getPaymentCardFirstSix));
 
-      await (new J_ReviewAndSubmitPage(cPage)).happyPathGo();
+      await (new O_ConfirmAndSubmitPage(cPage)).happyPathGo();
 
       try {
         await (new P_ResultsPage(cPage)).verifyApproved();
@@ -125,13 +134,11 @@ test.describe('happy path approved-resume', async () => {
       await marketingPageR.navigate();
       await marketingPageR.beginResume();
 
-      let resumePage = new Q_ResumeApplication(cPageR);
+      let resumePage: ResumeApplication = new ResumeApplication(cPageR);
       await resumePage.happyPathPopulate([nameFirstFetched, nameLastFetched], ssnFetched);
 
-      let k_resultsPage: P_ResultsPage = new P_ResultsPage(cPageR);
-
       try {
-        await k_resultsPage.verifyApproved();
+        await (new P_ResultsPage(cPageR)).verifyApproved();
         console.log('Resume passed. End test.');
         await cPageR.evaluate(_ => {
         }, `browserstack_executor: ${JSON.stringify({
