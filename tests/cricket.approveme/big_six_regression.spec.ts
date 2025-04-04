@@ -6,9 +6,7 @@ import D_AboutYou1EmailPhonePage from "$pages/cricket.approveme/D_AboutYou1Email
 import E_AboutYou2HomeAddressPage from "$pages/cricket.approveme/E_AboutYou2HomeAddressPage";
 import K_IncomeInfoPage from '$pages/cricket.approveme/K_IncomeInfoPage';
 import L_BankAcctInfoPage from '$pages/cricket.approveme/L_BankAcctInfoPage';
-import H_DirDepPage from '$pages/cricket.approveme/M_DirectDepositPage';
 import N_PaymentCardPage from '$pages/cricket.approveme/N_PaymentCardPage';
-import J_ReviewAndSubmitPage from '$pages/cricket.approveme/O_ConfirmAndSubmitPage';
 import P_ResultsPage from "$pages/cricket.approveme/P_ResultsPage";
 import ResumeApplication from '$pages/cricket.approveme/ResumeApplication';
 import PaymentEstimator from '$pages/cricket.approveme/PaymentEstimator';
