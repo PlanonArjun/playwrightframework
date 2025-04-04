@@ -45,7 +45,7 @@ test.describe('cricket', async () => {
     await pageTemp.close();
   });
 
-  test('approved', { tag: ['@approveme', '@cricketwireless', '@happy', '@approve'] },async ({ browser }) => {
+  test('pending', { tag: ['@approveme', '@cricketwireless', '@happy', '@approve'] },async ({ browser }) => {
     test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
     await expect(async () => {
 

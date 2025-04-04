@@ -17,9 +17,19 @@ import HappyPathPending from "../../data/cricket.approveme/HappyPathPending";
 import HappyPathDenied from "../../data/cricket.approveme/HappyPathDenied";
 import {PaymentFrequency} from "../../data/paymentFrequency";
 import CricketHealthCheck from './CricketHealthCheck';
+import F_AboutYou3RentOwnPage from '$pages/cricket.approveme/F_AboutYou3RentOwnPage';
+import G_AboutYou4IDTypePage from '$pages/cricket.approveme/G_AboutYou4IDTypePage';
+import H_IncomeSourcePage from '$pages/cricket.approveme/H_IncomeSourcePage';
+import I_EmployerInfoPage from '$pages/cricket.approveme/I_EmployerInfoPage';
+import J_EmploymentHistoryPage from '$pages/cricket.approveme/J_EmploymentHistoryPage';
+import { IncomeFrequency } from '$utils/IncomeFrequency';
+import M_DirectDepositPage from '$pages/cricket.approveme/M_DirectDepositPage';
+import O_ConfirmAndSubmitPage from '$pages/cricket.approveme/O_ConfirmAndSubmitPage';
+import { IncomeSource } from '$utils/IncomeSource';
 
 test.describe('Cricket Big Six', async () => {
 
+  test.describe.configure({ retries: 0 }); // do not change
   test.describe.configure({ mode: 'serial' }); // do not change
 
   let getStartAppData: string[];
@@ -76,8 +86,10 @@ test.describe('Cricket Big Six', async () => {
       let e_aboutYou2Page = new E_AboutYou2HomeAddressPage(cPage);
       await e_aboutYou2Page.happyPathPopulate(happyPathApproved.getAboutYou2);
 
-      let f_incomeInfoPage: K_IncomeInfoPage = new K_IncomeInfoPage(cPage);
-      await f_incomeInfoPage.doHappyPath(happyPathApproved.getIncomeInfo);
+      /*
+      They move this rent-own frame in and out of the flow from time to time...
+       */
+      await (new F_AboutYou3RentOwnPage(cPage)).setIsOwn(true);
 
       let g_bankAcctInfoPage: L_BankAcctInfoPage = new L_BankAcctInfoPage(cPage);
 
@@ -91,13 +103,23 @@ test.describe('Cricket Big Six', async () => {
         console.log(bankInfo1Data[value] + "\t");
       }
 
-      await g_bankAcctInfoPage.happyPathPopulate(bankInfo1Data);
+      await (new G_AboutYou4IDTypePage(cPage)).doHappyPathWithPassport(); // ID type, ID number, State (if applicable)
 
-      await (new H_DirDepPage(cPage,true)).happyPathGo();
+      await (new H_IncomeSourcePage(cPage)).doHappyPathFullTime();
+
+      await (new I_EmployerInfoPage(cPage)).doHappyPath(happyPathApproved.getEmployerContactInfo); // employer name, phone, zip
+
+      await (new J_EmploymentHistoryPage(cPage)).doHappyPath(happyPathApproved.getEmploymentHistory); // employedYears employedMonths monthlyIncome
+
+      await (new K_IncomeInfoPage(cPage)).doHappyPath(IncomeFrequency.MONTHLY, happyPathApproved.getLastPayDate, happyPathApproved.getNextPayDate); // how often paid [weekly biweekly semimontly montly]; last and next paydays
+
+      await (new L_BankAcctInfoPage(cPage)).happyPathPopulate(happyPathApproved.getPaymentAccountInfo); // routing checking yearsOpen monthsOpen
+
+      await (new M_DirectDepositPage(cPage, true)).happyPathGo();
 
       await (new N_PaymentCardPage(cPage).enterCardNumberFirstSix(happyPathApproved.getPaymentCardFirstSix));
 
-      await (new J_ReviewAndSubmitPage(cPage)).happyPathGo();
+      await (new O_ConfirmAndSubmitPage(cPage)).happyPathGo();
 
       try {
         await (new P_ResultsPage(cPage)).verifyApproved();
@@ -166,13 +188,7 @@ test.describe('Cricket Big Six', async () => {
       let bCont = await browser.newContext();
       let cPage = await bCont.newPage();
 
-      let a_marketingPage = new A_MarketingPage(cPage);
-      await a_marketingPage.navigate();
-      await a_marketingPage.beginApply();
-      await cPage.waitForTimeout(500);
-
-      let b_splashPage = new B_SplashPage(cPage);
-      await b_splashPage.continue();
+      await (new B_SplashPage(cPage)).continue();
 
       let happyPathApproved = new HappyPathApproved();
 
@@ -196,10 +212,12 @@ test.describe('Cricket Big Six', async () => {
       let e_aboutYou2Page = new E_AboutYou2HomeAddressPage(cPage);
       await e_aboutYou2Page.happyPathPopulate(happyPathApproved.getAboutYou2);
 
-      let f_incomeInfoPage: K_IncomeInfoPage = new K_IncomeInfoPage(cPage);
-      await f_incomeInfoPage.doHappyPath(happyPathApproved.getIncomeInfo);
+      /*
+      They move this rent-own frame in and out of the flow from time to time...
+       */
+      await (new F_AboutYou3RentOwnPage(cPage)).setIsOwn(true);
 
-      let g_bankAcctInfoPage: L_BankAcctInfoPage = new L_BankAcctInfoPage(cPage);
+      await (new G_AboutYou4IDTypePage(cPage)).doHappyPathWithPassport(); // ID type, ID number, State (if applicable)
 
       bankInfo1Data = happyPathApproved.getBankInfo1;
       routing = bankInfo1Data[0];
@@ -211,13 +229,21 @@ test.describe('Cricket Big Six', async () => {
         console.log(bankInfo1Data[value] + "\t");
       }
 
-      await g_bankAcctInfoPage.happyPathPopulate(bankInfo1Data);
+      await (new H_IncomeSourcePage(cPage)).doHappyPathFullTime();
 
-      await (new H_DirDepPage(cPage,true)).happyPathGo();
+      await (new I_EmployerInfoPage(cPage)).doHappyPath(happyPathApproved.getEmployerContactInfo); // employer name, phone, zip
+
+      await (new J_EmploymentHistoryPage(cPage)).doHappyPath(happyPathApproved.getEmploymentHistory); // employedYears employedMonths monthlyIncome
+
+      await (new K_IncomeInfoPage(cPage)).doHappyPath(IncomeFrequency.MONTHLY, happyPathApproved.getLastPayDate, happyPathApproved.getNextPayDate); // how often paid [weekly biweekly semimontly montly]; last and next paydays
+
+      await (new L_BankAcctInfoPage(cPage)).happyPathPopulate(happyPathApproved.getPaymentAccountInfo); // routing checking yearsOpen monthsOpen
+
+      await (new M_DirectDepositPage(cPage, true)).happyPathGo();
 
       await (new N_PaymentCardPage(cPage).enterCardNumberFirstSix(happyPathApproved.getPaymentCardFirstSix));
 
-      await (new J_ReviewAndSubmitPage(cPage)).happyPathGo();
+      await (new O_ConfirmAndSubmitPage(cPage)).happyPathGo();
 
       try {
         await (new P_ResultsPage(cPage)).verifyApproved();
@@ -243,19 +269,13 @@ test.describe('Cricket Big Six', async () => {
       let bCont = await browser.newContext();
       let cPage = await bCont.newPage();
 
-      let a_marketingPage = new A_MarketingPage(cPage);
-      await a_marketingPage.navigate();
-      await a_marketingPage.beginApply();
-      await cPage.waitForTimeout(500);
+      await (new B_SplashPage(cPage)).continue();
 
-      let b_splashPage = new B_SplashPage(cPage);
-      await b_splashPage.continue();
-
-      let happyPathPending = new HappyPathPending();
+      let pendingDataset = new HappyPathPending();
 
       let c_startAppPage = new C_StartAppPage(cPage);
 
-      getStartAppData = happyPathPending.getStartAppData;
+      getStartAppData = pendingDataset.getStartAppData;
       nameFirstFetched  = getStartAppData[0];
       nameLastFetched   = getStartAppData[1];
       ssnFetched        = getStartAppData[3]; // ssn is 3
@@ -268,17 +288,19 @@ test.describe('Cricket Big Six', async () => {
       await c_startAppPage.happyPathPopulate(getStartAppData);
 
       let d_aboutYou1Page = new D_AboutYou1EmailPhonePage(cPage);
-      await d_aboutYou1Page.happyPathPopulate(happyPathPending.getAboutYou1);
+      await d_aboutYou1Page.happyPathPopulate(pendingDataset.getAboutYou1);
 
       let e_aboutYou2Page = new E_AboutYou2HomeAddressPage(cPage);
-      await e_aboutYou2Page.happyPathPopulate(happyPathPending.getAboutYou2);
+      await e_aboutYou2Page.happyPathPopulate(pendingDataset.getAboutYou2);
 
-      let f_incomeInfoPage: K_IncomeInfoPage = new K_IncomeInfoPage(cPage);
-      await f_incomeInfoPage.doHappyPath(happyPathPending.getIncomeInfo);
+      /*
+      They move this rent-own frame in and out of the flow from time to time...
+       */
+      await (new F_AboutYou3RentOwnPage(cPage)).setIsOwn(true);
 
-      let g_bankAcctInfoPage: L_BankAcctInfoPage = new L_BankAcctInfoPage(cPage);
+      await (new G_AboutYou4IDTypePage(cPage)).doHappyPathWithPassport(); // ID type, ID number, State (if applicable)
 
-      bankInfo1Data = happyPathPending.getBankInfo1;
+      bankInfo1Data = pendingDataset.getBankInfo1;
       routing = bankInfo1Data[0];
       checking = bankInfo1Data[1];
       yearsOpen = bankInfo1Data[2];
@@ -288,13 +310,21 @@ test.describe('Cricket Big Six', async () => {
         console.log(bankInfo1Data[value] + "\t");
       }
 
-      await g_bankAcctInfoPage.happyPathPopulate(bankInfo1Data);
+      await (new H_IncomeSourcePage(cPage)).doHappyPathSpecified(IncomeSource.FULL_TIME); // IncomeSource.ts enum
 
-      await (new H_DirDepPage(cPage,true)).happyPathGo();
+      await (new I_EmployerInfoPage(cPage)).doHappyPath(pendingDataset.getEmployerContactInfo); // employer name, phone, zip
 
-      await (new N_PaymentCardPage(cPage).enterCardNumberFirstSix(happyPathPending.getPaymentCardFirstSix));
+      await (new J_EmploymentHistoryPage(cPage)).doHappyPath(pendingDataset.getEmploymentHistory); // employedYears employedMonths monthlyIncome
 
-      await (new J_ReviewAndSubmitPage(cPage)).happyPathGo();
+      await (new K_IncomeInfoPage(cPage)).doHappyPath(IncomeFrequency.MONTHLY, pendingDataset.getLastPayDate, pendingDataset.getNextPayDate); // how often paid [weekly biweekly semimontly montly]; last and next paydays
+
+      await (new L_BankAcctInfoPage(cPage)).happyPathPopulate(pendingDataset.getPaymentAccountInfo); // routing checking yearsOpen monthsOpen
+
+      await (new M_DirectDepositPage(cPage, true)).happyPathGo();
+
+      await (new N_PaymentCardPage(cPage)).enterCardNumberFirstSix('411111');
+
+      await (new O_ConfirmAndSubmitPage(cPage)).happyPathGo();
 
       try {
         await (new P_ResultsPage(cPage)).verifyPending();
@@ -328,19 +358,13 @@ test.describe('Cricket Big Six', async () => {
       let bCont = await browser.newContext();
       let cPage = await bCont.newPage();
 
-      let a_marketingPage = new A_MarketingPage(cPage);
-      await a_marketingPage.navigate();
-      await a_marketingPage.beginApply();
-      await cPage.waitForTimeout(500);
+      await (new B_SplashPage(cPage)).continue();
 
-      let b_splashPage = new B_SplashPage(cPage);
-      await b_splashPage.continue();
-
-      let happyPathDenied = new HappyPathDenied();
+      let deniedDataset = new HappyPathDenied();
 
       let c_startAppPage = new C_StartAppPage(cPage);
 
-      getStartAppData = happyPathDenied.getStartAppData;
+      getStartAppData = deniedDataset.getStartAppData;
       nameFirstFetched  = getStartAppData[0];
       nameLastFetched   = getStartAppData[1];
       ssnFetched        = getStartAppData[3]; // ssn is 3
@@ -353,17 +377,19 @@ test.describe('Cricket Big Six', async () => {
       await c_startAppPage.happyPathPopulate(getStartAppData);
 
       let d_aboutYou1Page = new D_AboutYou1EmailPhonePage(cPage);
-      await d_aboutYou1Page.happyPathPopulate(happyPathDenied.getAboutYou1);
+      await d_aboutYou1Page.happyPathPopulate(deniedDataset.getAboutYou1);
 
       let e_aboutYou2Page = new E_AboutYou2HomeAddressPage(cPage);
-      await e_aboutYou2Page.happyPathPopulate(happyPathDenied.getAboutYou2);
+      await e_aboutYou2Page.happyPathPopulate(deniedDataset.getAboutYou2);
 
-      let f_incomeInfoPage: K_IncomeInfoPage = new K_IncomeInfoPage(cPage);
-      await f_incomeInfoPage.doHappyPath(happyPathDenied.getIncomeInfo);
+      /*
+      They move this rent-own frame in and out of the flow from time to time...
+       */
+      await (new F_AboutYou3RentOwnPage(cPage)).setIsOwn(true);
 
-      let g_bankAcctInfoPage: L_BankAcctInfoPage = new L_BankAcctInfoPage(cPage);
+      await (new G_AboutYou4IDTypePage(cPage)).doHappyPathWithPassport(); // ID type, ID number, State (if applicable)
 
-      bankInfo1Data = happyPathDenied.getBankInfo1;
+      bankInfo1Data = deniedDataset.getBankInfo1;
       routing = bankInfo1Data[0];
       checking = bankInfo1Data[1];
       yearsOpen = bankInfo1Data[2];
@@ -373,13 +399,21 @@ test.describe('Cricket Big Six', async () => {
         console.log(bankInfo1Data[value] + "\t");
       }
 
-      await g_bankAcctInfoPage.happyPathPopulate(bankInfo1Data);
+      await (new H_IncomeSourcePage(cPage)).doHappyPathSpecified(IncomeSource.FULL_TIME); // IncomeSource.ts enum
 
-      await (new H_DirDepPage(cPage,true)).happyPathGo();
+      await (new I_EmployerInfoPage(cPage)).doHappyPath(deniedDataset.getEmployerContactInfo); // employer name, phone, zip
 
-      await (new N_PaymentCardPage(cPage).enterCardNumberFirstSix(happyPathDenied.getPaymentCardFirstSix));
+      await (new J_EmploymentHistoryPage(cPage)).doHappyPath(deniedDataset.getEmploymentHistory); // employedYears employedMonths monthlyIncome
 
-      await (new J_ReviewAndSubmitPage(cPage)).happyPathGo();
+      await (new K_IncomeInfoPage(cPage)).doHappyPath(IncomeFrequency.MONTHLY, deniedDataset.getLastPayDate, deniedDataset.getNextPayDate);
+
+      await (new L_BankAcctInfoPage(cPage)).happyPathPopulate(deniedDataset.getPaymentAccountInfo); // routing checking yearsOpen monthsOpen
+
+      await (new M_DirectDepositPage(cPage, true)).happyPathGo();
+
+      await (new N_PaymentCardPage(cPage)).enterCardNumberFirstSix('411111');
+
+      await (new O_ConfirmAndSubmitPage(cPage)).happyPathGo();
 
       try {
         await (new P_ResultsPage(cPage)).verifyDenied();
