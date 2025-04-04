@@ -16,11 +16,9 @@ import M_DirectDepositPage from '$pages/cricket.approveme/M_DirectDepositPage';
 import N_PaymentCardPage from '$pages/cricket.approveme/N_PaymentCardPage';
 import O_ConfirmAndSubmitPage from '$pages/cricket.approveme/O_ConfirmAndSubmitPage';
 import P_ResultsPage from '$pages/cricket.approveme/P_ResultsPage';
-import Q_ResumeApplication from "$pages/cricket.approveme/ResumeApplication";
 import CricketHealthCheck from './CricketHealthCheck';
 import { IncomeFrequency } from '$utils/IncomeFrequency';
 import ResumeApplication from '$pages/cricket.approveme/ResumeApplication';
-import { IncomeSource } from '$utils/IncomeSource';
 
 test.describe('happy path approved-resume', async () => {
 
