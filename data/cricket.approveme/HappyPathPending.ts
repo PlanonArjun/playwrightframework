@@ -68,6 +68,16 @@ class HappyPathPending {
         return this._aboutYou2;
     }
 
+    private _employmentHistory: Array<string> = [
+        this.pendingDatasetFull.yearsOpen.toString(),
+        this.pendingDatasetFull.monthsOpen.toString(),
+        this.pendingDatasetFull.monthlyIncome,
+    ]
+    get getEmploymentHistory(): string[] {
+        return this._employmentHistory;
+    }
+
+
     private _incomeInfo = [
         this.pendingDatasetFull.monthlyIncome, // already a string
         this.pendingDatasetFull.payFrequency.toString(),
@@ -135,6 +145,13 @@ class HappyPathPending {
     ];
     get getPaymentAccountInfo() {
         return this._paymentAccountInfo;
+    }
+
+    get getLastPayDate(): string {
+        return this.pendingDatasetFull.lastPayDate;
+    }
+    get getNextPayDate(): string {
+        return this.pendingDatasetFull.nextPayDate;
     }
 
 }
