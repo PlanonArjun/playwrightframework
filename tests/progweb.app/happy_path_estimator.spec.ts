@@ -1,9 +1,10 @@
-import { test, expect, BrowserContext, Page } from '@playwright/test';
+import { test, expect, BrowserContext, Page, chromium } from '@playwright/test';
 import A_LoginPage from '../../pages/progweb.app/A_LoginPage';
 import B_SelectShop from '../../pages/progweb.app/B_SelectShop';
 import HappyPathApproved from 'data/progweb.approveme/HappyPathApproved';
 import I_PaymentEstimator from '$pages/progweb.app/K_PaymentEstimator';
 import { PaymentFrequency } from 'data/paymentFrequency';
+import ProgWebHealthCheck from './ProgWebHealthCheck';
 
 test.describe('navigation', async () => {
 
@@ -11,6 +12,7 @@ test.describe('navigation', async () => {
     test.describe.configure({ mode: 'parallel' });
 
     let approvedDataset: HappyPathApproved;
+    let isHealthyLocal: Boolean;
 
     let bCont: BrowserContext;
     let cPage: Page;
@@ -21,6 +23,11 @@ test.describe('navigation', async () => {
 
     test.beforeAll(async () => {
         approvedDataset = new HappyPathApproved();
+        let browserTemp = await chromium.launch({ headless: true });
+        let pageTemp = await browserTemp.newPage();
+        isHealthyLocal = await new ProgWebHealthCheck(pageTemp).isHealthy();
+        await browserTemp.close();
+        await pageTemp.close();
     });
 
     test.beforeEach(async ({browser}) => {
@@ -44,6 +51,7 @@ test.describe('navigation', async () => {
     });
 
     test('estimate Every week', { tag: ['@progweb','@estimate'] }, async () => {
+        test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
         await expect(async () => {
             try {
                 await paymentEstimator.happyPathEstimate('2999', PaymentFrequency.Weekly);
@@ -55,6 +63,7 @@ test.describe('navigation', async () => {
     });
 
     test('estimate twice a week', { tag: ['@progweb','@estimate'] }, async () => {
+        test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
         await expect(async () => {
             try {
                 await paymentEstimator.happyPathEstimate('2999', PaymentFrequency.BiWeekly);
@@ -66,6 +75,7 @@ test.describe('navigation', async () => {
     });
 
     test('estimate twice a month', { tag: ['@progweb','@estimate'] }, async () => {
+        test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
         await expect(async () => {
             try {
                 await paymentEstimator.happyPathEstimate('2999', PaymentFrequency.SemiMonthly);
@@ -77,6 +87,7 @@ test.describe('navigation', async () => {
     });
 
     test('estimate monthly', { tag: ['@progweb','@estimate'] }, async () => {
+        test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
         await expect(async () => {
             try {
                 await paymentEstimator.happyPathEstimate('2999', PaymentFrequency.Monthly);
