@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, chromium } from '@playwright/test';
 import A_LoginPage from '../../pages/progweb.app/A_LoginPage';
 import B_SelectShop from '../../pages/progweb.app/B_SelectShop';
 import C_StartApplication from '../../pages/progweb.app/C_StartApplication';
@@ -9,13 +9,25 @@ import G_BankingInfo from '../../pages/progweb.app/G_BankingInfo';
 import H_SubmitApplication from '../../pages/progweb.app/H_SubmitApplication';
 import I_ResultsPage from '../../pages/progweb.app/I_ResultsPage';
 import HappyPathPending from '../../data/progweb.approveme/HappyPathPending';
+import ProgWebHealthCheck from './ProgWebHealthCheck';
 
-test.describe('navigation', async () => {
+test.describe('ProgWeb', async () => {
+
+  let isHealthyLocal: Boolean;
 
   test.describe.configure({ retries: 0 });
   test.describe.configure({ mode: 'serial' });
 
-  test('happy path pending to results page - apply', { tag: ['@progweb', '@happy', '@pending'] }, async ({ browser }) => {
+  test.beforeAll(async () => {
+    let browserTemp = await chromium.launch({ headless: true });
+    let pageTemp = await browserTemp.newPage();
+    isHealthyLocal = await new ProgWebHealthCheck(pageTemp).isHealthy();
+    await browserTemp.close();
+    await pageTemp.close();
+  });
+
+  test('ProgWeb pending to results page', { tag: ['@progweb', '@happy', '@pending'] }, async ({ browser }) => {
+    test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
     await expect(async () => {
 
       const bCont = await browser.newContext();

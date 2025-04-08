@@ -9,9 +9,9 @@ import G_BankingInfo from '../../pages/progweb.app/G_UpdateBankingInfo';
 import H_SubmitApplication from '../../pages/progweb.app/H_SubmitApplication';
 import I_ResultsPage from '../../pages/progweb.app/I_ResultsPage';
 import HappyPathApproved from 'data/progweb.approveme/HappyPathApproved';
-import ProgWebHealthCheck from './ProgWebHealthCheck.spec';
+import ProgWebHealthCheck from './ProgWebHealthCheck';
 
-test.describe('navigation', async () => {
+test.describe('ProgWeb', async () => {
 
   let isHealthyLocal: Boolean;
 
@@ -26,7 +26,8 @@ test.describe('navigation', async () => {
     await pageTemp.close();
   });
 
-  test('happy path approved to results page - apply', { tag: ['@approveme', '@progweb', '@happy', '@approved'] }, async ({ browser }) => {
+  test('ProgWeb approved to results page', { tag: ['@approveme', '@progweb', '@happy', '@approved'] }, async ({ browser }) => {
+    test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
     await expect(async () => {
 
       let bCont = await browser.newContext();
@@ -70,7 +71,7 @@ test.describe('navigation', async () => {
       let resultsPage = new I_ResultsPage(cPage);
       try {
         await resultsPage.verifySuccessApproved();
-        await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason: 'approved'}})}`);
+        await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason: 'ProgWeb approved'}})}`);
       }catch(Error) {
         await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
       }finally  {

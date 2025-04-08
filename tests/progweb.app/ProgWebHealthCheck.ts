@@ -9,7 +9,7 @@ class ProgWebHealthCheck {
   readonly fieldEmail: Locator;
   readonly fieldPassword: Locator;
   readonly buttonContinue: Locator;
-  readonly happyPathApproved;
+  readonly happyPathApproved: HappyPathApproved;
 
   private statusHealthy: Boolean = false;
 

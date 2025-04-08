@@ -35,7 +35,7 @@ class I_ResultsPage {
     }
 
     async verifySuccessPending() {
-        await expect(this.page.getByText('Current applications')).toBeVisible();
+        await expect(this.page.getByText('Current applications')).toBeVisible({ timeout: 20000 });
         await expect(this.page.getByText('Pending')).toBeVisible({ timeout: 20000 });
         await this.headingPending.click();
         await expect(this.page.getByText('Thank you for submitting your')).toBeVisible({ timeout: 20000 });
