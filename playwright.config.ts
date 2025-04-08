@@ -5,6 +5,7 @@ const config = {
 
 	/* Maximum time one test can run for. */
 	timeout: 120 * 1000,
+	/* For ProgWeb: timeout: 240 * 1000, */
 	expect: {
 		/**
 		 * Maximum time expect() should wait for the condition to be met.

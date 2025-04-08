@@ -36,15 +36,15 @@ class I_ResultsPage {
 
     async verifySuccessPending() {
         await expect(this.page.getByText('Current applications')).toBeVisible();
-        await expect(this.page.getByText('Pending')).toBeVisible();
+        await expect(this.page.getByText('Pending')).toBeVisible({ timeout: 20000 });
         await this.headingPending.click();
-        await expect(this.page.getByText('Thank you for submitting your')).toBeVisible();
+        await expect(this.page.getByText('Thank you for submitting your')).toBeVisible({ timeout: 20000 });
         console.log('success - pending');
     }
 
     async verifySuccessDenied() {
         const element = this.page.getByText('Your application was not approved').first();
-        await expect(element).toBeVisible({ timeout: 15000 });
+        await expect(element).toBeVisible({ timeout: 20000 });
         console.log('success - denied');
     }
 

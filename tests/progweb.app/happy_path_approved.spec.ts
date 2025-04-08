@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, chromium } from '@playwright/test';
 import A_LoginPage from '../../pages/progweb.app/A_LoginPage';
 import B_SelectShop from '../../pages/progweb.app/B_SelectShop';
 import C_StartApplication from '../../pages/progweb.app/C_StartApplication';
@@ -9,12 +9,22 @@ import G_BankingInfo from '../../pages/progweb.app/G_UpdateBankingInfo';
 import H_SubmitApplication from '../../pages/progweb.app/H_SubmitApplication';
 import I_ResultsPage from '../../pages/progweb.app/I_ResultsPage';
 import HappyPathApproved from 'data/progweb.approveme/HappyPathApproved';
-
+import ProgWebHealthCheck from './ProgWebHealthCheck.spec';
 
 test.describe('navigation', async () => {
 
+  let isHealthyLocal: Boolean;
+
   test.describe.configure({ retries: 0 });
   test.describe.configure({ mode: 'serial' });
+
+  test.beforeAll(async () => {
+    let browserTemp = await chromium.launch({ headless: true });
+    let pageTemp = await browserTemp.newPage();
+    isHealthyLocal = await new ProgWebHealthCheck(pageTemp).isHealthy();
+    await browserTemp.close();
+    await pageTemp.close();
+  });
 
   test('happy path approved to results page - apply', { tag: ['@approveme', '@progweb', '@happy', '@approved'] }, async ({ browser }) => {
     await expect(async () => {
