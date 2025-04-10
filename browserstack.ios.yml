@@ -31,6 +31,10 @@ platforms:
     osVersion: Ventura
     browserName: Chrome
     browserVersion: '132'
+  - os: OS X
+    osVersion: Monterey
+    browserName: Playwright-webkit
+    browserVersion: '17.4'
 
 # =======================
 # Parallels per Platform
@@ -50,11 +54,11 @@ parallelsPerPlatform: 1
 # Set browserStackLocal to true if your website under test is not accessible publicly over the internet
 # Learn more about how BrowserStack Local works here -> https://www.browserstack.com/docs/automate/selenium/local-testing-introduction
 browserstackLocal: true # <boolean> (Default false)
-# browserStackLocalOptions:
-# Options to be passed to BrowserStack local in-case of advanced configurations
+  # browserStackLocalOptions:
+  # Options to be passed to BrowserStack local in-case of advanced configurations
   # localIdentifier: # <string> (Default: null) Needed if you need to run multiple instances of local.
   # forceLocal: true  # <boolean> (Default: false) Set to true if you need to resolve all your traffic via BrowserStack Local tunnel.
-  # Entire list of arguments available here -> https://www.browserstack.com/docs/automate/selenium/manage-incoming-connections
+# Entire list of arguments available here -> https://www.browserstack.com/docs/automate/selenium/manage-incoming-connections
 # Set `buildName` as the name of the job / testsuite being run
 buildName: not_set
 # `buildIdentifier` is a unique id to differentiate every execution that gets appended to

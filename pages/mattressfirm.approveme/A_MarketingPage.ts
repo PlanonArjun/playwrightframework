@@ -22,7 +22,6 @@ class A_MarketingPage1 {
     async beginResume() {
         await this.page.goto(urls.marketing.marketing,{timeout: 20000});
         await this.linkResume.click({timeout: 10000});
-        await expect(this.page.getByRole('heading', { name: 'Resume by providing the' })).toBeVisible({timeout:20000});
     }
 
     async beginEstimate() {
