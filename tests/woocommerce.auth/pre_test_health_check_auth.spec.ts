@@ -16,8 +16,15 @@ test.describe('auth (shopper and admin)', async () => {
       const shopperContext = await browser.newContext();
       const shopperPage = await shopperContext.newPage();
       loginPageShopper = new LoginPageShopper(shopperPage);
-      await loginPageShopper.authenticateRoundRobin(credentials.stagingShopper.username, credentials.stagingShopper.password);
-      await shopperContext.close();
+      try {
+        await loginPageShopper.authenticateRoundRobin(credentials.stagingShopper.username, credentials.stagingShopper.password);
+        await shopperPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason:'woo auth shopper round robin'}})}`);
+      }catch(Error) {
+        await shopperPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
+      }finally{
+        await shopperPage.close();
+        await shopperContext.close();
+      }
     }).toPass({timeout: 20000});
   });
 
@@ -27,7 +34,15 @@ test.describe('auth (shopper and admin)', async () => {
       const adminPage = await adminContext.newPage();
       loginPageAdmin = new LoginPageAdmin(adminPage);
       await loginPageAdmin.authenticateRoundRobin(credentials.stagingAdmin.username, credentials.stagingAdmin.password);
-      await adminContext.close();
+      try {
+        await loginPageAdmin.authenticateRoundRobin(credentials.stagingShopper.username, credentials.stagingShopper.password);
+        await adminPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason:'woo auth admin round robin'}})}`);
+      }catch(Error) {
+        await adminPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
+      }finally{
+        await adminPage.close();
+        await adminContext.close();
+      }
     }).toPass({timeout: 20000});
   });
 
