@@ -2,27 +2,35 @@ import { type Page, type Locator, expect } from '@playwright/test';
 
 class J_LinksCheck {
 
-
     readonly page: Page;
-    readonly applicationDiscloser: Locator;
-    readonly eSignDiscloser: Locator;
-    readonly arbitrationClause: Locator;
-    readonly priavacyPolicy: Locator;
-    readonly termsOfUse: Locator;
+    readonly link_ApplicationDisclosure: Locator;
+    readonly link_eSignDisclosure: Locator;
+    readonly link_ArbitrationProvision: Locator;
+    readonly link_PrivacyPolicy: Locator;
+    readonly link_TermsOfUse: Locator;
 
     constructor(page: Page) {
         this.page = page;
-        this.applicationDiscloser = page.getByRole('link', { name: 'Application Disclosure,' });
 
-        this.eSignDiscloser = page.getByRole('link', { name: 'E-Sign Disclosure' });
-        this.arbitrationClause = page.getByRole('link', { name: 'Arbitration Provision' });
-        this.priavacyPolicy = page.getByRole('link', { name: 'Privacy Policy' }).first();
-        this.termsOfUse = page.getByRole('link', { name: 'Terms of Use.' });
+        this.link_ApplicationDisclosure = page.getByRole('link', { name: 'Application Disclosure,' });
+        // this.linkApplicationDisclosure = page.locator('#Application_Disclosure_Checkbox-label > div > a:nth-child(1)');
+
+        this.link_eSignDisclosure = page.getByRole('link', { name: 'E-Sign Disclosure' });
+        // this.linkeSignDisclosure = page.locator('#Application_Disclosure_Checkbox-label > div > a:nth-child(2)');
+
+        this.link_ArbitrationProvision = page.getByRole('link', { name: 'Arbitration Provision' });
+        // this.linkArbitrationProvision = page.locator('#Application_Disclosure_Checkbox-label > div > a:nth-child(3)');
+
+        this.link_PrivacyPolicy = page.getByRole('link', { name: 'Privacy Policy' }).first();
+        // this.linkPrivacyPolicy = page.locator('#Application_Disclosure_Checkbox-label > div > a:nth-child(4)');
+
+        this.link_TermsOfUse = page.getByRole('link', { name: 'Terms of Use.' });
+        // this.linkTermsOfUse = page.locator('#Application_Disclosure_Checkbox-label > div > a:nth-child(5)');
     }
 
     async checkApplicationDisclosure() {
+        await this.link_ApplicationDisclosure.click();
         const page1Promise = this.page.waitForEvent('popup');
-        await this.applicationDiscloser.click();
         const newPage = await page1Promise;
         await expect(newPage.getByRole('heading', { name: 'Application Disclosure' })).toBeVisible();
         newPage.close();
@@ -30,7 +38,7 @@ class J_LinksCheck {
 
     async checkESignDisclosure() {
         const page1Promise = this.page.waitForEvent('popup');
-        await this.eSignDiscloser.click();
+        await this.link_eSignDisclosure.click();
         const newPage = await page1Promise;
         await expect(newPage.getByRole('heading', { name: 'E-sign disclosure', exact: true })).toBeVisible();
         newPage.close();
@@ -38,7 +46,7 @@ class J_LinksCheck {
 
     async checkArbitrationProvision() {
         const page1Promise = this.page.waitForEvent('popup');
-        await this.arbitrationClause.click();
+        await this.link_ArbitrationProvision.click();
         const newPage = await page1Promise;
         await expect(newPage.getByRole('heading', { name: 'Arbitration Clause' })).toBeVisible();
         newPage.close();
@@ -46,7 +54,7 @@ class J_LinksCheck {
 
     async checkPrivacyPolicy() {
         const page1Promise = this.page.waitForEvent('popup');
-        await this.priavacyPolicy.click();
+        await this.link_PrivacyPolicy.click();
         const newPage = await page1Promise;
         await expect(newPage.getByRole('heading', { name: 'Privacy' })).toBeVisible();
         newPage.close();
@@ -54,7 +62,7 @@ class J_LinksCheck {
 
     async checkTermsOfUse() {
         const page1Promise = this.page.waitForEvent('popup');
-        await this.termsOfUse.click();
+        await this.link_TermsOfUse.click();
         const newPage = await page1Promise;
         await expect(newPage.getByRole('heading', { name: 'Terms of use', exact: true })).toBeVisible();
         newPage.close();
