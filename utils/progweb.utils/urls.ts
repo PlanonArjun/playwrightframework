@@ -12,4 +12,7 @@ export default {
     storelocation: {
         storelocation: base + '/myaccount/find-store/location',
     },
+    locatorBestBuyTestStore: {
+        locatorBestBuyTestStore: base + '/myaccount/find-store?lat=40.5584836&lng=-112.0178286',
+    }
 };

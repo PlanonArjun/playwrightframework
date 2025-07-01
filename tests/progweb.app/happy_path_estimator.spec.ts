@@ -1,100 +1,85 @@
-import { test, expect, BrowserContext, Page, chromium } from '@playwright/test';
-import A_LoginPage from '../../pages/progweb.app/A_LoginPage';
-import B_SelectShop from '../../pages/progweb.app/B_SelectShop';
-import HappyPathApproved from 'data/progweb.approveme/HappyPathApproved';
-import I_PaymentEstimator from '$pages/progweb.app/K_PaymentEstimator';
-import { PaymentFrequency } from 'data/paymentFrequency';
-import ProgWebHealthCheck from './ProgWebHealthCheck';
+import { test, expect, BrowserContext, Page, Locator, FrameLocator } from '@playwright/test';
+import urls from '$utils/progweb.utils/urls';
 
-test.describe('navigation', async () => {
+test.describe.configure({ retries: 0 });
+test.describe.configure({ mode: 'parallel' });
 
-    test.describe.configure({ retries: 0 });
-    test.describe.configure({ mode: 'parallel' });
+let bCont: BrowserContext;
+let cPage: Page;
 
-    let approvedDataset: HappyPathApproved;
-    let isHealthyLocal: Boolean;
+let fieldCashPrice: Locator;
+let estimatorRoot: FrameLocator;
 
-    let bCont: BrowserContext;
-    let cPage: Page;
+test.beforeEach(async ({browser}) => {
+    bCont = await browser.newContext();
+    cPage = await bCont.newPage();
 
-    let loginPage: A_LoginPage;
-    let selectShop: B_SelectShop;
-    let paymentEstimator: I_PaymentEstimator;
+    estimatorRoot = cPage.locator('iframe[title="A Progressive Leasing tool for Lease Cost Estimator"]').contentFrame();
+    fieldCashPrice = estimatorRoot.getByRole('textbox', { name: 'Cash price' });
 
-    test.beforeAll(async () => {
-        approvedDataset = new HappyPathApproved();
-        let browserTemp = await chromium.launch({ headless: true });
-        let pageTemp = await browserTemp.newPage();
-        isHealthyLocal = await new ProgWebHealthCheck(pageTemp).isHealthy();
-        await browserTemp.close();
-        await pageTemp.close();
-    });
+    /*
+    We can re-use a BBY test store for each of these.
+     */
+    await cPage.goto(urls.locatorBestBuyTestStore.locatorBestBuyTestStore);
+    await cPage.getByRole('button', { name: 'Accept' }).click();
+    await cPage.getByRole('img', { name: 'Best Buy' }).click();
+    await cPage.getByText('Best Buy Blocked Test 7.1 mi').click();
 
-    test.beforeEach(async ({browser}) => {
-        bCont = await browser.newContext();
-        cPage = await bCont.newPage();
-        loginPage = new A_LoginPage(cPage);
-        await loginPage.happyPathPopulate(approvedDataset.getLoginData);
-        selectShop = new B_SelectShop(cPage);
-        await selectShop.clickForShop();
-        await selectShop.navigateLocation();
-        await selectShop._selectCityWithCode(approvedDataset.getShopDetails[0]);
-        await selectShop._selectOnline();
-        await selectShop._selectShopName();
-        await cPage.waitForTimeout(1000);
-        paymentEstimator = new I_PaymentEstimator(cPage);
-    });
+    await cPage.getByRole('button', { name: 'Estimate leasing cost' }).click();
+    await fieldCashPrice.click();
+    await fieldCashPrice.fill('3000.00');
+    await fieldCashPrice.press('Tab');
+});
 
-    test.afterEach(async () => {
-        await cPage.close();
-        await bCont.close();
-    });
+test('ProgWeb estimator Every week', async () => {
+    await estimatorRoot.getByRole('radio', { name: 'Every week' }).check();
+    await estimatorRoot.getByRole('button', { name: 'Get my estimate' }).click();
+    try {
+        await expect (estimatorRoot.getByRole('heading', { name: '-month lease-to-own summary' })).toBeVisible();
+        await expect (estimatorRoot.getByRole('heading', { name: 'Total of Payments' })).toBeVisible();
+        await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason:'ProgWeb estimator Every week'}})}`);
+    }catch(Error) {
+        await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
+    }
+});
 
-    test('estimate Every week', { tag: ['@progweb','@estimate'] }, async () => {
-        test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
-        await expect(async () => {
-            try {
-                await paymentEstimator.happyPathEstimate('2999', PaymentFrequency.Weekly);
-                await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason: 'weekly'}})}`);
-            }catch(Error) {
-                await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
-            }
-        }).toPass({ timeout: 400000 });
-    });
+test('ProgWeb estimator Every other week', async () => {
+    await estimatorRoot.getByRole('radio', { name: 'Every other week' }).check();
+    await estimatorRoot.getByRole('button', { name: 'Get my estimate' }).click();
+    try {
+        await expect (estimatorRoot.getByRole('heading', { name: '-month lease-to-own summary' })).toBeVisible();
+        await expect (estimatorRoot.getByRole('heading', { name: 'Total of Payments' })).toBeVisible();
+        await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason:'ProgWeb estimator Every other week'}})}`);
+    }catch(Error) {
+        await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
+    }
+});
 
-    test('estimate twice a week', { tag: ['@progweb','@estimate'] }, async () => {
-        test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
-        await expect(async () => {
-            try {
-                await paymentEstimator.happyPathEstimate('2999', PaymentFrequency.BiWeekly);
-                await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason: 'biweekly'}})}`);
-            }catch(Error) {
-                await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
-            }
-        }).toPass({ timeout: 400000 });
-    });
+test('ProgWeb estimator Twice per month', async () => {
+    await estimatorRoot.getByRole('radio', { name: 'Twice per month' }).check();
+    await estimatorRoot.getByRole('button', { name: 'Get my estimate' }).click();
+    try {
+        await expect (estimatorRoot.getByRole('heading', { name: '-month lease-to-own summary' })).toBeVisible();
+        await expect (estimatorRoot.getByRole('heading', { name: 'Total of Payments' })).toBeVisible();
+        await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason:'ProgWeb estimator Twice per month'}})}`);
+    }catch(Error) {
+        await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
+    }
+});
 
-    test('estimate twice a month', { tag: ['@progweb','@estimate'] }, async () => {
-        test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
-        await expect(async () => {
-            try {
-                await paymentEstimator.happyPathEstimate('2999', PaymentFrequency.SemiMonthly);
-                await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason: 'semimonthly'}})}`);
-            }catch(Error) {
-                await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
-            }
-        }).toPass({ timeout: 400000 });
-    });
+test('ProgWeb estimator Every month', async () => {
+    await estimatorRoot.getByRole('radio', { name: 'Every month' }).check();
+    await estimatorRoot.getByRole('button', { name: 'Get my estimate' }).click();
+    try {
+        await expect (estimatorRoot.getByRole('heading', { name: '-month lease-to-own summary' })).toBeVisible();
+        await expect (estimatorRoot.getByRole('heading', { name: 'Total of Payments' })).toBeVisible();
+        await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason:'ProgWeb estimator Every month'}})}`);
+    }catch(Error) {
+        await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
+    }
+});
 
-    test('estimate monthly', { tag: ['@progweb','@estimate'] }, async () => {
-        test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
-        await expect(async () => {
-            try {
-                await paymentEstimator.happyPathEstimate('2999', PaymentFrequency.Monthly);
-                await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'passed',reason: 'monthly'}})}`);
-            }catch(Error) {
-                await cPage.evaluate(_ => {}, `browserstack_executor: ${JSON.stringify({action: 'setSessionStatus',arguments: {status: 'failed',reason: Error.toString()}})}`);
-            }
-        }).toPass({ timeout: 400000 });
-    });
+test.afterEach(async () => {
+    await bCont.close();
+    await cPage.close();
 });
