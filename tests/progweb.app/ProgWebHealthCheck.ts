@@ -22,7 +22,7 @@ class ProgWebHealthCheck {
   }
 
   async _navigate() {
-    await this.page.goto(urls.myaccount.myaccount); // https://slc-qaswebapp11.stormwind.local/myaccount/
+    await this.page.goto(urls.myaccount.myaccount);
     await this.page.waitForTimeout(250);
   }
 
@@ -32,14 +32,14 @@ class ProgWebHealthCheck {
     /* The duplicate email entry here is not a bug in the test.
     It's a workaround for a bug in the SUT.
      */
-    await this.fieldEmail.fill(this.happyPathApproved.approvedDatasetFull.userEmail);
+    await this.fieldEmail.fill(this.happyPathApproved.getLoginData[0]);
     await this.buttonContinue.click();
     await this.fieldEmail.click();
-    await this.fieldEmail.fill(this.happyPathApproved.approvedDatasetFull.userEmail);
+    await this.fieldEmail.fill(this.happyPathApproved.getLoginData[0]);
     await this.buttonContinue.click();
 
     await this.fieldPassword.click();
-    await this.fieldPassword.fill(this.happyPathApproved.approvedDatasetFull.userPassword);
+    await this.fieldPassword.fill(this.happyPathApproved.getLoginData[1]);
     await this.buttonContinue.click();
 
     await this.page.getByRole('button', { name: 'Accept' }).click(); // user-facing cookie prompt
