@@ -1,5 +1,5 @@
-# playwright-e2e-tests
-Test Repo for all things e2e, will be using this for our e2e project initiative
+# marketplace-e2e-tests
+Repo to house code needed for marketplace application tests
 
 First time setup (run in terminal in the playwright-e2e-tests directory):
 * NOTE! YOU WILL NEED TO DOWNLOAD AQUA IF YOU DON'T HAVE THE PAID VERSION OF INTELLIJ www.jetbrains.com/aqua/download
@@ -21,8 +21,8 @@ To run tests in BrowserStack cloud:
 2) Look in the scripts element.
 3) Copy and paste any of those values, then use it in a run command like the examples below.
 
-npm run test:woo:auth:ios
-npm run test:woo:product:desktop
+npm run test:globalfooter:appandsociallinks:ios
+npm run test:globalfooter:appandsociallinks:desktop
 
 
 To run tests locally:
