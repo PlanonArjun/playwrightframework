@@ -1,0 +1,17 @@
+package-lock.json
+node_modules
+playwright-report
+log
+test-results
+local.log
+playwright-browserstack-sdk.config.js
+browserstackSetupConfig.json
+.DS_Store
+/test-results/
+/tests-examples/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+e2e/
+.idea/
+.env

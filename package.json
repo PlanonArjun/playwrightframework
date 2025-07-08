@@ -1,0 +1,30 @@
+{
+  "name": "marketplace-e2e-tests",
+  "version": "1.0.0",
+  "description": "Contains all the component level and customer journey UI tests for D2C marketplace application",
+  "main": "index.js",
+  "scripts": {
+    "test:globalfooter:appandsociallinks:ios": "npx browserstack-node-sdk playwright test --workers=5 -g d2c.marketplace/globalfooter_appandsociallinks.spec.ts --browserstack.config=./browserstack.ios.yml --config=./playwright.ios.config.ts",
+    "test:globalfooter:appandsociallinks:desktop": "npx browserstack-node-sdk playwright test --workers=5 -g d2c.marketplace/globalfooter_appandsociallinks.spec.ts --browserstack.config=./browserstack.desktop.yml --config=./playwright.config.ts",
+    "test:globalfooter:appandsociallinks:android": "npx browserstack-node-sdk playwright test --workers=5 -g d2c.marketplace/globalfooter_appandsociallinks.spec.ts --browserstack.config=./browserstack.android.yml --config=./playwright.config.ts"
+     },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Prog-Leasing-LLC-Legacy/marketplace-e2e-tests.git"
+  },
+  "private": false,
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Prog-Leasing-LLC-Legacy/marketplace-e2e-tests/issues"
+  },
+  "devDependencies": {
+    "@nestjs/common": "^11.0.10",
+    "@playwright/test": "^ 1.51.0",
+    "browserstack-node-sdk": "^1.34.42",
+    "x2js": "^3.4.4",
+    "playwright-qe-core": "^1.0.1"
+  },
+  "homepage": "https://github.com/Prog-Leasing-LLC-Legacy/marketplace-e2e-tests#readme"
+}
