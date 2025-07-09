@@ -24,7 +24,7 @@ export default {
         HOME_PAGE_URL: HOME_PAGE_URL
     },
     SHOP_RETAILERS_URL: {
-        SHOP_RETAILERS_URL: HOME_PAGE_URL + 'shop-retailers/'
+        SHOP_RETAILERS_URL: HOME_PAGE_URL + 'retailers/'
     },
     HOW_IT_WORKS_URL: {
         HOW_IT_WORKS_URL: PL_CURRENT_HOME_PAGE_URL + 'how-it-works'
