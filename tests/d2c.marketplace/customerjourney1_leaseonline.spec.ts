@@ -4,12 +4,18 @@ import { C_RetailersIndexPage } from '$pages/d2c.marketplace/C_RetailersIndexPag
 import D2CMarketPlaceHealthCheck from './D2CMarketPlaceHealthCheck';
 import LocationData from '../../data/d2c.marketplace/LocationData';
 import urls from '../../utils/d2cmarketplace.utils/urls';
+import FeaturedRetailerData from 'data/d2c.marketplace/FeaturedRetailerData';
+import { D_RetailersDetailPage } from '$pages/d2c.marketplace/D_RetailersDetailPage';
+import { getProductKeyByName, getProductDescriptionByName } from 'data/d2c.marketplace/ProductMapping';
+import { Formatter } from '$utils/d2cmarketplace.utils/Formatter';
+import { normalizedURL } from '$utils/d2cmarketplace.utils/urls';
 
 let browserContext: BrowserContext;
 let page: Page;
 let isHealthyLocal: Boolean;
 let basePage: A_BasePage;
 let retailerIndexPage: C_RetailersIndexPage;
+let retailerDetailPage: D_RetailersDetailPage;
 
 test.describe('Regression Suite', () => {
     test.describe.configure({ retries: 0 });
@@ -52,7 +58,7 @@ test.describe('Regression Suite', () => {
             expect(actualShopRetailersURL).toBe(urls.SHOP_RETAILERS_URL.SHOP_RETAILERS_URL);
             await retailerIndexPage.verifyPresenceOfShopRetailersHeader();
             await retailerIndexPage.verifyLocationSelectedOnRetailersIndexPage(locationData.getChicagoCityName);
-            
+
             //go to location modal screen again and click cancel update
             await retailerIndexPage.clickOnLocationUpdateLink();
             await retailerIndexPage.clickOnCancelBtnOnLocationModalView();
@@ -62,9 +68,28 @@ test.describe('Regression Suite', () => {
             await retailerIndexPage.enterCityInLocationModalView(locationData.getNewYorkCityName);
             await retailerIndexPage.clickOnFirstOption();
             await retailerIndexPage.verifyLocationOptionSelected(locationData.getNewYorkCityName);
+            await retailerIndexPage.clickOnUpdateBtnOnLocationModalView();
 
             //user checks for the featured retailers and clicks on specific featured retailer
-        
+
+            //User search for and clicks on specific retailer
+            let featuredRetailersData = new FeaturedRetailerData();
+            await retailerIndexPage.enterRetailerInSearchInput(featuredRetailersData.getBestBuy);
+            await retailerIndexPage.clickOnFirstOptionForRetailer(featuredRetailersData.getBestBuy);
+
+            //User lands on grand parent retailer detail page and verifies relevant information
+            retailerDetailPage = new D_RetailersDetailPage(page);
+            let expectedRetailerDetailURL = `${urls.SHOP_RETAILERS_URL.SHOP_RETAILERS_URL}${getProductKeyByName(featuredRetailersData.getBestBuy)}/`;
+            await expect(page).toHaveURL(expectedRetailerDetailURL);
+            await retailerDetailPage.verifyProductKeyInBreadCrumb(Formatter.formatProductName(getProductKeyByName(featuredRetailersData.getBestBuy)));
+            await retailerDetailPage.verifyPresenceOfRetailerHeader(featuredRetailersData.getBestBuy);
+            await retailerDetailPage.verifyPresenceOfRetailerDesc(getProductDescriptionByName(featuredRetailersData.getBestBuy));
+            await retailerDetailPage.verifyOtherOptionsHeaderAndDesc();
+
+            //User clicks on Lease Online Button to proceed with leasing process
+            await retailerDetailPage.clickOnLeaseOnlineBtn();
+            await expect(page).toHaveURL(urls.LEASE_ONLINE_URL.LEASE_ONLINE_URL);
+
         })
 
         test.afterEach(async () => {

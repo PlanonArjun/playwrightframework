@@ -1,5 +1,4 @@
 import { type Page, type Locator, expect } from "@playwright/test"
-import urls from '../../utils/d2cmarketplace.utils/urls'
 
 export class C_RetailersIndexPage {
 
@@ -11,6 +10,9 @@ export class C_RetailersIndexPage {
     private readonly locationUpdateLink: Locator
     private readonly locationCancelBtn: Locator
     private readonly locationUpdateBtn: Locator
+    private readonly retailerSearchBtn: Locator
+    private readonly retailerInputBox: Locator
+    private readonly firstValueInRetailerDropdown: Locator
 
     constructor(page: Page) {
         this.page = page
@@ -21,6 +23,9 @@ export class C_RetailersIndexPage {
         this.locationUpdateLink = page.locator('div[class="flex items-center gap-5"] button').first()
         this.locationCancelBtn = page.locator('button', {hasText: "Cancel"})
         this.locationUpdateBtn = page.locator('button', {hasText: "Update"})
+        this.retailerSearchBtn = page.locator('button', {hasText: "Search Retailers"})
+        this.retailerInputBox = page.getByPlaceholder('Search Retailers')
+        this.firstValueInRetailerDropdown = page.locator('li a div span').nth(2)
     }
 
     async enterCityInLocationModalView(city: string) {
@@ -41,7 +46,7 @@ export class C_RetailersIndexPage {
     }
 
     async getCurrentURL() {
-        this.page.waitForLoadState()
+        await this.page.waitForLoadState()
         return this.page.url()
     }
 
@@ -63,6 +68,17 @@ export class C_RetailersIndexPage {
 
     async clickOnUpdateBtnOnLocationModalView() {
         await this.locationUpdateBtn.click()
+    }
+
+    async enterRetailerInSearchInput(retailer: string) {
+        await this.retailerSearchBtn.scrollIntoViewIfNeeded()
+        await this.retailerSearchBtn.click()
+        await this.retailerInputBox.fill(retailer)
+    }
+
+    async clickOnFirstOptionForRetailer(retailer: string) {
+        expect(await this.firstValueInRetailerDropdown.textContent()).toContain(retailer)
+        await this.firstValueInRetailerDropdown.click()
     }
 
 }

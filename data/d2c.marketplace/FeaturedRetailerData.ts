@@ -19,8 +19,14 @@ class FeaturedRetailerData {
         this.dataset.retailer5
     ];
 
+    private _bestBuy: string = this.dataset.retailer1
+
     get getFeaturedRetailers() {
         return this._featuredRetailers;
+    }
+
+    get getBestBuy() {
+        return this._bestBuy;
     }
 
 }

@@ -9,6 +9,8 @@ export const PLAY_STORE_URL: string = 'https://play.google.com/store/apps/detail
 export const FB_URL: string = 'https://facebook.com/ProgLeasingLLC';
 export const IG_URL: string = 'https://instagram.com/accounts/login/?next=https%3A%2F%2Fwww.instagram.com%2Fprogressiveleasing%2F&is_from_rle';
 export const PL_DATA_SUBJECT_REQUEST_URL: string = 'https://progleasing.truyo.com/consumer/make_request';
+export const LEASE_ONLINE_URL: string = 'https://www.google.com/'
+export const ESTIMATE_LEASING_COST_URL: string = 'https://www.google.com/'
 export const normalizedURL = (url: string): string => {
     // Remove protocol and www (optional)
     const stripped = url.replace(/^https?:\/\/(www\.)?/, '');
@@ -88,5 +90,11 @@ export default {
     },
     PL_BIPA_URL: {
         PL_BIPA_URL: PL_BASE_URL + 'bipa'
+    },
+    LEASE_ONLINE_URL: {
+        LEASE_ONLINE_URL: LEASE_ONLINE_URL
+    },
+    ESTIMATE_LEASING_COST_URL: {
+        ESTIMATE_LEASING_COST_URL: ESTIMATE_LEASING_COST_URL
     }
 };
