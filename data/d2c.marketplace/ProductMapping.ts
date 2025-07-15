@@ -7,8 +7,7 @@ export interface Product {
 
 export const products: Product[] = [
     {name: 'Best Buy', key: 'bestbuy', type: 'Retailer', description: 'Best Buy'},
-    {name: 'Amazon', key: 'amazon', type: 'Retailer', description: 'Amazon'},
-    {name: 'Mattress Firm', key: 'mattressfirm', type: 'Retailer', description: 'Desk Organization. Make your study time as productive as possible with smart, stylish solutions that put everything you need at your fingertips.'}
+    {name: 'Amazon', key: 'amazon', type: 'Retailer', description: 'Amazon'}
 ]
 
 // Utility function to get key by name

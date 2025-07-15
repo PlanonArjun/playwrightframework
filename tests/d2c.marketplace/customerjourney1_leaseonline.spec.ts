@@ -72,7 +72,7 @@ test.describe('Regression Suite', () => {
 
             //user checks for the featured retailers and clicks on specific featured retailer
 
-            //User search for and clicks on specific retailer
+            //User search for and click the first search suggestion
             let featuredRetailersData = new FeaturedRetailerData();
             await retailerIndexPage.enterRetailerInSearchInput(featuredRetailersData.getBestBuy);
             await retailerIndexPage.clickOnFirstOptionForRetailer(featuredRetailersData.getBestBuy);
