@@ -107,6 +107,7 @@ export class A_BasePage {
 
     async onBasePage() {
         await this.page.goto(urls.HOME_PAGE_URL.HOME_PAGE_URL)
+        await this.page.waitForLoadState('load', {timeout: 60000});
         await expect(this.progLeasingLogo).toBeVisible()
     }
 
