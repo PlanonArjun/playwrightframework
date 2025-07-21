@@ -28,6 +28,9 @@ export default {
     SHOP_RETAILERS_URL: {
         SHOP_RETAILERS_URL: HOME_PAGE_URL + 'retailers/'
     },
+    SHOP_ALL_URL: {
+        SHOP_ALL_URL: HOME_PAGE_URL + 'shop/shop/'
+    },
     HOW_IT_WORKS_URL: {
         HOW_IT_WORKS_URL: PL_CURRENT_HOME_PAGE_URL + 'how-it-works'
     },

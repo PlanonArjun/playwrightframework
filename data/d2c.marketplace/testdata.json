@@ -1,0 +1,76 @@
+{
+    "urls": [
+        {
+            "env": "QA",
+            "marketplace": {
+                "home": "https://marketplace01-progleasing.frontend.site/en/",
+                "shopRetailers": "https://marketplace01-progleasing.frontend.site/en/retailers/",
+                "shopAll": "https://marketplace01-progleasing.frontend.site/en/shop/shop/"
+            },
+            "social": {
+                "facebook": "https://facebook.com/ProgLeasingLLC",
+                "instagram": "https://instagram.com/accounts/login/?next=https%3A%2F%2Fwww.instagram.com%2Fprogressiveleasing%2F&is_from_rle"
+            },
+            "mobileApps": {
+                "android": "https://play.google.com/store/apps/details?id=com.progfinance.progressivemobile&hl=en_US",
+                "ios": "https://apps.apple.com/us/app/progressive-leasing/id995368829?mt=8"
+            },
+            "external": {
+                "pl": {
+                    "home": "https://progleasing.com/",
+                    "faq": "https://help.progleasing.com/hc/en-us",
+                    "investors": "https://investor.progholdings.com/",
+                    "progFoundation": "https://progfoundation.org/",
+                    "dataSubjectRequest": "https://progleasing.truyo.com/consumer/make_request",
+                    "howItWorks": "https://progleasing.com/how-it-works",
+                    "contactUs": "https://progleasing.com/contact-us",
+                    "blog": "https://progleasing.com/blog",
+                    "partnerSignUp": "https://progleasing.com/index.php/merchant",
+                    "retailerLogin": "https://progleasing.com/merchant",
+                    "mediaKit": "https://progleasing.com/index.php/retailer-social-kits",
+                    "aboutUs": "https://progleasing.com/about-us",
+                    "careers": "https://progleasing.com/jobs/",
+                    "terms": "https://progleasing.com/terms/",
+                    "privacy": "https://progleasing.com/privacy/",
+                    "trust": "https://progleasing.com/prog-force-trust-center",
+                    "cookiesPreference": "https://progleasing.com/CookiePreferences",
+                    "bipa": "https://progleasing.com/bipa"
+                }
+            }
+        }
+    ],
+    "location": [
+        {
+            "cityZipCode": "10006",
+            "cityName": "New York" 
+        },
+        {
+            "cityZipCode": "60007",
+            "cityName": "Chicago"
+        }
+    ],
+    "shopCategories": {
+        "electronicsAndGaming": "Electronics & Gaming",
+        "computerAndTablets": "Computer & Tablets",
+        "jewelry": "Jewelry",
+        "furniture": "Furniture"
+    },
+    "featuredRetailers": {
+        "bestBuy": "Best Buy",
+        "amazon": "Amazon"
+    },
+    "product": [
+        {
+            "name": "Best Buy",
+            "key": "bestbuy",
+            "type": "Retailer",
+            "description": "Best Buy"
+        },
+        {
+            "name": "Amazon",
+            "key": "amazon",
+            "type": "Retailer",
+            "description": "Amazon"
+        }
+    ]
+}

@@ -5,7 +5,6 @@ import D2CMarketPlaceHealthCheck from './D2CMarketPlaceHealthCheck';
 import LocationData from '../../data/d2c.marketplace/LocationData';
 import urls from '../../utils/d2cmarketplace.utils/urls';
 import FeaturedRetailerData from 'data/d2c.marketplace/FeaturedRetailerData';
-import { normalizedURL } from '$utils/d2cmarketplace.utils/urls';
 import { LEASE_TO_OWN_OPTIONS } from '$utils/d2cmarketplace.utils/filters/leasetoownoptions';
 
 let browserContext: BrowserContext;

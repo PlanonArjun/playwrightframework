@@ -52,3 +52,5 @@ export class D_RetailersDetailPage {
     }
 
 }
+
+export default D_RetailersDetailPage;

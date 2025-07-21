@@ -10,6 +10,7 @@ export class A_BasePage {
     private readonly shopRetailersIcon: Locator
     private readonly locationPopUpHeader: Locator
     private readonly shopAllIcon: Locator
+    private readonly shopAllLink: Locator
     private readonly shopCategoriesHeader: Locator
     private readonly shopCategoriesItems: Locator
     private readonly learnMoreBtn: Locator
@@ -59,7 +60,8 @@ export class A_BasePage {
         this.progLeasingLogo = page.locator('img[alt="B2C Retail Store"]')
         this.shopRetailersIcon = page.locator('a', { hasText: "Shop Retailers" })
         this.locationPopUpHeader = page.locator('span', { hasText: "Find a store to get started" })
-        this.shopAllIcon = page.locator('button', { hasText: "Shop All" })
+        this.shopAllIcon = page.getByRole('button', { name: 'Shop All', exact: true })
+        this.shopAllLink = page.getByRole('link', { name: 'Shop All' })
         this.shopCategoriesHeader = page.locator('p', { hasText: "Shop Categories" })
         this.shopCategoriesItems = page.locator('div[class="flex flex-col items-center justify-center gap-[0.5rem]"] p')
         this.learnMoreBtn = page.locator('button', { hasText: "Learn More" })
@@ -107,7 +109,7 @@ export class A_BasePage {
 
     async onBasePage() {
         await this.page.goto(urls.HOME_PAGE_URL.HOME_PAGE_URL)
-        await this.page.waitForLoadState('load', {timeout: 60000});
+        await this.page.waitForLoadState('networkidle', {timeout: 180000});
         await expect(this.progLeasingLogo).toBeVisible()
     }
 
@@ -132,6 +134,10 @@ export class A_BasePage {
     //CSS validation of header to be added
     async clickShopAllBtn() {
         await this.shopAllIcon.click({ timeout: 10000 })
+    }
+
+    async clickShopAllLink() {
+        await this.shopAllLink.click()
     }
 
     //CSS validation of header to be added
