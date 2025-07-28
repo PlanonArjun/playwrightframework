@@ -37,7 +37,7 @@ test.describe('Regression Suite', () => {
             await basePage.onBasePage();
         });
 
-        test('Lease Online for a product using Shop All navigation', { tag: ['@regression', '@kcj3'] }, async () => {
+        test('Verify QR for a product offered by online Retailer using Shop All navigation', { tag: ['@regression', '@kcj3'] }, async () => {
             //user lands on home page and click on Shop All icon
             shopAllListPage = new F_ShopAllList(page);
             await basePage.clickShopAllBtn();           
