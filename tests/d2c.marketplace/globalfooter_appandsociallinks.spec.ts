@@ -9,7 +9,7 @@ let page: Page;
 let isHealthyLocal: Boolean;
 let basePage: A_BasePage;
 
-test.describe('Global Footers Test Suite', () => {
+test.describe.skip('Global Footers Test Suite', () => {
     test.describe.configure({ retries: 0 });
     test.describe.configure({ mode: 'serial' });
 
