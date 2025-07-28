@@ -25,6 +25,12 @@ class FeaturedRetailerData {
         return this._bestBuy;
     }
 
+    private _amazon: string = this.dataset.retailer2
+
+    get getAmazon() {
+        return this._amazon;
+    }
+
 }
 
 export default FeaturedRetailerData;

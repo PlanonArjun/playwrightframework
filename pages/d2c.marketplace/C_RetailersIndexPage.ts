@@ -72,7 +72,7 @@ export class C_RetailersIndexPage {
         this.loadMoreBtn = page.locator('button', { hasText: "Load more" })
         this.distanceOfRetailersOrOnline = page.locator('span[class="global-text-xxs-medium text-secondary"]')
         this.sortByOption = page.locator('span[class="global-text-sm-medium"]', { hasText: "Sort By:" })
-        this.defaultSortBy = page.locator('input[value="Default"]')
+        this.defaultSortBy = page.locator('input[value="default"]')
         this.applySorting = page.locator('button', { hasText: "Apply" })
         this.crossBtnSortBy = page.locator('//button[contains(@class, "MuiIconButton-sizeMedium")]')
         this.distanceFirstTile = this.distanceOfRetailersOrOnline.first()

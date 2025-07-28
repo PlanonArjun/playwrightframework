@@ -17,7 +17,7 @@ test.describe('Regression Suite', () => {
     test.describe.configure({ retries: 0 });
     test.describe.configure({ mode: 'serial' });
 
-    test.beforeAll(async ({ browser }) => {
+    test.beforeAll(async () => {
         let browserTemp = await chromium.launch({ headless: true });
         let pageTemp = await browserTemp.newPage();
         isHealthyLocal = await new D2CMarketPlaceHealthCheck(pageTemp).isHealthy();
@@ -61,14 +61,14 @@ test.describe('Regression Suite', () => {
             await retailerIndexPage.verifyRetailerNameInInputBoxAfterSearch(featuredRetailersData.getBestBuy);
 
             //Apply for In-Store filter
-            // await retailerIndexPage.clickOnFilterBtn();
-            // await retailerIndexPage.selectInStoreOptionForLeaseToOwnOptions();
-            // await retailerIndexPage.applyFilter();
+            await retailerIndexPage.clickOnFilterBtn();
+            await retailerIndexPage.selectInStoreOptionForLeaseToOwnOptions();
+            await retailerIndexPage.applyFilter();
             await retailerIndexPage.clickOnLoadMore();
-            //await retailerIndexPage.verifyLeaseToOwnOptionFilterIsApplied(LEASE_TO_OWN_OPTIONS.IN_STORE);
+            await retailerIndexPage.verifyLeaseToOwnOptionFilterIsApplied(LEASE_TO_OWN_OPTIONS.IN_STORE);
 
             //Check if near to far sorting is applied for BM stores
-            //await retailerIndexPage.verifyNearToFarSortingWithInStoreFilter();
+            await retailerIndexPage.verifyNearToFarSortingWithInStoreFilter();
 
             //Click on the first retailer tile and verify in store details on modal screen
             await retailerIndexPage.clickOnFirstTile();
@@ -85,7 +85,12 @@ test.describe('Regression Suite', () => {
             await retailerIndexPage.selectInStoreTileFromModalScreen();
 
             //Click on Estimate Leasing Cost and verify the page navigation
-            await retailerIndexPage.clickOnEstimateCostFromModalScreen();
+            await Promise.all([
+                page.waitForNavigation({ waitUntil: 'load' }),
+                await retailerIndexPage.clickOnEstimateCostFromModalScreen(),
+            ]);
+            const currentUrl = page.url();
+            expect(currentUrl).toContain(urls.ESTIMATE_LEASING_COST_URL.ESTIMATE_LEASING_COST_URL);
 
         })
 

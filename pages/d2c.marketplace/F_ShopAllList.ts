@@ -14,20 +14,31 @@ export class F_ShopAllList {
     private readonly laptopsCategory: Locator
     private readonly retailerInputBoxOnFilterScreen: Locator
     private readonly bestBuyRetailerOptionOnFilterScreen: Locator
+    private readonly amazonRetailerOptionOnFilterScreen: Locator
+    private readonly brandInputBoxOnFilterScreen: Locator
+    private readonly dellBrandOptionOnFilterScreen: Locator
+    private readonly asusBrandOptionOnFilterScreen: Locator
     private readonly applyFiltersBtn: Locator
     private readonly clearFiltersBtn: Locator
     private readonly laptopsCategoryFilterApplied: Locator
     private readonly bestBuyRetailerFilterApplied: Locator
+    private readonly amazonRetailerFilterApplied: Locator
+    private readonly dellBrandFilterApplied: Locator
+    private readonly asusBrandFilterApplied: Locator
     private readonly productLoadMoreBtn: Locator
     private readonly listOfRetailerNamesForProducts: Locator
+    private readonly listOfProductDesc: Locator
     private readonly productSortByOption: Locator
     private readonly lowToHighProductSort: Locator
     private readonly applySorting: Locator
     private readonly listOfProductPrice: Locator
+    private readonly firstProductTilePrice: Locator
+    private readonly firstProductTileDesc: Locator
+    private readonly firstProductTileRetailer: Locator
 
     constructor(page: Page) {
         this.page = page
-        this.shopAllBreadCrumb = page.locator('li span', { hasText: "Shop All" })
+        this.shopAllBreadCrumb = page.locator('li a', { hasText: "Shop All" })
         this.cityOrZipInputBox = page.getByPlaceholder('City or zip code')
         this.firstValueInLocationDropdown = page.locator('ul[role="listbox"] li').first()
         this.continueBtnForLocation = page.locator('button', { hasText: "Continue" })
@@ -38,16 +49,27 @@ export class F_ShopAllList {
         this.laptopsCategory = page.locator('span', { hasText: "Laptops" })
         this.retailerInputBoxOnFilterScreen = page.locator('input[placeholder="Search Retailers"]')
         this.bestBuyRetailerOptionOnFilterScreen = page.locator('input[type="radio"][value="Best Buy"]')
+        this.amazonRetailerOptionOnFilterScreen = page.locator('input[type="radio"][value="Amazon"]')
+        this.brandInputBoxOnFilterScreen = page.locator('input[placeholder="Search Brands"]')
+        this.dellBrandOptionOnFilterScreen = page.locator('input[type="radio"][value="Dell"]')
+        this.asusBrandOptionOnFilterScreen = page.locator('input[type="radio"][value="ASUS"]')
         this.applyFiltersBtn = page.locator('button', { hasText: "Apply Filters" })
         this.clearFiltersBtn = page.locator('button', { hasText: "Clear Filters" })
         this.laptopsCategoryFilterApplied = page.locator('//span[contains(@class, "MuiChip-label")]/span[text()="Laptops"]')
         this.bestBuyRetailerFilterApplied = page.locator('//span[contains(@class, "MuiChip-label")]/span[text()="Best Buy"]')
+        this.amazonRetailerFilterApplied = page.locator('//span[contains(@class, "MuiChip-label")]/span[text()="Amazon"]')
+        this.dellBrandFilterApplied = page.locator('//span[contains(@class, "MuiChip-label")]/span[text()="Dell"]')
+        this.asusBrandFilterApplied = page.locator('//span[contains(@class, "MuiChip-label")]/span[text()="ASUS"]')
         this.productLoadMoreBtn = page.locator('button[aria-label="Load more products"]', { hasText: "Load more" })
         this.listOfRetailerNamesForProducts = page.locator('a div div h1')
+        this.listOfProductDesc = page.locator('//a/div/div/p')
         this.productSortByOption = page.getByRole('button', { name: 'Sort By: A to Z' })
-        this.lowToHighProductSort = page.locator('input[value="Low to High"]')
-        this.applySorting = page.locator('button', { hasText: "Apply" })
+        this.lowToHighProductSort = page.locator('input[value="lowToHigh"]')
+        this.applySorting = page.locator('button', { hasText: /^Apply$/ })
         this.listOfProductPrice = page.locator('//a/div/div/div/p[contains(@aria-label, "Price")]')
+        this.firstProductTilePrice = this.listOfProductPrice.first()
+        this.firstProductTileDesc = this.listOfProductDesc.first()
+        this.firstProductTileRetailer = this.listOfRetailerNamesForProducts.first()
     }
 
     async verifyPresenceOfBreadCrumb() {
@@ -95,8 +117,26 @@ export class F_ShopAllList {
         await this.retailerInputBoxOnFilterScreen.scrollIntoViewIfNeeded()
         await this.retailerInputBoxOnFilterScreen.fill(retailer)
         expect(await this.retailerInputBoxOnFilterScreen.getAttribute('value')).toContain(retailer)
-        await this.bestBuyRetailerOptionOnFilterScreen.check()
-        expect(await this.bestBuyRetailerOptionOnFilterScreen.isChecked()).toBeTruthy()
+        if (retailer === 'Best Buy') {
+            await this.bestBuyRetailerOptionOnFilterScreen.check()
+            expect(await this.bestBuyRetailerOptionOnFilterScreen.isChecked()).toBeTruthy()
+        } else if (retailer === 'Amazon') {
+            await this.amazonRetailerOptionOnFilterScreen.check()
+            expect(await this.amazonRetailerOptionOnFilterScreen.isChecked()).toBeTruthy()
+        }
+    }
+
+    async selectBrandFilter(brand: string) {
+        await this.brandInputBoxOnFilterScreen.scrollIntoViewIfNeeded()
+        await this.brandInputBoxOnFilterScreen.fill(brand)
+        expect(await this.brandInputBoxOnFilterScreen.getAttribute('value')).toContain(brand)
+        if (brand === 'Dell') {
+            await this.dellBrandOptionOnFilterScreen.check()
+            expect(await this.dellBrandOptionOnFilterScreen.isChecked()).toBeTruthy()
+        } else if (brand === 'ASUS') {
+            await this.asusBrandOptionOnFilterScreen.check()
+            expect(await this.asusBrandOptionOnFilterScreen.isChecked()).toBeTruthy()
+        }
     }
 
     async applyFilter() {
@@ -118,6 +158,26 @@ export class F_ShopAllList {
             await expect(this.bestBuyRetailerFilterApplied).toBeVisible()
             const listOfRetailerName = await this.listOfRetailerNamesForProducts.allTextContents()
             expect(listOfRetailerName.every(retailer => retailer === retailerFilter)).toBeTruthy()
+        } else if (retailerFilter === 'Amazon') {
+            await expect(this.amazonRetailerFilterApplied).toBeVisible()
+            const listOfRetailerName = await this.listOfRetailerNamesForProducts.allTextContents()
+            expect(listOfRetailerName.every(retailer => retailer === retailerFilter)).toBeTruthy()
+        }
+    }
+
+    async verifyBrandFilterIsApplied(brandFilter: string) {
+        if (brandFilter === 'Dell') {
+            await expect(this.dellBrandFilterApplied).toBeVisible()
+            const listOfProductDecription = await this.listOfProductDesc.evaluateAll((elements) =>
+                elements.map(el => (el as HTMLElement).innerText))
+            console.log("list: " + listOfProductDecription)
+            expect(listOfProductDecription.every(desc => desc.includes(brandFilter))).toBeTruthy()
+        } else if (brandFilter === 'ASUS') {
+            await expect(this.asusBrandFilterApplied).toBeVisible()
+            const listOfProductDecription = await this.listOfProductDesc.evaluateAll((elements) =>
+                elements.map(el => (el as HTMLElement).innerText))
+            console.log("list: " + listOfProductDecription)
+            expect(listOfProductDecription.every(desc => desc.includes(brandFilter))).toBeTruthy()
         }
     }
 
@@ -147,4 +207,23 @@ export class F_ShopAllList {
         expect(isSorted).toBe(true);
     }
 
+    async clickOnFirstProductTile() {
+        await this.firstProductTilePrice.click()
+        await expect(this.page).toHaveTitle('Product Detail', { timeout: 10000 });
+    }
+
+    async getProductDescOnPLP() {
+        return await this.firstProductTileDesc.innerText()
+    }
+
+    async getProductPriceOnPLP() {
+        return await this.firstProductTilePrice.innerText()
+    }
+
+    async getProductRetailerNameOnPLP() {
+        return await this.firstProductTileRetailer.innerText()
+    }
+
 }
+
+export default F_ShopAllList;

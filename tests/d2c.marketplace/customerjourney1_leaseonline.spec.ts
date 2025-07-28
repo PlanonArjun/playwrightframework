@@ -21,7 +21,7 @@ test.describe('Regression Suite', () => {
     test.describe.configure({ retries: 0 });
     test.describe.configure({ mode: 'serial' });
 
-    test.beforeAll(async ({ browser }) => {
+    test.beforeAll(async () => {
         let browserTemp = await chromium.launch({ headless: true });
         let pageTemp = await browserTemp.newPage();
         isHealthyLocal = await new D2CMarketPlaceHealthCheck(pageTemp).isHealthy();
@@ -84,9 +84,12 @@ test.describe('Regression Suite', () => {
             await retailerDetailPage.verifyOtherOptionsHeaderAndDesc(featuredRetailersData.getBestBuy);
 
             //User clicks on Lease Online Button to proceed with leasing process
-            await retailerDetailPage.clickOnLeaseOnlineBtn(featuredRetailersData.getBestBuy);
-            //await expect(page).toHaveURL(urls.LEASE_ONLINE_URL.LEASE_ONLINE_URL);
-
+            await Promise.all([
+                page.waitForNavigation({ waitUntil: 'load' }),
+                retailerDetailPage.clickOnLeaseOnlineBtn(featuredRetailersData.getBestBuy),
+            ]);
+            const currentUrl = page.url();
+            expect(currentUrl).toContain(urls.LEASE_ONLINE_URL.LEASE_ONLINE_URL);
         })
 
         test.afterEach(async () => {
