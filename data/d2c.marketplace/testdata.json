@@ -1,4 +1,92 @@
 {
+    "pageTexts": {
+        "basePage": {
+            "shopRetailersBtnText": "Shop Retailers",
+            "locationHeaderText": "Find a store to get started",
+            "shopAllBtnAndLinkText": "Shop All",
+            "shopCategoriesHeaderText": "Shop Categories",
+            "learnMoreBtnAndHeaderText": "Learn More",
+            "howItWorksLinkText": "How it Works",
+            "contactUsLinkText": "Contact Us",
+            "getTheAppLinkText": "Get the App",
+            "faqsLinkText": "FAQs",
+            "startALeaseBtnText": "Start a Lease",
+            "forRetailersHeaderText": "For Retailers",
+            "partnerSignUpLinkText": "Partner signup",
+            "retailerLoginLinkText": "Retailer login",
+            "mediaKitLinkText": "Media Kit",
+            "progCentralLinkText": "Prog Central",
+            "ourBusinessHeaderText": "Our Business",
+            "aboutUsLinkText": "About Us",
+            "investorsLinkText": "Investors",
+            "partnersLinkText": "Partners",
+            "progFoundationLinkText": "Prog Foundation",
+            "careersLinkText": "Careers",
+            "supportHeaderText": "Support",
+            "customerFeedbackLink": "Customer Feedback",
+            "blogsLinkText": "Blogs",
+            "appStoreLinkText": "Download on App Store",
+            "playStoreLinkText": "Download on Play store",
+            "fbLinkText": "Visit us on Facebook",
+            "igLinkText": "Visit us on Instagram",
+            "plDeclarationText": "Ownership by",
+            "plCopyrightText": "all rights reserved",
+            "termsOfUseLinkText": "Terms of Use",
+            "privacyLinkText": "Footer link: Privacy",
+            "trustCentreLinkText": "Trust Center",
+            "dataSubjectsRequestLinkText": "Data Subject Requests",
+            "bipaLinkText": "BIPA",
+            "yourPrivacyChoicesLinkText": "Your Privacy Choices"
+        },
+        "homePage": {
+
+        },
+        "retailersIndexPage": {
+            "shopRetailersBreadcrumbText": "Retailers",
+            "locationInputBoxPlaceholderText": "City or zip code",
+            "continueBtnText": "Continue",
+            "shopRetailersHeaderText": "Shop Retailers",
+            "cancelBtnText": "Cancel",
+            "updateBtnText": "Update",
+            "searchRetailersBtnText": "Search Retailers",
+            "retailersInputBoxPlaceholderText": "Search Retailers",
+            "searchResultsHeaderText": "Search Results",
+            "filtersBtnText": "Filters",
+            "filtersHeaderText": "Filters",
+            "leaseToOwnOptionsFilterHeaderText": "Lease-to-Own Options",
+            "applyFiltersBtnText": "Apply Filters",
+            "clearFiltersBtnText": "Clear Filters",
+            "loadMoreBtnText": "Load more",
+            "sortByBtnText": "Sort By:",
+            "applySortingBtnText": "Apply",
+            "leaseToOwnOptionsOnRetailerModalScreenHeaderText": "Lease-to-Own Options",
+            "estimateCostOnRetailerModalScreenBtnText": "Estimate leasing cost",
+            "getDirectionsLinkText": "Get Directions" 
+        },
+        "retailersDetailPage": {
+            "otherOptionsDescText": "No worries. Click here to see all the places  where you can do a lease-to-own purchase",
+            "allRetailersLinkText": "All retailers",
+            "estimateLeasingCostBtnText": "Estimate Leasing cost"
+        },
+        "productDetailsPage": {
+            "availableInTheAppHeaderText": "Available in the App!",
+            "plDisclaimerText": "As an affiliate, Progressive Leasing earns from qualifying purchases.",
+            "onlineRetailerAppDescText": "Use our app to start your lease"
+        },
+        "shopAllListPage": {
+            "shopAllBreadcrumbText": "Shop All",
+            "locationInputBoxPlaceholderText": "City or zip code",
+            "continueBtnText": "Continue",
+            "shopAllHeaderText": "Shop All",
+            "filtersBtnText": "Filters",
+            "filtersHeaderText": "Filters",
+            "laptopsCategoryFilterText": "Laptops",
+            "applyFiltersBtnText": "Apply Filters",
+            "clearFiltersBtnText": "Clear Filters",
+            "loadMoreBtnText": "Load more",
+            "productSortByOptionText": "Sort By: A to Z"
+        }
+    },
     "urls": [
         {
             "env": "QA",
@@ -42,7 +130,7 @@
     "location": [
         {
             "cityZipCode": "10006",
-            "cityName": "New York" 
+            "cityName": "New York"
         },
         {
             "cityZipCode": "60007",

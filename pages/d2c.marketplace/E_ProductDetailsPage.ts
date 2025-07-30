@@ -1,5 +1,6 @@
 import { type Page, type Locator, expect } from "@playwright/test"
 import { getStoreTypeByName } from "data/d2c.marketplace/ProductMapping"
+import testData from '../../data/d2c.marketplace/testdata.json'
 
 export class E_ProductDetailsPage {
 
@@ -19,9 +20,9 @@ export class E_ProductDetailsPage {
         this.productPrice = page.locator('xpath=//div[@class="component--price"]/p[contains(@aria-label, "Price") and contains(@class, "global-text-xxl")]').last()
         this.productDetailsHeader = page.locator('xpath=//div[@class="component--product-description"]/h2[text()="Product Details"]').first();
         this.productDetails = page.locator('xpath=//div[@class="component--product-description"]/p').first()
-        this.availableInTheAppText = page.getByRole('paragraph').filter({ hasText: 'Available in the App!' })
-        this.plDisclaimerOnPDPPage = page.getByRole('paragraph').filter({ hasText: 'As an affiliate, Progressive Leasing earns from qualifying purchases.' })
-        this.onlineRetailerAppDesc = page.getByRole('paragraph').filter({ hasText: 'Use our app to start your lease' })
+        this.availableInTheAppText = page.getByRole('paragraph').filter({ hasText: testData.pageTexts.productDetailsPage.availableInTheAppHeaderText })
+        this.plDisclaimerOnPDPPage = page.getByRole('paragraph').filter({ hasText: testData.pageTexts.productDetailsPage.plDisclaimerText })
+        this.onlineRetailerAppDesc = page.getByRole('paragraph').filter({ hasText: testData.pageTexts.productDetailsPage.onlineRetailerAppDescText })
         this.qrImg = this.onlineRetailerAppDesc.locator('xpath=following-sibling::div[1]/img[@alt="Scan QR to download the app"]')
     }
 

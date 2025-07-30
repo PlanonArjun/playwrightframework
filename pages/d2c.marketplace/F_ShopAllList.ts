@@ -1,4 +1,5 @@
 import { type Page, type Locator, expect } from "@playwright/test"
+import testData from '../../data/d2c.marketplace/testdata.json'
 
 export class F_ShopAllList {
 
@@ -38,32 +39,32 @@ export class F_ShopAllList {
 
     constructor(page: Page) {
         this.page = page
-        this.shopAllBreadCrumb = page.locator('li a', { hasText: "Shop All" })
-        this.cityOrZipInputBox = page.getByPlaceholder('City or zip code')
+        this.shopAllBreadCrumb = page.locator('li a', { hasText: testData.pageTexts.shopAllListPage.shopAllBreadcrumbText })
+        this.cityOrZipInputBox = page.getByPlaceholder(testData.pageTexts.shopAllListPage.locationInputBoxPlaceholderText)
         this.firstValueInLocationDropdown = page.locator('ul[role="listbox"] li').first()
-        this.continueBtnForLocation = page.locator('button', { hasText: "Continue" })
-        this.shopAllHeader = page.locator('h1', { hasText: "Shop All" })
+        this.continueBtnForLocation = page.locator('button', { hasText: testData.pageTexts.shopAllListPage.continueBtnText })
+        this.shopAllHeader = page.locator('h1', { hasText: testData.pageTexts.shopAllListPage.shopAllHeaderText })
         this.locationUpdateLink = page.locator('div[class="flex items-center gap-5"] button').first()
-        this.filtersBtn = page.locator('span', { hasText: "Filters" })
-        this.filtersHeader = page.locator('span[class="global-text-sm-semi-degular text-primary"]', { hasText: "Filters" })
-        this.laptopsCategory = page.locator('span', { hasText: "Laptops" })
+        this.filtersBtn = page.locator('span', { hasText: testData.pageTexts.shopAllListPage.filtersBtnText })
+        this.filtersHeader = page.locator('span[class="global-text-sm-semi-degular text-primary"]', { hasText: testData.pageTexts.shopAllListPage.filtersHeaderText })
+        this.laptopsCategory = page.locator('span', { hasText: testData.pageTexts.shopAllListPage.laptopsCategoryFilterText })
         this.retailerInputBoxOnFilterScreen = page.locator('input[placeholder="Search Retailers"]')
         this.bestBuyRetailerOptionOnFilterScreen = page.locator('input[type="radio"][value="Best Buy"]')
         this.amazonRetailerOptionOnFilterScreen = page.locator('input[type="radio"][value="Amazon"]')
         this.brandInputBoxOnFilterScreen = page.locator('input[placeholder="Search Brands"]')
         this.dellBrandOptionOnFilterScreen = page.locator('input[type="radio"][value="Dell"]')
         this.asusBrandOptionOnFilterScreen = page.locator('input[type="radio"][value="ASUS"]')
-        this.applyFiltersBtn = page.locator('button', { hasText: "Apply Filters" })
-        this.clearFiltersBtn = page.locator('button', { hasText: "Clear Filters" })
+        this.applyFiltersBtn = page.locator('button', { hasText: testData.pageTexts.shopAllListPage.applyFiltersBtnText })
+        this.clearFiltersBtn = page.locator('button', { hasText: testData.pageTexts.shopAllListPage.clearFiltersBtnText })
         this.laptopsCategoryFilterApplied = page.locator('//span[contains(@class, "MuiChip-label")]/span[text()="Laptops"]')
         this.bestBuyRetailerFilterApplied = page.locator('//span[contains(@class, "MuiChip-label")]/span[text()="Best Buy"]')
         this.amazonRetailerFilterApplied = page.locator('//span[contains(@class, "MuiChip-label")]/span[text()="Amazon"]')
         this.dellBrandFilterApplied = page.locator('//span[contains(@class, "MuiChip-label")]/span[text()="Dell"]')
         this.asusBrandFilterApplied = page.locator('//span[contains(@class, "MuiChip-label")]/span[text()="ASUS"]')
-        this.productLoadMoreBtn = page.locator('button[aria-label="Load more products"]', { hasText: "Load more" })
+        this.productLoadMoreBtn = page.locator('button[aria-label="Load more products"]', { hasText: testData.pageTexts.shopAllListPage.loadMoreBtnText })
         this.listOfRetailerNamesForProducts = page.locator('a div div h1')
         this.listOfProductDesc = page.locator('//a/div/div/p')
-        this.productSortByOption = page.getByRole('button', { name: 'Sort By: A to Z' })
+        this.productSortByOption = page.getByRole('button', { name: testData.pageTexts.shopAllListPage.productSortByOptionText })
         this.lowToHighProductSort = page.locator('input[value="lowToHigh"]')
         this.applySorting = page.locator('button', { hasText: /^Apply$/ })
         this.listOfProductPrice = page.locator('//a/div/div/div/p[contains(@aria-label, "Price")]')
@@ -170,13 +171,11 @@ export class F_ShopAllList {
             await expect(this.dellBrandFilterApplied).toBeVisible()
             const listOfProductDecription = await this.listOfProductDesc.evaluateAll((elements) =>
                 elements.map(el => (el as HTMLElement).innerText))
-            console.log("list: " + listOfProductDecription)
             expect(listOfProductDecription.every(desc => desc.includes(brandFilter))).toBeTruthy()
         } else if (brandFilter === 'ASUS') {
             await expect(this.asusBrandFilterApplied).toBeVisible()
             const listOfProductDecription = await this.listOfProductDesc.evaluateAll((elements) =>
                 elements.map(el => (el as HTMLElement).innerText))
-            console.log("list: " + listOfProductDecription)
             expect(listOfProductDecription.every(desc => desc.includes(brandFilter))).toBeTruthy()
         }
     }

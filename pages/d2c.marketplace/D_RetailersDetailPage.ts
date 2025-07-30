@@ -1,4 +1,5 @@
 import { type Page, type Locator, expect } from "@playwright/test" 
+import testData from '../../data/d2c.marketplace/testdata.json'
 
 export class D_RetailersDetailPage {
 
@@ -18,10 +19,10 @@ export class D_RetailersDetailPage {
         this.retailerHeader = page.locator('h2[class="global-text-lg-semi-degular"]')
         this.retailerDesc = page.locator('span[class="global-text-xxs-degular"]')
         this.otherOptionsHeader = page.locator('h1', {hasText: /Looking for another option besides/})
-        this.otherOptionsDesc = page.locator('p', {hasText: "No worries. Click here to see all the places  where you can do a lease-to-own purchase"})
-        this.allRetailersLink = page.getByRole("link", {name: "All retailers"})
-        this.leaseOnlineBtnOnGrandParentDetailPage = page.getByRole("button", {name: /Lease Online with/})
-        this.estimateLeasingCostBtnOnGrandParentDetailPage = page.getByRole("button",{name: "Estimate Leasing Cost"})
+        this.otherOptionsDesc = page.locator('p', {hasText: testData.pageTexts.retailersDetailPage.otherOptionsDescText})
+        this.allRetailersLink = page.getByRole("link", {name: testData.pageTexts.retailersDetailPage.allRetailersLinkText})
+        this.leaseOnlineBtnOnGrandParentDetailPage = page.getByRole("button", {name: /Apply Now with/})
+        this.estimateLeasingCostBtnOnGrandParentDetailPage = page.getByRole("button",{name: testData.pageTexts.retailersDetailPage.estimateLeasingCostBtnText})
     }
 
     async verifyProductKeyInBreadCrumb(productKey: string) {
