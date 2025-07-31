@@ -1,5 +1,5 @@
 export class Formatter {
-  
+
   static formatProductName(productKey: string): string {
     // Replace underscores with spaces
     let formattedName = productKey.replace(/_/g, ' ');
@@ -12,4 +12,5 @@ export class Formatter {
 
     return formattedName;
   }
+
 }

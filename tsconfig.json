@@ -4,6 +4,8 @@
     "paths": {
       "$utils/*": ["./utils/*"],
       "$pages/*": ["./pages/*"]
-    }
+    },
+    "resolveJsonModule": true,
+    "esModuleInterop": true
   }
 }
