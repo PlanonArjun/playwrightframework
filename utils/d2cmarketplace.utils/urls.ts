@@ -1,4 +1,4 @@
-export const HOME_PAGE_URL: string = 'https://marketplace01-progleasing.frontend.site/en/';
+export const HOME_PAGE_URL: string = 'https://www.stage.progleasing.com/en/';
 export const PL_CURRENT_HOME_PAGE_URL: string = 'https://progleasing.com/';
 export const PL_BASE_URL: string = 'https://www.progleasing.com/';
 export const PL_FAQ_URL: string = 'https://help.progleasing.com/hc/en-us';

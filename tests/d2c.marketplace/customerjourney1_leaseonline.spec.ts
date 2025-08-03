@@ -88,8 +88,7 @@ test.describe('Regression Suite', () => {
                 page.waitForNavigation({ waitUntil: 'load' }),
                 retailerDetailPage.clickOnLeaseOnlineBtn(featuredRetailersData.getBestBuy),
             ]);
-            const currentUrl = page.url();
-            expect(currentUrl).toContain(urls.LEASE_ONLINE_URL.LEASE_ONLINE_URL);
+            await expect(page).toHaveURL(new RegExp(urls.LEASE_ONLINE_URL.LEASE_ONLINE_URL), { timeout: 10000 });
         })
 
         test.afterEach(async () => {

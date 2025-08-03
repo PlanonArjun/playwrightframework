@@ -61,8 +61,8 @@ export class A_BasePage {
         this.progLeasingLogo = page.locator('img[alt="B2C Retail Store"]')
         this.shopRetailersIcon = page.locator('a', { hasText: testData.pageTexts.basePage.shopRetailersBtnText })
         this.locationPopUpHeader = page.locator('span', { hasText: testData.pageTexts.basePage.locationHeaderText })
-        this.shopAllIcon = page.getByRole('button', { name: testData.pageTexts.basePage.shopAllBtnAndLinkText, exact: true })
-        this.shopAllLink = page.getByRole('link', { name: testData.pageTexts.basePage.shopAllBtnAndLinkText })
+        this.shopAllIcon = page.getByRole('button', { name: testData.pageTexts.basePage.shopProductsBtnText, exact: true })
+        this.shopAllLink = page.getByRole('link', { name: testData.pageTexts.basePage.shopAllLinkText })
         this.shopCategoriesHeader = page.locator('p', { hasText: testData.pageTexts.basePage.shopCategoriesHeaderText })
         this.shopCategoriesItems = page.locator('div[class="flex flex-col items-center justify-center gap-[0.5rem]"] p')
         this.learnMoreBtn = page.locator('button', { hasText: testData.pageTexts.basePage.learnMoreBtnAndHeaderText })
@@ -133,7 +133,7 @@ export class A_BasePage {
     }
 
     //CSS validation of header to be added
-    async clickShopAllBtn() {
+    async clickShopProductsBtn() {
         await this.shopAllIcon.click({ timeout: 10000 })
     }
 

@@ -2,8 +2,9 @@
     "pageTexts": {
         "basePage": {
             "shopRetailersBtnText": "Shop Retailers",
-            "locationHeaderText": "Find a store to get started",
-            "shopAllBtnAndLinkText": "Shop All",
+            "locationHeaderText": "Let’s find the best options near you",
+            "shopProductsBtnText": "Shop Products",
+            "shopAllLinkText": "Shop All",
             "shopCategoriesHeaderText": "Shop Categories",
             "learnMoreBtnAndHeaderText": "Learn More",
             "howItWorksLinkText": "How it Works",
@@ -64,8 +65,10 @@
             "getDirectionsLinkText": "Get Directions" 
         },
         "retailersDetailPage": {
-            "otherOptionsDescText": "No worries. Click here to see all the places  where you can do a lease-to-own purchase",
+            "otherOptionsHeaderText": "Need more ways to shop with lease-to-own?",
+            "otherOptionsDescPartialText": "is a great option—and if they don’t have exactly what you’re looking for, we’ve got plenty more. Click here to explore other retailers where you can lease-to-own.",
             "allRetailersLinkText": "All retailers",
+            "applyNowBtnPartialText": "Apply Now with",
             "estimateLeasingCostBtnText": "Estimate Leasing cost"
         },
         "productDetailsPage": {
@@ -84,7 +87,7 @@
             "applyFiltersBtnText": "Apply Filters",
             "clearFiltersBtnText": "Clear Filters",
             "loadMoreBtnText": "Load more",
-            "productSortByOptionText": "Sort By: A to Z"
+            "productSortByOptionText": "Sort By: Default"
         }
     },
     "urls": [

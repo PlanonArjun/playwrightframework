@@ -62,12 +62,12 @@ export class F_ShopAllList {
         this.dellBrandFilterApplied = page.locator('//span[contains(@class, "MuiChip-label")]/span[text()="Dell"]')
         this.asusBrandFilterApplied = page.locator('//span[contains(@class, "MuiChip-label")]/span[text()="ASUS"]')
         this.productLoadMoreBtn = page.locator('button[aria-label="Load more products"]', { hasText: testData.pageTexts.shopAllListPage.loadMoreBtnText })
-        this.listOfRetailerNamesForProducts = page.locator('a div div h1')
-        this.listOfProductDesc = page.locator('//a/div/div/p')
+        this.listOfRetailerNamesForProducts = page.locator('xpath=//div[@class="component--filter-products"]/descendant::a/div/div/p[contains(@class, "global-text-xs-bold")]')
+        this.listOfProductDesc = page.locator('xpath=//div[@class="component--filter-products"]/descendant::a/div/div/p[contains(@class, "global-text-xs-bold")]/following-sibling::p')
         this.productSortByOption = page.getByRole('button', { name: testData.pageTexts.shopAllListPage.productSortByOptionText })
         this.lowToHighProductSort = page.locator('input[value="lowToHigh"]')
         this.applySorting = page.locator('button', { hasText: /^Apply$/ })
-        this.listOfProductPrice = page.locator('//a/div/div/div/p[contains(@aria-label, "Price")]')
+        this.listOfProductPrice = page.locator('xpath=//div[@class="component--filter-products"]/descendant::a/div/div/div/p[contains(@aria-label, "rice")]')
         this.firstProductTilePrice = this.listOfProductPrice.first()
         this.firstProductTileDesc = this.listOfProductDesc.first()
         this.firstProductTileRetailer = this.listOfRetailerNamesForProducts.first()
@@ -158,10 +158,12 @@ export class F_ShopAllList {
         if (retailerFilter === 'Best Buy') {
             await expect(this.bestBuyRetailerFilterApplied).toBeVisible()
             const listOfRetailerName = await this.listOfRetailerNamesForProducts.allTextContents()
+            expect(listOfRetailerName.length).toBeGreaterThan(0);
             expect(listOfRetailerName.every(retailer => retailer === retailerFilter)).toBeTruthy()
         } else if (retailerFilter === 'Amazon') {
             await expect(this.amazonRetailerFilterApplied).toBeVisible()
             const listOfRetailerName = await this.listOfRetailerNamesForProducts.allTextContents()
+            expect(listOfRetailerName.length).toBeGreaterThan(0);
             expect(listOfRetailerName.every(retailer => retailer === retailerFilter)).toBeTruthy()
         }
     }
@@ -200,7 +202,9 @@ export class F_ShopAllList {
         await this.lowToHighProductSort.check()
         expect(await this.lowToHighProductSort.isChecked()).toBeTruthy()
         await this.applySorting.click()
+        await this.clickOnLoadMoreForProductIfApplicable(3)
         const listOfPriceText = await this.listOfProductPrice.allTextContents()
+        expect(listOfPriceText.length).toBeGreaterThan(0);
         const prices = listOfPriceText.map(price => parseFloat(price.replace(/[^0-9.]/g, '')))
         const isSorted = prices.every((val, i, arr) => i === 0 || arr[i - 1] <= val);
         expect(isSorted).toBe(true);
