@@ -5,14 +5,18 @@ export class F_ShopAllList {
 
     private readonly page: Page
     private readonly shopAllBreadCrumb: Locator
+    private readonly electronicsAndGamingBreadCrumb: Locator
     private readonly cityOrZipInputBox: Locator
     private readonly firstValueInLocationDropdown: Locator
     private readonly continueBtnForLocation: Locator
     private readonly shopAllHeader: Locator
+    private readonly shopElectronicsAndGamingHeader: Locator
+    private readonly shopFurnitureHeader: Locator
     private readonly locationUpdateLink: Locator
     private readonly filtersBtn: Locator
     private readonly filtersHeader: Locator
     private readonly laptopsCategory: Locator
+    private readonly televisionsCategory: Locator
     private readonly retailerInputBoxOnFilterScreen: Locator
     private readonly bestBuyRetailerOptionOnFilterScreen: Locator
     private readonly amazonRetailerOptionOnFilterScreen: Locator
@@ -22,6 +26,7 @@ export class F_ShopAllList {
     private readonly applyFiltersBtn: Locator
     private readonly clearFiltersBtn: Locator
     private readonly laptopsCategoryFilterApplied: Locator
+    private readonly televisionsCategoryFilterApplied: Locator
     private readonly bestBuyRetailerFilterApplied: Locator
     private readonly amazonRetailerFilterApplied: Locator
     private readonly dellBrandFilterApplied: Locator
@@ -39,15 +44,19 @@ export class F_ShopAllList {
 
     constructor(page: Page) {
         this.page = page
-        this.shopAllBreadCrumb = page.locator('li a', { hasText: testData.pageTexts.shopAllListPage.shopAllBreadcrumbText })
+        this.shopAllBreadCrumb = page.locator('li', { hasText: testData.pageTexts.shopAllListPage.shopAllBreadcrumbText })
+        this.electronicsAndGamingBreadCrumb = page.locator('li span', { hasText: testData.pageTexts.shopAllListPage.electronicsAndGamingBreadcrumbText })
         this.cityOrZipInputBox = page.getByPlaceholder(testData.pageTexts.shopAllListPage.locationInputBoxPlaceholderText)
         this.firstValueInLocationDropdown = page.locator('ul[role="listbox"] li').first()
         this.continueBtnForLocation = page.locator('button', { hasText: testData.pageTexts.shopAllListPage.continueBtnText })
         this.shopAllHeader = page.locator('h1', { hasText: testData.pageTexts.shopAllListPage.shopAllHeaderText })
+        this.shopElectronicsAndGamingHeader = page.locator('h1', { hasText: testData.pageTexts.shopAllListPage.shopElectronicsAndGamingHeaderText })
+        this.shopFurnitureHeader = page.locator('h1', { hasText: testData.pageTexts.shopAllListPage.shopFurnitureHeaderText })
         this.locationUpdateLink = page.locator('div[class="flex items-center gap-5"] button').first()
         this.filtersBtn = page.locator('span', { hasText: testData.pageTexts.shopAllListPage.filtersBtnText })
         this.filtersHeader = page.locator('span[class="global-text-sm-semi-degular text-primary"]', { hasText: testData.pageTexts.shopAllListPage.filtersHeaderText })
         this.laptopsCategory = page.locator('span', { hasText: testData.pageTexts.shopAllListPage.laptopsCategoryFilterText })
+        this.televisionsCategory = page.locator('span', { hasText: testData.pageTexts.shopAllListPage.televisionsCategoryFilterText })
         this.retailerInputBoxOnFilterScreen = page.locator('input[placeholder="Search Retailers"]')
         this.bestBuyRetailerOptionOnFilterScreen = page.locator('input[type="radio"][value="Best Buy"]')
         this.amazonRetailerOptionOnFilterScreen = page.locator('input[type="radio"][value="Amazon"]')
@@ -57,6 +66,7 @@ export class F_ShopAllList {
         this.applyFiltersBtn = page.locator('button', { hasText: testData.pageTexts.shopAllListPage.applyFiltersBtnText })
         this.clearFiltersBtn = page.locator('button', { hasText: testData.pageTexts.shopAllListPage.clearFiltersBtnText })
         this.laptopsCategoryFilterApplied = page.locator('//span[contains(@class, "MuiChip-label")]/span[text()="Laptops"]')
+        this.televisionsCategoryFilterApplied = page.locator('//span[contains(@class, "MuiChip-label")]/span[text()="Televisions"]')
         this.bestBuyRetailerFilterApplied = page.locator('//span[contains(@class, "MuiChip-label")]/span[text()="Best Buy"]')
         this.amazonRetailerFilterApplied = page.locator('//span[contains(@class, "MuiChip-label")]/span[text()="Amazon"]')
         this.dellBrandFilterApplied = page.locator('//span[contains(@class, "MuiChip-label")]/span[text()="Dell"]')
@@ -75,6 +85,14 @@ export class F_ShopAllList {
 
     async verifyPresenceOfBreadCrumb() {
         await expect(this.shopAllBreadCrumb).toBeVisible({ timeout: 50000 })
+    }
+
+    async verifyPresenceOfCategoryInBreadCrumb(category: string) {
+        if (category === testData.pageTexts.shopAllListPage.electronicsAndGamingBreadcrumbText) {
+            await expect(this.electronicsAndGamingBreadCrumb).toBeVisible()
+        } else {
+            throw new Error(`Test failed: Category mismatch`)
+        }
     }
 
     async enterCityInLocationModalView(city: string) {
@@ -98,6 +116,16 @@ export class F_ShopAllList {
         await expect(this.shopAllHeader).toBeVisible()
     }
 
+    async verifyPresenceOfShopCategoryHeader(category: string) {
+        if (testData.pageTexts.shopAllListPage.shopElectronicsAndGamingHeaderText.includes(category)) {
+            await expect(this.shopElectronicsAndGamingHeader).toBeVisible()
+        } else if (testData.pageTexts.shopAllListPage.shopFurnitureHeaderText.includes(category)) {
+            await expect(this.shopFurnitureHeader).toBeVisible()
+        } else {
+            throw new Error(`Test failed: Category mismatch`)
+        }
+    }
+
     async verifyLocationSelectedOnProductIndexPage(city: string) {
         await expect(this.locationUpdateLink).toContainText(city)
     }
@@ -109,8 +137,12 @@ export class F_ShopAllList {
     }
 
     async selectCategoryFilter(category: string) {
-        if (category === 'Laptops') {
+        if (category === testData.pageTexts.shopAllListPage.laptopsCategoryFilterText) {
             await this.laptopsCategory.click()
+        } else if (category === testData.pageTexts.shopAllListPage.televisionsCategoryFilterText) {
+            await this.televisionsCategory.click()
+        } else {
+            throw new Error(`Test failed: Category mismatch`)
         }
     }
 
@@ -149,8 +181,12 @@ export class F_ShopAllList {
     }
 
     async verifyCategoryFilterIsApplied(categoryFilter: string) {
-        if (categoryFilter === 'Laptops') {
+        if (categoryFilter === testData.pageTexts.shopAllListPage.laptopsCategoryFilterText) {
             await expect(this.laptopsCategoryFilterApplied).toBeVisible()
+        } else if (categoryFilter === testData.pageTexts.shopAllListPage.televisionsCategoryFilterText) {
+            await expect(this.televisionsCategoryFilterApplied).toBeVisible()
+        } else {
+            throw new Error(`Test failed: Category mismatch`)
         }
     }
 
@@ -212,7 +248,7 @@ export class F_ShopAllList {
 
     async clickOnFirstProductTile() {
         await this.firstProductTilePrice.click()
-        await expect(this.page).toHaveTitle('Product Detail', { timeout: 10000 });
+        await expect(this.page).toHaveTitle(testData.pageTitle.productDetailsPage, { timeout: 10000 });
     }
 
     async getProductDescOnPLP() {

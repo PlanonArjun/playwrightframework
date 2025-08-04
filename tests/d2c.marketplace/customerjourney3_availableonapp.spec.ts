@@ -8,6 +8,8 @@ import { CATEGORIES } from '$utils/d2cmarketplace.utils/filters/categories';
 import { F_ShopAllList } from '$pages/d2c.marketplace/F_ShopAllList';
 import { BRANDS } from '$utils/d2cmarketplace.utils/filters/brands';
 import E_ProductDetailsPage from '$pages/d2c.marketplace/E_ProductDetailsPage';
+import { getStoreTypeByName } from "data/d2c.marketplace/ProductMapping";
+import { STORE_TYPE } from '$utils/d2cmarketplace.utils/storeType';
 
 let browserContext: BrowserContext;
 let page: Page;
@@ -20,7 +22,7 @@ test.describe('Regression Suite', () => {
     test.describe.configure({ retries: 0 });
     test.describe.configure({ mode: 'serial' });
 
-    test.beforeAll(async() => {
+    test.beforeAll(async () => {
         let browserTemp = await chromium.launch({ headless: true });
         let pageTemp = await browserTemp.newPage();
         isHealthyLocal = await new D2CMarketPlaceHealthCheck(pageTemp).isHealthy();
@@ -40,7 +42,7 @@ test.describe('Regression Suite', () => {
         test('Verify QR for a product offered by online Retailer using Shop All navigation', { tag: ['@regression', '@kcj3'] }, async () => {
             //user lands on home page and click on Shop All icon
             shopAllListPage = new F_ShopAllList(page);
-            await basePage.clickShopProductsBtn();           
+            await basePage.clickShopProductsBtn();
             await basePage.verifyPresenceOfShopCategories();
             await basePage.clickShopAllLink();
             await shopAllListPage.verifyPresenceOfBreadCrumb();
@@ -90,7 +92,13 @@ test.describe('Regression Suite', () => {
             expect(actualProductDetails).toEqual(expectedProductDescription);
             expect(actualProductPrice).toEqual(expectedProductPrice);
 
-            await productDetailPage.clickOnLeaseOnlineIfNotOnlineRetailerElseVerifyAppDownloadLink(expectedProductRetailer);
+            const isOnlineRetailer: boolean = getStoreTypeByName(expectedProductRetailer) === STORE_TYPE.ONLINE;
+
+            if (isOnlineRetailer) {
+                await productDetailPage.verifyAppDownloadLinkForOnlineRetailer(expectedProductRetailer);
+            } else {
+                throw new Error(`Test failed: Store Type mismatch`)
+            }
 
         })
 

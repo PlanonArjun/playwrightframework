@@ -4,7 +4,9 @@
             "shopRetailersBtnText": "Shop Retailers",
             "locationHeaderText": "Let’s find the best options near you",
             "shopProductsBtnText": "Shop Products",
-            "shopAllLinkText": "Shop All",
+            "electronicsAndGamingCategoryText": "Electronics & Gaming",
+            "furnitureCategoryText": "Furniture",
+            "shopAllLinkText": "Shop Products",
             "shopCategoriesHeaderText": "Shop Categories",
             "learnMoreBtnAndHeaderText": "Learn More",
             "howItWorksLinkText": "How it Works",
@@ -39,9 +41,7 @@
             "bipaLinkText": "BIPA",
             "yourPrivacyChoicesLinkText": "Your Privacy Choices"
         },
-        "homePage": {
-
-        },
+        "homePage": {},
         "retailersIndexPage": {
             "shopRetailersBreadcrumbText": "Retailers",
             "locationInputBoxPlaceholderText": "City or zip code",
@@ -62,7 +62,7 @@
             "applySortingBtnText": "Apply",
             "leaseToOwnOptionsOnRetailerModalScreenHeaderText": "Lease-to-Own Options",
             "estimateCostOnRetailerModalScreenBtnText": "Estimate leasing cost",
-            "getDirectionsLinkText": "Get Directions" 
+            "getDirectionsLinkText": "Get Directions"
         },
         "retailersDetailPage": {
             "otherOptionsHeaderText": "Need more ways to shop with lease-to-own?",
@@ -74,62 +74,81 @@
         "productDetailsPage": {
             "availableInTheAppHeaderText": "Available in the App!",
             "plDisclaimerText": "As an affiliate, Progressive Leasing earns from qualifying purchases.",
-            "onlineRetailerAppDescText": "Use our app to start your lease"
+            "onlineRetailerAppDescText": "Use our app to start your lease",
+            "applyNowBtnPartialText": "Apply Now with",
+            "estimateCostBtnText": "Estimate leasing cost"
         },
         "shopAllListPage": {
-            "shopAllBreadcrumbText": "Shop All",
+            "shopAllBreadcrumbText": "Shop Products",
+            "electronicsAndGamingBreadcrumbText": "Electronics & Gaming",
             "locationInputBoxPlaceholderText": "City or zip code",
             "continueBtnText": "Continue",
             "shopAllHeaderText": "Shop All",
+            "shopElectronicsAndGamingHeaderText": "Shop Electronics & Gaming",
+            "shopFurnitureHeaderText": "Shop Furniture",
             "filtersBtnText": "Filters",
             "filtersHeaderText": "Filters",
             "laptopsCategoryFilterText": "Laptops",
+            "televisionsCategoryFilterText": "Televisions",
             "applyFiltersBtnText": "Apply Filters",
             "clearFiltersBtnText": "Clear Filters",
             "loadMoreBtnText": "Load more",
             "productSortByOptionText": "Sort By: Default"
         }
     },
-    "urls": [
-        {
-            "env": "QA",
-            "marketplace": {
-                "home": "https://marketplace01-progleasing.frontend.site/en/",
-                "shopRetailers": "https://marketplace01-progleasing.frontend.site/en/retailers/",
-                "shopAll": "https://marketplace01-progleasing.frontend.site/en/shop/shop/"
-            },
-            "social": {
-                "facebook": "https://facebook.com/ProgLeasingLLC",
-                "instagram": "https://instagram.com/accounts/login/?next=https%3A%2F%2Fwww.instagram.com%2Fprogressiveleasing%2F&is_from_rle"
-            },
-            "mobileApps": {
-                "android": "https://play.google.com/store/apps/details?id=com.progfinance.progressivemobile&hl=en_US",
-                "ios": "https://apps.apple.com/us/app/progressive-leasing/id995368829?mt=8"
-            },
-            "external": {
-                "pl": {
-                    "home": "https://progleasing.com/",
-                    "faq": "https://help.progleasing.com/hc/en-us",
-                    "investors": "https://investor.progholdings.com/",
-                    "progFoundation": "https://progfoundation.org/",
-                    "dataSubjectRequest": "https://progleasing.truyo.com/consumer/make_request",
-                    "howItWorks": "https://progleasing.com/how-it-works",
-                    "contactUs": "https://progleasing.com/contact-us",
-                    "blog": "https://progleasing.com/blog",
-                    "partnerSignUp": "https://progleasing.com/index.php/merchant",
-                    "retailerLogin": "https://progleasing.com/merchant",
-                    "mediaKit": "https://progleasing.com/index.php/retailer-social-kits",
-                    "aboutUs": "https://progleasing.com/about-us",
-                    "careers": "https://progleasing.com/jobs/",
-                    "terms": "https://progleasing.com/terms/",
-                    "privacy": "https://progleasing.com/privacy/",
-                    "trust": "https://progleasing.com/prog-force-trust-center",
-                    "cookiesPreference": "https://progleasing.com/CookiePreferences",
-                    "bipa": "https://progleasing.com/bipa"
+    "urls": {
+        "marketplace": {
+            "homeQA": "https://marketplace01-progleasing.frontend.site/en/",
+            "homeStaging": "https://www.stage.progleasing.com/en/",
+            "endpoints": {
+                "shopRetailers": "retailers/",
+                "shopAll": "shop/shop/",
+                "shopCategories": {
+                    "shopElectronics": "shop/shop_electronics/",
+                    "shopFurniture": "shop/shop_furniture/"
                 }
             }
+        },
+        "social": {
+            "facebook": "https://facebook.com/ProgLeasingLLC",
+            "instagram": "https://instagram.com/accounts/login/?next=https%3A%2F%2Fwww.instagram.com%2Fprogressiveleasing%2F&is_from_rle"
+        },
+        "mobileApps": {
+            "android": "https://play.google.com/store/apps/details?id=com.progfinance.progressivemobile&hl=en_US",
+            "ios": "https://apps.apple.com/us/app/progressive-leasing/id995368829?mt=8"
+        },
+        "external": {
+            "pl": {
+                "home": "https://progleasing.com/",
+                "faq": "https://help.progleasing.com/hc/en-us",
+                "investors": "https://investor.progholdings.com/",
+                "progFoundation": "https://progfoundation.org/",
+                "dataSubjectRequest": "https://progleasing.truyo.com/consumer/make_request",
+                "howItWorks": "https://progleasing.com/how-it-works",
+                "contactUs": "https://progleasing.com/contact-us",
+                "blog": "https://progleasing.com/blog",
+                "partnerSignUp": "https://progleasing.com/index.php/merchant",
+                "retailerLogin": "https://progleasing.com/merchant",
+                "mediaKit": "https://progleasing.com/index.php/retailer-social-kits",
+                "aboutUs": "https://progleasing.com/about-us",
+                "careers": "https://progleasing.com/jobs/",
+                "terms": "https://progleasing.com/terms/",
+                "privacy": "https://progleasing.com/privacy/",
+                "trust": "https://progleasing.com/prog-force-trust-center",
+                "cookiesPreference": "https://progleasing.com/CookiePreferences",
+                "bipa": "https://progleasing.com/bipa"
+            }
         }
-    ],
+    },
+    "pageTitle": {
+        "homePage": "Progressive Leasing Lease-to-Own | Progleasing",
+        "retailersIndexPage": "Shop Retailers",
+        "retailersDetailPage": "Retailer Detail Page",
+        "shopAllPage": "Progressive Leasing Lease-to-Own | Progleasing - Category Page",
+        "productDetailsPage": "Product Detail",
+        "electronicsAndGamingCategoryPage": "Electronics and Gaming",
+        "furnitureCategoryPage": "Furniture"
+    },
     "location": [
         {
             "cityZipCode": "10006",
@@ -145,6 +164,10 @@
         "computerAndTablets": "Computer & Tablets",
         "jewelry": "Jewelry",
         "furniture": "Furniture"
+    },
+    "filterCategories": {
+        "laptopsFilter": "Laptops",
+        "televisionsFilter": "Televisions"
     },
     "featuredRetailers": {
         "bestBuy": "Best Buy",

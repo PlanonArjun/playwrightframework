@@ -12,6 +12,8 @@ export class A_BasePage {
     private readonly locationPopUpHeader: Locator
     private readonly shopAllIcon: Locator
     private readonly shopAllLink: Locator
+    private readonly electronicsAndGamingShopCategory: Locator
+    private readonly furnitureShopCategory: Locator
     private readonly shopCategoriesHeader: Locator
     private readonly shopCategoriesItems: Locator
     private readonly learnMoreBtn: Locator
@@ -61,7 +63,9 @@ export class A_BasePage {
         this.progLeasingLogo = page.locator('img[alt="B2C Retail Store"]')
         this.shopRetailersIcon = page.locator('a', { hasText: testData.pageTexts.basePage.shopRetailersBtnText })
         this.locationPopUpHeader = page.locator('span', { hasText: testData.pageTexts.basePage.locationHeaderText })
-        this.shopAllIcon = page.getByRole('button', { name: testData.pageTexts.basePage.shopProductsBtnText, exact: true })
+        this.shopAllIcon = page.locator('button', { hasText: testData.pageTexts.basePage.shopProductsBtnText })
+        this.electronicsAndGamingShopCategory = page.getByRole('link', {name: testData.pageTexts.basePage.electronicsAndGamingCategoryText})
+        this.furnitureShopCategory = page.getByRole('link', {name: testData.pageTexts.basePage.furnitureCategoryText})
         this.shopAllLink = page.getByRole('link', { name: testData.pageTexts.basePage.shopAllLinkText })
         this.shopCategoriesHeader = page.locator('p', { hasText: testData.pageTexts.basePage.shopCategoriesHeaderText })
         this.shopCategoriesItems = page.locator('div[class="flex flex-col items-center justify-center gap-[0.5rem]"] p')
@@ -125,6 +129,16 @@ export class A_BasePage {
 
     async clickShopRetailersLink() {
         await this.shopRetailersIcon.click()
+    }
+
+    async clickOnCategoryImg(category: string) {
+        if (category === testData.pageTexts.basePage.electronicsAndGamingCategoryText) {
+            await this.electronicsAndGamingShopCategory.click()
+        } else if (category === testData.pageTexts.basePage.furnitureCategoryText) {
+            await this.furnitureShopCategory.click()
+        } else {
+            throw new Error(`Test failed: Category mismatch`);
+        }
     }
 
     //CSS validation of header to be added
