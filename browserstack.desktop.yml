@@ -23,6 +23,26 @@ platforms:
     osVersion: '11'
     browserName: Playwright-chromium
     browserVersion: '131'
+  - os: Windows
+    osVersion: '11'
+    browserName: Playwright-firefox
+    browserVersion: '132'
+  - os: Windows
+    osVersion: '10'
+    browserName: Chrome
+    browserVersion: '132'
+  # - os: OS X
+  #   osVersion: Sequoia
+  #   browserName: Chrome
+  #   browserVersion: '132'
+  # - os: OS X
+  #   osVersion: Sonoma
+  #   browserName: Playwright-firefox
+  #   browserVersion: '130'
+  # - os: OS X
+  #   osVersion: Sequoia
+  #   browserName: Playwright-webkit
+  #   browserVersion: '18'
 
 
 # =======================
