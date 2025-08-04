@@ -1,8 +1,8 @@
 import { type Page, type Locator, expect } from "@playwright/test"
-import urls from '../../utils/d2cmarketplace.utils/urls'
 import { LANGUAGE } from "$utils/d2cmarketplace.utils/language"
 import { PL } from "$utils/d2cmarketplace.utils/pl"
 import testData from '../../data/d2c.marketplace/testdata.json'
+import { SHOP_CATEGORIES } from "$utils/d2cmarketplace.utils/shopCategories"
 
 export class A_BasePage {
 
@@ -113,7 +113,7 @@ export class A_BasePage {
     }
 
     async onBasePage() {
-        await this.page.goto(urls.HOME_PAGE_URL.HOME_PAGE_URL)
+        await this.page.goto(testData.urls.marketplace.homeStaging)
         await this.page.waitForTimeout(2000);
         await expect(this.progLeasingLogo).toBeVisible()
     }
@@ -132,9 +132,9 @@ export class A_BasePage {
     }
 
     async clickOnCategoryImg(category: string) {
-        if (category === testData.pageTexts.basePage.electronicsAndGamingCategoryText) {
+        if (category === SHOP_CATEGORIES.ELECTRONICS_AND_GAMING) {
             await this.electronicsAndGamingShopCategory.click()
-        } else if (category === testData.pageTexts.basePage.furnitureCategoryText) {
+        } else if (category === SHOP_CATEGORIES.FURNITURE) {
             await this.furnitureShopCategory.click()
         } else {
             throw new Error(`Test failed: Category mismatch`);

@@ -1,5 +1,6 @@
 import { type Page, type Locator, expect } from "@playwright/test"
 import testData from '../../data/d2c.marketplace/testdata.json'
+import { STORE_TYPE } from "$utils/d2cmarketplace.utils/storeType"
 
 export class C_RetailersIndexPage {
 
@@ -183,12 +184,12 @@ export class C_RetailersIndexPage {
     }
 
     async verifyLeaseToOwnOptionFilterIsApplied(filter: string) {
-        if (filter === 'Online') {
+        if (filter === STORE_TYPE.ONLINE) {
             await expect(this.onlineFilterApplied).toBeVisible()
         } else {
             await expect(this.inStoreFilterApplied).toBeVisible()
             const listOfDistance = await this.distanceOfRetailersOrOnline.allTextContents()
-            expect(listOfDistance).not.toContain('Online')
+            expect(listOfDistance).not.toContain(STORE_TYPE.ONLINE)
         }
     }
 

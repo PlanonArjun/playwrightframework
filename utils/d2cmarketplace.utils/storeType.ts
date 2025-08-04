@@ -1,4 +1,5 @@
 export enum STORE_TYPE {
   ONLINE = 'Online',
-  BOTH = 'Both'
+  BOTH = 'Both',
+  IN_STORE = "In Store"
 }

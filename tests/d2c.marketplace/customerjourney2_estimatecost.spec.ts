@@ -2,10 +2,7 @@ import { test, expect, BrowserContext, Page, chromium } from '@playwright/test';
 import { A_BasePage } from '$pages/d2c.marketplace/A_BasePage';
 import { C_RetailersIndexPage } from '$pages/d2c.marketplace/C_RetailersIndexPage';
 import D2CMarketPlaceHealthCheck from './D2CMarketPlaceHealthCheck';
-import LocationData from '../../data/d2c.marketplace/LocationData';
-import urls from '../../utils/d2cmarketplace.utils/urls';
-import FeaturedRetailerData from 'data/d2c.marketplace/FeaturedRetailerData';
-import { LEASE_TO_OWN_OPTIONS } from '$utils/d2cmarketplace.utils/filters/leasetoownoptions';
+import testData from '../../data/d2c.marketplace/testdata.json';
 
 let browserContext: BrowserContext;
 let page: Page;
@@ -21,13 +18,15 @@ test.describe('Regression Suite', () => {
         let browserTemp = await chromium.launch({ headless: true });
         let pageTemp = await browserTemp.newPage();
         isHealthyLocal = await new D2CMarketPlaceHealthCheck(pageTemp).isHealthy();
-        await browserTemp.close();
         await pageTemp.close();
+        await browserTemp.close();
     });
 
     test.describe('Key Customer Journey 2', () => {
-        test.skip(isHealthyLocal == false, 'health check FAILED; test.skip()');
         test.beforeEach(async ({ browser }) => {
+            if (!isHealthyLocal) {
+                test.skip(true, 'health check FAILED; skipping tests');
+            }
             browserContext = await browser.newContext();
             page = await browserContext.newPage();
             basePage = new A_BasePage(page);
@@ -40,45 +39,43 @@ test.describe('Regression Suite', () => {
             await basePage.clickShopRetailersLink();
             await retailerIndexPage.verifyPresenceOfBreadCrumb();
             await basePage.verifyLocationPopUpVisibility();
-            expect(page).toHaveURL(urls.SHOP_RETAILERS_URL.SHOP_RETAILERS_URL);
+            expect(page).toHaveURL(testData.urls.marketplace.homeStaging + testData.urls.marketplace.endpoints.shopRetailers);
 
             //provide a zipcode for location 
-            let locationData = new LocationData();
-            await retailerIndexPage.enterCityInLocationModalView(locationData.getNewYorkZipcode);
+            await retailerIndexPage.enterCityInLocationModalView(testData.location.newYorkCity.zipcode);
             await retailerIndexPage.clickOnFirstOption();
-            await retailerIndexPage.verifyLocationOptionSelected(locationData.getNewYorkZipcode);
+            await retailerIndexPage.verifyLocationOptionSelected(testData.location.newYorkCity.zipcode);
             await retailerIndexPage.clickOnContinueBtn();
 
             //land on retailers page and perform basic assertions like url header and location
-            expect(page).toHaveURL(urls.SHOP_RETAILERS_URL.SHOP_RETAILERS_URL);
+            expect(page).toHaveURL(testData.urls.marketplace.homeStaging + testData.urls.marketplace.endpoints.shopRetailers);
             await retailerIndexPage.verifyPresenceOfShopRetailersHeader();
-            await retailerIndexPage.verifyLocationSelectedOnRetailersIndexPage(locationData.getNewYorkCityName);
+            await retailerIndexPage.verifyLocationSelectedOnRetailersIndexPage(testData.location.newYorkCity.name);
 
             //User search for the retailer
-            let featuredRetailersData = new FeaturedRetailerData();
-            await retailerIndexPage.enterRetailerInSearchInput(featuredRetailersData.getBestBuy);
+            await retailerIndexPage.enterRetailerInSearchInput(testData.featuredRetailers.bestBuy);
             await retailerIndexPage.searchForResults();
-            await retailerIndexPage.verifyRetailerNameInInputBoxAfterSearch(featuredRetailersData.getBestBuy);
+            await retailerIndexPage.verifyRetailerNameInInputBoxAfterSearch(testData.featuredRetailers.bestBuy);
 
             //Apply for In-Store filter
             await retailerIndexPage.clickOnFilterBtn();
             await retailerIndexPage.selectInStoreOptionForLeaseToOwnOptions();
             await retailerIndexPage.applyFilter();
             await retailerIndexPage.clickOnLoadMore();
-            await retailerIndexPage.verifyLeaseToOwnOptionFilterIsApplied(LEASE_TO_OWN_OPTIONS.IN_STORE);
+            await retailerIndexPage.verifyLeaseToOwnOptionFilterIsApplied(testData.leaseToOwnOptionsFilter.inStoreFilter);
 
             //Check if near to far sorting is applied for BM stores
             await retailerIndexPage.verifyNearToFarSortingWithInStoreFilter();
 
             //Click on the first retailer tile and verify in store details on modal screen
             await retailerIndexPage.clickOnFirstTile();
-            await retailerIndexPage.verifyInStoreDetailsOnModalScreen(featuredRetailersData.getBestBuy);
+            await retailerIndexPage.verifyInStoreDetailsOnModalScreen(testData.featuredRetailers.bestBuy);
             const [googleMapPage] = await Promise.all([
                 browserContext.waitForEvent('page'),
                 await retailerIndexPage.clickOnGetDirectionLinkOnRetailerModalScreen()
             ]);
             await googleMapPage.waitForLoadState();
-            await expect(googleMapPage).toHaveTitle(new RegExp(locationData.getNewYorkCityName, 'i'), { timeout: 10000 });
+            await expect(googleMapPage).toHaveTitle(new RegExp(testData.location.newYorkCity.name, 'i'), { timeout: 10000 });
             await googleMapPage.close();
 
             //Select In Store radio button on modal screen
@@ -90,13 +87,18 @@ test.describe('Regression Suite', () => {
                 await retailerIndexPage.clickOnEstimateCostFromModalScreen(),
             ]);
             const currentUrl = page.url();
-            expect(currentUrl).toContain(urls.ESTIMATE_LEASING_COST_URL.ESTIMATE_LEASING_COST_URL);
+            expect(currentUrl).toContain(testData.urls.external.pl.estimateCostPartial);
 
         })
 
         test.afterEach(async () => {
-            await page.close();
-            await browserContext.close();
+            //defensive tear up 
+            if (page && !page.isClosed()) {
+                await page.close();
+            }
+            if (browserContext) {
+                await browserContext.close();
+            }
         });
     })
 })

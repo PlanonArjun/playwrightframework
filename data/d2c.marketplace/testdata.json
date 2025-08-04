@@ -136,7 +136,9 @@
                 "privacy": "https://progleasing.com/privacy/",
                 "trust": "https://progleasing.com/prog-force-trust-center",
                 "cookiesPreference": "https://progleasing.com/CookiePreferences",
-                "bipa": "https://progleasing.com/bipa"
+                "bipa": "https://progleasing.com/bipa",
+                "leaseOnlinePartial": "https://cic-preview.progleasing.com/u/login/",
+                "estimateCostPartial": "https://www.stage.progleasing.com/myaccount/"
             }
         }
     },
@@ -149,16 +151,16 @@
         "electronicsAndGamingCategoryPage": "Electronics and Gaming",
         "furnitureCategoryPage": "Furniture"
     },
-    "location": [
-        {
-            "cityZipCode": "10006",
-            "cityName": "New York"
+    "location": {
+        "newYorkCity" : {
+            "name": "New York",
+            "zipcode": "10006"
         },
-        {
-            "cityZipCode": "60007",
-            "cityName": "Chicago"
+        "chicagoCity": {
+            "name": "Chicago",
+            "zipcode": "60007"
         }
-    ],
+    },
     "shopCategories": {
         "electronicsAndGaming": "Electronics & Gaming",
         "computerAndTablets": "Computer & Tablets",
@@ -169,22 +171,20 @@
         "laptopsFilter": "Laptops",
         "televisionsFilter": "Televisions"
     },
+    "leaseToOwnOptionsFilter": {
+        "onlineFilter": "Online",
+        "inStoreFilter": "In Store"
+    },
+    "retailerFilter": {
+        "amazonFilter": "Amazon",
+        "bestBuyFilter": "Best Buy"
+    },
+    "brandFilter": {
+        "dellFilter": "Dell",
+        "asusFilter": "ASUS"
+    },
     "featuredRetailers": {
         "bestBuy": "Best Buy",
         "amazon": "Amazon"
-    },
-    "product": [
-        {
-            "name": "Best Buy",
-            "key": "bestbuy",
-            "type": "Retailer",
-            "description": "Best Buy"
-        },
-        {
-            "name": "Amazon",
-            "key": "amazon",
-            "type": "Retailer",
-            "description": "Amazon"
-        }
-    ]
+    }
 }

@@ -1,5 +1,8 @@
 import { type Page, type Locator, expect } from "@playwright/test"
 import testData from '../../data/d2c.marketplace/testdata.json'
+import { RETAILERS } from "$utils/d2cmarketplace.utils/retailers"
+import { BRANDS } from "$utils/d2cmarketplace.utils/brands"
+import { CATEGORIES } from "$utils/d2cmarketplace.utils/categories"
 
 export class F_ShopAllList {
 
@@ -137,9 +140,9 @@ export class F_ShopAllList {
     }
 
     async selectCategoryFilter(category: string) {
-        if (category === testData.pageTexts.shopAllListPage.laptopsCategoryFilterText) {
+        if (category === CATEGORIES.LAPTOPS) {
             await this.laptopsCategory.click()
-        } else if (category === testData.pageTexts.shopAllListPage.televisionsCategoryFilterText) {
+        } else if (category === CATEGORIES.TELEVISIONS) {
             await this.televisionsCategory.click()
         } else {
             throw new Error(`Test failed: Category mismatch`)
@@ -150,10 +153,10 @@ export class F_ShopAllList {
         await this.retailerInputBoxOnFilterScreen.scrollIntoViewIfNeeded()
         await this.retailerInputBoxOnFilterScreen.fill(retailer)
         expect(await this.retailerInputBoxOnFilterScreen.getAttribute('value')).toContain(retailer)
-        if (retailer === 'Best Buy') {
+        if (retailer === RETAILERS.BEST_BUY) {
             await this.bestBuyRetailerOptionOnFilterScreen.check()
             expect(await this.bestBuyRetailerOptionOnFilterScreen.isChecked()).toBeTruthy()
-        } else if (retailer === 'Amazon') {
+        } else if (retailer === RETAILERS.AMAZON) {
             await this.amazonRetailerOptionOnFilterScreen.check()
             expect(await this.amazonRetailerOptionOnFilterScreen.isChecked()).toBeTruthy()
         }
@@ -163,12 +166,14 @@ export class F_ShopAllList {
         await this.brandInputBoxOnFilterScreen.scrollIntoViewIfNeeded()
         await this.brandInputBoxOnFilterScreen.fill(brand)
         expect(await this.brandInputBoxOnFilterScreen.getAttribute('value')).toContain(brand)
-        if (brand === 'Dell') {
+        if (brand === BRANDS.DELL) {
             await this.dellBrandOptionOnFilterScreen.check()
             expect(await this.dellBrandOptionOnFilterScreen.isChecked()).toBeTruthy()
-        } else if (brand === 'ASUS') {
+        } else if (brand === BRANDS.ASUS) {
             await this.asusBrandOptionOnFilterScreen.check()
             expect(await this.asusBrandOptionOnFilterScreen.isChecked()).toBeTruthy()
+        } else {
+            throw new Error(`Test failed: Brands mismatch`)
         }
     }
 
@@ -181,9 +186,9 @@ export class F_ShopAllList {
     }
 
     async verifyCategoryFilterIsApplied(categoryFilter: string) {
-        if (categoryFilter === testData.pageTexts.shopAllListPage.laptopsCategoryFilterText) {
+        if (categoryFilter === CATEGORIES.LAPTOPS) {
             await expect(this.laptopsCategoryFilterApplied).toBeVisible()
-        } else if (categoryFilter === testData.pageTexts.shopAllListPage.televisionsCategoryFilterText) {
+        } else if (categoryFilter === CATEGORIES.TELEVISIONS) {
             await expect(this.televisionsCategoryFilterApplied).toBeVisible()
         } else {
             throw new Error(`Test failed: Category mismatch`)
@@ -191,30 +196,34 @@ export class F_ShopAllList {
     }
 
     async verifyRetailerFilterIsApplied(retailerFilter: string) {
-        if (retailerFilter === 'Best Buy') {
+        if (retailerFilter === RETAILERS.BEST_BUY) {
             await expect(this.bestBuyRetailerFilterApplied).toBeVisible()
             const listOfRetailerName = await this.listOfRetailerNamesForProducts.allTextContents()
             expect(listOfRetailerName.length).toBeGreaterThan(0);
             expect(listOfRetailerName.every(retailer => retailer === retailerFilter)).toBeTruthy()
-        } else if (retailerFilter === 'Amazon') {
+        } else if (retailerFilter === RETAILERS.AMAZON) {
             await expect(this.amazonRetailerFilterApplied).toBeVisible()
             const listOfRetailerName = await this.listOfRetailerNamesForProducts.allTextContents()
             expect(listOfRetailerName.length).toBeGreaterThan(0);
             expect(listOfRetailerName.every(retailer => retailer === retailerFilter)).toBeTruthy()
+        } else {
+            throw new Error(`Test failed: Retailer mismatch`)
         }
     }
 
     async verifyBrandFilterIsApplied(brandFilter: string) {
-        if (brandFilter === 'Dell') {
+        if (brandFilter === BRANDS.DELL) {
             await expect(this.dellBrandFilterApplied).toBeVisible()
             const listOfProductDecription = await this.listOfProductDesc.evaluateAll((elements) =>
                 elements.map(el => (el as HTMLElement).innerText))
             expect(listOfProductDecription.every(desc => desc.includes(brandFilter))).toBeTruthy()
-        } else if (brandFilter === 'ASUS') {
+        } else if (brandFilter === BRANDS.ASUS) {
             await expect(this.asusBrandFilterApplied).toBeVisible()
             const listOfProductDecription = await this.listOfProductDesc.evaluateAll((elements) =>
                 elements.map(el => (el as HTMLElement).innerText))
             expect(listOfProductDecription.every(desc => desc.includes(brandFilter))).toBeTruthy()
+        } else {
+            throw new Error(`Test failed: Brands mismatch`)
         }
     }
 
