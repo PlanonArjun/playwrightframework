@@ -48,7 +48,7 @@ test.describe('Regression Suite', () => {
             await shopAllListPage.verifyPresenceOfBreadCrumb();
             await shopAllListPage.verifyPresenceOfCategoryInBreadCrumb(testData.shopCategories.electronicsAndGaming);
             await basePage.verifyLocationPopUpVisibility();
-            const baseUrl = testData.urls.marketplace.homeQA;
+            const baseUrl = testData.urls.marketplace.environments.qa.baseUrl;
             expect(page).toHaveURL(baseUrl + testData.urls.marketplace.endpoints.shopCategories.shopElectronics);
 
             //provide a zipcode for location 

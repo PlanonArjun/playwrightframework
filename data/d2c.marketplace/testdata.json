@@ -100,8 +100,14 @@
     },
     "urls": {
         "marketplace": {
-            "homeQA": "https://marketplace01-progleasing.frontend.site/en/",
-            "homeStaging": "https://www.stage.progleasing.com/en/",
+            "environments": {
+                "qa": {
+                    "baseUrl": "https://marketplace01-progleasing.frontend.site/en/"
+                },
+                "staging": {
+                    "baseUrl": "https://www.stage.progleasing.com/en/"
+                }
+            },
             "endpoints": {
                 "shopRetailers": "retailers/",
                 "shopAll": "shop/shop/",
