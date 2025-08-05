@@ -48,8 +48,7 @@ test.describe('Regression Suite', () => {
             await shopAllListPage.verifyPresenceOfBreadCrumb();
             await shopAllListPage.verifyPresenceOfCategoryInBreadCrumb(testData.shopCategories.electronicsAndGaming);
             await basePage.verifyLocationPopUpVisibility();
-            const baseUrl = testData.urls.marketplace.environments.qa.baseUrl;
-            expect(page).toHaveURL(baseUrl + testData.urls.marketplace.endpoints.shopCategories.shopElectronics);
+            expect(page).toHaveURL(testData.urls.marketplace.endpoints.shopCategories.shopElectronics);
 
             //provide a zipcode for location 
             await shopAllListPage.enterCityInLocationModalView(testData.location.newYorkCity.zipcode);
@@ -58,7 +57,7 @@ test.describe('Regression Suite', () => {
             await shopAllListPage.clickOnContinueBtn();
 
             //land on category list page and perform basic assertions like url header and location
-            expect(page).toHaveURL(baseUrl + testData.urls.marketplace.endpoints.shopCategories.shopElectronics);
+            expect(page).toHaveURL(testData.urls.marketplace.endpoints.shopCategories.shopElectronics);
             await shopAllListPage.verifyPresenceOfShopCategoryHeader(testData.shopCategories.electronicsAndGaming);
             await shopAllListPage.verifyLocationSelectedOnProductIndexPage(testData.location.newYorkCity.name);
 

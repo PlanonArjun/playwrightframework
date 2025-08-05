@@ -1,4 +1,14 @@
 import { defineConfig, devices } from '@playwright/test';
+import testData from './data/d2c.marketplace/testdata.json';
+
+// Get env from CLI or default to QA
+const envName = process.env.TEST_ENV || 'qa';
+const baseUrl = testData.urls.marketplace.environments[envName].baseUrl;
+
+if (!baseUrl) {
+  throw new Error(`Invalid environment: ${envName}`);
+}
+
 const config = {
 	testDir: './tests/',
 	// testMatch: 'auth/pre_test_health_check_auth.spec.ts',
@@ -29,10 +39,11 @@ const config = {
 	use: {
 		/* Maximum time each action such as `click()` can take. Defaults to 0 (no limit). */
 		actionTimeout: 0,
-		/* Base URL to use in actions like `await page.goto('/')`. */
-		// baseURL: 'http://localhost:3000',
+		/* Base URL to use in actions like `await page.goto('/')`. 
+		baseURL: 'http://localhost:3000',
 
 		/* https://playwright.dev/docs/trace-viewer */
+		baseURL: baseUrl,
 		trace: 'retain-on-failure',
 
 		/* [off(default)|on|only-on-failure] */

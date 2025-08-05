@@ -45,8 +45,7 @@ test.describe('Regression Suite', () => {
             await basePage.clickShopAllLink();
             await shopAllListPage.verifyPresenceOfBreadCrumb();
             await basePage.verifyLocationPopUpVisibility();
-            const baseUrl = testData.urls.marketplace.environments.qa.baseUrl;
-            expect(page).toHaveURL(baseUrl + testData.urls.marketplace.endpoints.shopAll);
+            expect(page).toHaveURL(testData.urls.marketplace.endpoints.shopAll);
 
             //provide a zipcode for location 
             await shopAllListPage.enterCityInLocationModalView(testData.location.newYorkCity.zipcode);
@@ -55,7 +54,7 @@ test.describe('Regression Suite', () => {
             await shopAllListPage.clickOnContinueBtn();
 
             //land on shop all page and perform basic assertions like url header and location
-            expect(page).toHaveURL(baseUrl + testData.urls.marketplace.endpoints.shopAll);
+            expect(page).toHaveURL(testData.urls.marketplace.endpoints.shopAll);
             await shopAllListPage.verifyPresenceOfShopAllHeader();
             await shopAllListPage.verifyLocationSelectedOnProductIndexPage(testData.location.newYorkCity.name);
 

@@ -113,7 +113,7 @@ export class A_BasePage {
     }
 
     async onBasePage() {
-        await this.page.goto(testData.urls.marketplace.environments.qa.baseUrl)
+        await this.page.goto('/')
         await this.page.waitForTimeout(2000);
         await expect(this.progLeasingLogo).toBeVisible()
     }
