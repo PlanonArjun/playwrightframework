@@ -19,18 +19,18 @@ projectName: not_set
 # Platforms object contains all the browser / device combinations you want to test on.
 # Entire list available here -> (https://www.browserstack.com/list-of-browsers-and-platforms/automate)
 platforms:
-  - os: Windows
-    osVersion: '11'
-    browserName: Playwright-chromium
-    browserVersion: '131'
+  # - os: Windows
+  #   osVersion: '11'
+  #   browserName: Playwright-chromium
+  #   browserVersion: '131'
   - os: Windows
     osVersion: '11'
     browserName: Playwright-firefox
     browserVersion: '132'
-  - os: Windows
-    osVersion: '10'
-    browserName: Chrome
-    browserVersion: '132'
+  # - os: Windows
+  #   osVersion: '10'
+  #   browserName: Chrome
+  #   browserVersion: '132'
   # - os: OS X
   #   osVersion: Sequoia
   #   browserName: Chrome

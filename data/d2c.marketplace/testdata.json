@@ -4,6 +4,7 @@
             "shopRetailersBtnText": "Shop Retailers",
             "locationHeaderText": "Let’s find the best options near you",
             "shopProductsBtnText": "Shop Products",
+            "globalSearchInputBoxPlaceholderText": "Search Retailers and products",
             "electronicsAndGamingCategoryText": "Electronics & Gaming",
             "furnitureCategoryText": "Furniture",
             "shopAllLinkText": "Shop Products",
@@ -86,6 +87,7 @@
             "shopAllHeaderText": "Shop All",
             "shopElectronicsAndGamingHeaderText": "Shop Electronics & Gaming",
             "shopFurnitureHeaderText": "Shop Furniture",
+            "searchResultsHeaderText": "Search Results",
             "filtersBtnText": "Filters",
             "filtersHeaderText": "Filters",
             "laptopsCategoryFilterText": "Laptops",
@@ -93,7 +95,7 @@
             "applyFiltersBtnText": "Apply Filters",
             "clearFiltersBtnText": "Clear Filters",
             "loadMoreBtnText": "Load more",
-            "productSortByOptionText": "Sort By: Default"
+            "productSortByOptionText": "Sort By: A to Z"
         }
     },
     "urls": {
@@ -152,7 +154,7 @@
         "furnitureCategoryPage": "Furniture"
     },
     "location": {
-        "newYorkCity" : {
+        "newYorkCity": {
             "name": "New York",
             "zipcode": "10006"
         },
@@ -186,5 +188,15 @@
     "featuredRetailers": {
         "bestBuy": "Best Buy",
         "amazon": "Amazon"
+    },
+    "search": {
+        "products": {
+            "laptops": "Laptops",
+            "jewellery": "Jewellery"
+        },
+        "retailers": {
+            "bestBuy": "Best Buy",
+            "amazon": "Amazon"
+        }
     }
 }

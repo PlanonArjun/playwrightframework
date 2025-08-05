@@ -14,7 +14,7 @@ class D2CMarketPlaceHealthCheck {
   }
 
   async _navigate() {
-    await this.page.goto(testData.urls.marketplace.homeStaging);
+    await this.page.goto(testData.urls.marketplace.homeQA);
   }
 
   async isHealthy() {

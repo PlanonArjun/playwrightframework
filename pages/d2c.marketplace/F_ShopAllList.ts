@@ -16,7 +16,10 @@ export class F_ShopAllList {
     private readonly shopElectronicsAndGamingHeader: Locator
     private readonly shopFurnitureHeader: Locator
     private readonly locationUpdateLink: Locator
+    private readonly searchResultsHeader: Locator
+    private readonly productSearchInputBoxWithProductName: Locator
     private readonly filtersBtn: Locator
+    private readonly productFiltersBtn: Locator
     private readonly filtersHeader: Locator
     private readonly laptopsCategory: Locator
     private readonly televisionsCategory: Locator
@@ -56,7 +59,10 @@ export class F_ShopAllList {
         this.shopElectronicsAndGamingHeader = page.locator('h1', { hasText: testData.pageTexts.shopAllListPage.shopElectronicsAndGamingHeaderText })
         this.shopFurnitureHeader = page.locator('h1', { hasText: testData.pageTexts.shopAllListPage.shopFurnitureHeaderText })
         this.locationUpdateLink = page.locator('div[class="flex items-center gap-5"] button').first()
+        this.searchResultsHeader = page.locator('h1', { hasText: testData.pageTexts.shopAllListPage.searchResultsHeaderText })
+        this.productSearchInputBoxWithProductName = page.locator('//div[contains(@class,"MuiContainer-root")]/div/button')
         this.filtersBtn = page.locator('span', { hasText: testData.pageTexts.shopAllListPage.filtersBtnText })
+        this.productFiltersBtn = this.filtersBtn.last()
         this.filtersHeader = page.locator('span[class="global-text-sm-semi-degular text-primary"]', { hasText: testData.pageTexts.shopAllListPage.filtersHeaderText })
         this.laptopsCategory = page.locator('span', { hasText: testData.pageTexts.shopAllListPage.laptopsCategoryFilterText })
         this.televisionsCategory = page.locator('span', { hasText: testData.pageTexts.shopAllListPage.televisionsCategoryFilterText })
@@ -115,6 +121,14 @@ export class F_ShopAllList {
         await this.continueBtnForLocation.click()
     }
 
+    async verifySearchResultsHeader() {
+        await expect(this.searchResultsHeader).toBeVisible({ timeout: 8000 })
+    }
+
+    async verifyProductNameInInputBoxAfterSearch(productname: string) {
+        expect(await this.productSearchInputBoxWithProductName.innerText()).toBe(productname)
+    }
+
     async verifyPresenceOfShopAllHeader() {
         await expect(this.shopAllHeader).toBeVisible()
     }
@@ -136,6 +150,12 @@ export class F_ShopAllList {
     async clickOnFilterBtn() {
         await this.filtersBtn.scrollIntoViewIfNeeded()
         await this.filtersBtn.click()
+        await expect(this.filtersHeader).toBeVisible()
+    }
+
+    async clickOnProductFilterBtn() {
+        await this.productFiltersBtn.scrollIntoViewIfNeeded()
+        await this.productFiltersBtn.click()
         await expect(this.filtersHeader).toBeVisible()
     }
 

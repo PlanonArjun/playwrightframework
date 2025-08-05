@@ -48,7 +48,8 @@ test.describe('Regression Suite', () => {
             await shopAllListPage.verifyPresenceOfBreadCrumb();
             await shopAllListPage.verifyPresenceOfCategoryInBreadCrumb(testData.shopCategories.electronicsAndGaming);
             await basePage.verifyLocationPopUpVisibility();
-            expect(page).toHaveURL(testData.urls.marketplace.homeStaging + testData.urls.marketplace.endpoints.shopCategories.shopElectronics);
+            const baseUrl = testData.urls.marketplace.homeQA;
+            expect(page).toHaveURL(baseUrl + testData.urls.marketplace.endpoints.shopCategories.shopElectronics);
 
             //provide a zipcode for location 
             await shopAllListPage.enterCityInLocationModalView(testData.location.newYorkCity.zipcode);
@@ -57,7 +58,7 @@ test.describe('Regression Suite', () => {
             await shopAllListPage.clickOnContinueBtn();
 
             //land on category list page and perform basic assertions like url header and location
-            expect(page).toHaveURL(testData.urls.marketplace.homeStaging + testData.urls.marketplace.endpoints.shopCategories.shopElectronics);
+            expect(page).toHaveURL(baseUrl + testData.urls.marketplace.endpoints.shopCategories.shopElectronics);
             await shopAllListPage.verifyPresenceOfShopCategoryHeader(testData.shopCategories.electronicsAndGaming);
             await shopAllListPage.verifyLocationSelectedOnProductIndexPage(testData.location.newYorkCity.name);
 
@@ -92,7 +93,6 @@ test.describe('Regression Suite', () => {
             //User clicks on Apply Now Button to proceed with leasing process
             const isOnlineRetailer: boolean = getStoreTypeByName(expectedProductRetailer) === STORE_TYPE.ONLINE;
             if (!isOnlineRetailer) {
-                await productDetailPage.clickOnApplyNowBtnOnPDPPageForInStoreRetailer(expectedProductRetailer);
                 await Promise.all([
                     page.waitForNavigation({ waitUntil: 'load' }),
                     productDetailPage.clickOnApplyNowBtnOnPDPPageForInStoreRetailer(expectedProductRetailer),

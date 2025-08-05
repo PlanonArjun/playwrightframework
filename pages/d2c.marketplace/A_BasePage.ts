@@ -78,7 +78,7 @@ export class A_BasePage {
         this.startALeaseBtn_LearnMore = page.locator('button', { hasText: testData.pageTexts.basePage.startALeaseBtnText })
         this.languageIcon = page.locator('div button', { hasText: /^E/ })
         this.globalSearch = page.locator('button[aria-label="search"]')
-        this.searchProductAndRetailerInput = page.getByPlaceholder('Search Retailers and products')
+        this.searchProductAndRetailerInput = page.getByPlaceholder(testData.pageTexts.basePage.globalSearchInputBoxPlaceholderText)
         this.progLeasingLogoFooter = page.locator('img[alt="progressive leasing"]')
         this.forRetailersHeader = page.locator('h2', { hasText: testData.pageTexts.basePage.forRetailersHeaderText })
         this.partnerSignUpLink = page.getByRole('link', { name: testData.pageTexts.basePage.partnerSignUpLinkText })
@@ -113,7 +113,7 @@ export class A_BasePage {
     }
 
     async onBasePage() {
-        await this.page.goto(testData.urls.marketplace.homeStaging)
+        await this.page.goto(testData.urls.marketplace.homeQA)
         await this.page.waitForTimeout(2000);
         await expect(this.progLeasingLogo).toBeVisible()
     }
@@ -217,6 +217,12 @@ export class A_BasePage {
     async clickGlobalSearch() {
         await this.globalSearch.click()
         await expect(this.searchProductAndRetailerInput).toBeVisible()
+    }
+
+    async enterProductInGlobalSearchInputBox(product: string) {
+        await this.searchProductAndRetailerInput.fill(product)
+        await this.searchProductAndRetailerInput.press('Enter')
+        
     }
 
     async clickPLLogoInFooter() {

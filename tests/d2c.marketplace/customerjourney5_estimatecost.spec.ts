@@ -3,9 +3,9 @@ import { A_BasePage } from '$pages/d2c.marketplace/A_BasePage';
 import D2CMarketPlaceHealthCheck from './D2CMarketPlaceHealthCheck';
 import { F_ShopAllList } from '$pages/d2c.marketplace/F_ShopAllList';
 import E_ProductDetailsPage from '$pages/d2c.marketplace/E_ProductDetailsPage';
+import testData from '../../data/d2c.marketplace/testdata.json';
 import { getStoreTypeByName } from "data/d2c.marketplace/ProductMapping";
 import { STORE_TYPE } from '$utils/d2cmarketplace.utils/storeType';
-import testData from '../../data/d2c.marketplace/testdata.json';
 
 let browserContext: BrowserContext;
 let page: Page;
@@ -21,12 +21,12 @@ test.describe('Regression Suite', () => {
     test.beforeAll(async () => {
         let browserTemp = await chromium.launch({ headless: true });
         let pageTemp = await browserTemp.newPage();
-        isHealthyLocal = await new D2CMarketPlaceHealthCheck(pageTemp).isHealthy();
+        isHealthyLocal = await new D2CMarketPlaceHealthCheck(pageTemp).isHealthy()
         await pageTemp.close();
         await browserTemp.close();
     });
 
-    test.describe('Key Customer Journey 3', () => {
+    test.describe('Key Customer Journey 5', () => {
         test.beforeEach(async ({ browser }) => {
             if (!isHealthyLocal) {
                 test.skip(true, 'health check FAILED; skipping tests');
@@ -37,36 +37,22 @@ test.describe('Regression Suite', () => {
             await basePage.onBasePage();
         });
 
-        test('Verify QR for a product offered by online Retailer using Shop All navigation', { tag: ['@regression', '@kcj3'] }, async () => {
-            //user lands on home page and click on Shop All icon
+        test('Estimate cost for a product using Global Search', { tag: ['@regression', '@kcj5'] }, async () => {
+            //user lands on home page and clicks on global search icon
+            await basePage.clickGlobalSearch();
+
+            //user search for the product and hits enter
             shopAllListPage = new F_ShopAllList(page);
-            await basePage.clickShopProductsBtn();
-            await basePage.verifyPresenceOfShopCategories();
-            await basePage.clickShopAllLink();
-            await shopAllListPage.verifyPresenceOfBreadCrumb();
-            await basePage.verifyLocationPopUpVisibility();
-            const baseUrl = testData.urls.marketplace.homeQA;
-            expect(page).toHaveURL(baseUrl + testData.urls.marketplace.endpoints.shopAll);
+            await basePage.enterProductInGlobalSearchInputBox(testData.search.products.laptops);
+            await shopAllListPage.verifySearchResultsHeader();
+            await shopAllListPage.verifyProductNameInInputBoxAfterSearch(testData.search.products.laptops);
 
-            //provide a zipcode for location 
-            await shopAllListPage.enterCityInLocationModalView(testData.location.newYorkCity.zipcode);
-            await shopAllListPage.clickOnFirstOption();
-            await shopAllListPage.verifyLocationOptionSelected(testData.location.newYorkCity.zipcode);
-            await shopAllListPage.clickOnContinueBtn();
-
-            //land on shop all page and perform basic assertions like url header and location
-            expect(page).toHaveURL(baseUrl + testData.urls.marketplace.endpoints.shopAll);
-            await shopAllListPage.verifyPresenceOfShopAllHeader();
-            await shopAllListPage.verifyLocationSelectedOnProductIndexPage(testData.location.newYorkCity.name);
-
-            //Click on fliters button and apply filters for retailer and categories
-            await shopAllListPage.clickOnFilterBtn();
-            await shopAllListPage.selectCategoryFilter(testData.filterCategories.laptopsFilter);
-            await shopAllListPage.selectRetailerFilter(testData.featuredRetailers.amazon);
+            //Click on fliters button and apply filters for retailer
+            await shopAllListPage.clickOnProductFilterBtn();
+            await shopAllListPage.selectRetailerFilter(testData.featuredRetailers.bestBuy);
             await shopAllListPage.applyFilter();
             await shopAllListPage.clickOnLoadMoreForProductIfApplicable(3);
-            await shopAllListPage.verifyCategoryFilterIsApplied(testData.filterCategories.laptopsFilter);
-            await shopAllListPage.verifyRetailerFilterIsApplied(testData.featuredRetailers.amazon);
+            await shopAllListPage.verifyRetailerFilterIsApplied(testData.featuredRetailers.bestBuy);
 
             //Sort the products by Price low to high
             await shopAllListPage.applyLowToHighPriceSorting();
@@ -76,6 +62,13 @@ test.describe('Regression Suite', () => {
 
             //Click on first product tile
             await shopAllListPage.clickOnFirstProductTile();
+
+            //provide a zipcode for location 
+            await basePage.verifyLocationPopUpVisibility();
+            await shopAllListPage.enterCityInLocationModalView(testData.location.newYorkCity.zipcode);
+            await shopAllListPage.clickOnFirstOption();
+            await shopAllListPage.verifyLocationOptionSelected(testData.location.newYorkCity.zipcode);
+            await shopAllListPage.clickOnContinueBtn();
 
             //User navigates to the product detail page and verifies the relevant information
             productDetailPage = new E_ProductDetailsPage(page);
@@ -87,10 +80,15 @@ test.describe('Regression Suite', () => {
             expect(actualProductDetails).toEqual(expectedProductDescription);
             expect(actualProductPrice).toEqual(expectedProductPrice);
 
+            //User clicks on Estimate cost Button to proceed with leasing process
             const isOnlineRetailer: boolean = getStoreTypeByName(expectedProductRetailer) === STORE_TYPE.ONLINE;
-
-            if (isOnlineRetailer) {
-                await productDetailPage.verifyAppDownloadLinkForOnlineRetailer(expectedProductRetailer);
+            if (!isOnlineRetailer) {
+                await Promise.all([
+                    page.waitForNavigation({ waitUntil: 'load' }),
+                    productDetailPage.clickOnEstimateCostBtnOnPDPPageForInStoreRetailer(),
+                ]);
+                const currentUrl = page.url();
+                expect(currentUrl).toContain(testData.urls.external.pl.estimateCostPartial);
             } else {
                 throw new Error(`Test failed: Store Type mismatch`)
             }
