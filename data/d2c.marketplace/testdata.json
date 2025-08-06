@@ -2,8 +2,12 @@
     "pageTexts": {
         "basePage": {
             "shopRetailersBtnText": "Shop Retailers",
-            "locationHeaderText": "Find a store to get started",
-            "shopAllBtnAndLinkText": "Shop All",
+            "locationHeaderText": "Let’s find the best options near you",
+            "shopProductsBtnText": "Shop Products",
+            "globalSearchInputBoxPlaceholderText": "Search Retailers and products",
+            "electronicsAndGamingCategoryText": "Electronics & Gaming",
+            "furnitureCategoryText": "Furniture",
+            "shopAllLinkText": "Shop Products",
             "shopCategoriesHeaderText": "Shop Categories",
             "learnMoreBtnAndHeaderText": "Learn More",
             "howItWorksLinkText": "How it Works",
@@ -38,9 +42,7 @@
             "bipaLinkText": "BIPA",
             "yourPrivacyChoicesLinkText": "Your Privacy Choices"
         },
-        "homePage": {
-
-        },
+        "homePage": {},
         "retailersIndexPage": {
             "shopRetailersBreadcrumbText": "Retailers",
             "locationInputBoxPlaceholderText": "City or zip code",
@@ -61,104 +63,149 @@
             "applySortingBtnText": "Apply",
             "leaseToOwnOptionsOnRetailerModalScreenHeaderText": "Lease-to-Own Options",
             "estimateCostOnRetailerModalScreenBtnText": "Estimate leasing cost",
-            "getDirectionsLinkText": "Get Directions" 
+            "getDirectionsLinkText": "Get Directions"
         },
         "retailersDetailPage": {
-            "otherOptionsDescText": "No worries. Click here to see all the places  where you can do a lease-to-own purchase",
+            "otherOptionsHeaderText": "Need more ways to shop with lease-to-own?",
+            "otherOptionsDescPartialText": "is a great option—and if they don’t have exactly what you’re looking for, we’ve got plenty more. Click here to explore other retailers where you can lease-to-own.",
             "allRetailersLinkText": "All retailers",
+            "applyNowBtnPartialText": "Apply Now with",
             "estimateLeasingCostBtnText": "Estimate Leasing cost"
         },
         "productDetailsPage": {
             "availableInTheAppHeaderText": "Available in the App!",
             "plDisclaimerText": "As an affiliate, Progressive Leasing earns from qualifying purchases.",
-            "onlineRetailerAppDescText": "Use our app to start your lease"
+            "onlineRetailerAppDescText": "Use our app to start your lease",
+            "applyNowBtnPartialText": "Apply Now with",
+            "estimateCostBtnText": "Estimate leasing cost"
         },
         "shopAllListPage": {
-            "shopAllBreadcrumbText": "Shop All",
+            "shopAllBreadcrumbText": "Shop Products",
+            "electronicsAndGamingBreadcrumbText": "Electronics & Gaming",
             "locationInputBoxPlaceholderText": "City or zip code",
             "continueBtnText": "Continue",
             "shopAllHeaderText": "Shop All",
+            "shopElectronicsAndGamingHeaderText": "Shop Electronics & Gaming",
+            "shopFurnitureHeaderText": "Shop Furniture",
+            "searchResultsHeaderText": "Search Results",
             "filtersBtnText": "Filters",
             "filtersHeaderText": "Filters",
             "laptopsCategoryFilterText": "Laptops",
+            "televisionsCategoryFilterText": "Televisions",
             "applyFiltersBtnText": "Apply Filters",
             "clearFiltersBtnText": "Clear Filters",
             "loadMoreBtnText": "Load more",
-            "productSortByOptionText": "Sort By: A to Z"
+            "productSortByOptionText": "Sort By: Default",
+            "globalProductSortByOptionText": "Sort By: A to Z"
         }
     },
-    "urls": [
-        {
-            "env": "QA",
-            "marketplace": {
-                "home": "https://marketplace01-progleasing.frontend.site/en/",
-                "shopRetailers": "https://marketplace01-progleasing.frontend.site/en/retailers/",
-                "shopAll": "https://marketplace01-progleasing.frontend.site/en/shop/shop/"
+    "urls": {
+        "marketplace": {
+            "environments": {
+                "qa": {
+                    "baseUrl": "https://marketplace01-progleasing.frontend.site/"
+                },
+                "staging": {
+                    "baseUrl": "https://www.stage.progleasing.com/"
+                }
             },
-            "social": {
-                "facebook": "https://facebook.com/ProgLeasingLLC",
-                "instagram": "https://instagram.com/accounts/login/?next=https%3A%2F%2Fwww.instagram.com%2Fprogressiveleasing%2F&is_from_rle"
-            },
-            "mobileApps": {
-                "android": "https://play.google.com/store/apps/details?id=com.progfinance.progressivemobile&hl=en_US",
-                "ios": "https://apps.apple.com/us/app/progressive-leasing/id995368829?mt=8"
-            },
-            "external": {
-                "pl": {
-                    "home": "https://progleasing.com/",
-                    "faq": "https://help.progleasing.com/hc/en-us",
-                    "investors": "https://investor.progholdings.com/",
-                    "progFoundation": "https://progfoundation.org/",
-                    "dataSubjectRequest": "https://progleasing.truyo.com/consumer/make_request",
-                    "howItWorks": "https://progleasing.com/how-it-works",
-                    "contactUs": "https://progleasing.com/contact-us",
-                    "blog": "https://progleasing.com/blog",
-                    "partnerSignUp": "https://progleasing.com/index.php/merchant",
-                    "retailerLogin": "https://progleasing.com/merchant",
-                    "mediaKit": "https://progleasing.com/index.php/retailer-social-kits",
-                    "aboutUs": "https://progleasing.com/about-us",
-                    "careers": "https://progleasing.com/jobs/",
-                    "terms": "https://progleasing.com/terms/",
-                    "privacy": "https://progleasing.com/privacy/",
-                    "trust": "https://progleasing.com/prog-force-trust-center",
-                    "cookiesPreference": "https://progleasing.com/CookiePreferences",
-                    "bipa": "https://progleasing.com/bipa"
+            "endpoints": {
+                "englishLanguage": "en/",
+                "spanishLanguage": "es/",
+                "shopRetailers": "retailers/",
+                "shopAll": "shop/shop/",
+                "shopCategories": {
+                    "shopElectronics": "shop/shop_electronics/",
+                    "shopFurniture": "shop/shop_furniture/"
                 }
             }
-        }
-    ],
-    "location": [
-        {
-            "cityZipCode": "10006",
-            "cityName": "New York"
         },
-        {
-            "cityZipCode": "60007",
-            "cityName": "Chicago"
+        "social": {
+            "facebook": "https://facebook.com/ProgLeasingLLC",
+            "instagram": "https://instagram.com/accounts/login/?next=https%3A%2F%2Fwww.instagram.com%2Fprogressiveleasing%2F&is_from_rle"
+        },
+        "mobileApps": {
+            "android": "https://play.google.com/store/apps/details?id=com.progfinance.progressivemobile&hl=en_US",
+            "ios": "https://apps.apple.com/us/app/progressive-leasing/id995368829?mt=8"
+        },
+        "external": {
+            "pl": {
+                "home": "https://progleasing.com/",
+                "faq": "https://help.progleasing.com/hc/en-us",
+                "investors": "https://investor.progholdings.com/",
+                "progFoundation": "https://progfoundation.org/",
+                "dataSubjectRequest": "https://progleasing.truyo.com/consumer/make_request",
+                "howItWorks": "https://progleasing.com/how-it-works",
+                "contactUs": "https://progleasing.com/contact-us",
+                "blog": "https://progleasing.com/blog",
+                "partnerSignUp": "https://progleasing.com/index.php/merchant",
+                "retailerLogin": "https://progleasing.com/merchant",
+                "mediaKit": "https://progleasing.com/index.php/retailer-social-kits",
+                "aboutUs": "https://progleasing.com/about-us",
+                "careers": "https://progleasing.com/jobs/",
+                "terms": "https://progleasing.com/terms/",
+                "privacy": "https://progleasing.com/privacy/",
+                "trust": "https://progleasing.com/prog-force-trust-center",
+                "cookiesPreference": "https://progleasing.com/CookiePreferences",
+                "bipa": "https://progleasing.com/bipa",
+                "leaseOnlinePartial": "https://cic-preview.progleasing.com/u/login/",
+                "estimateCostPartial": "https://www.stage.progleasing.com/myaccount/"
+            }
         }
-    ],
+    },
+    "pageTitle": {
+        "homePage": "Progressive Leasing Lease-to-Own | Progleasing",
+        "retailersIndexPage": "Shop Retailers",
+        "retailersDetailPage": "Retailer Detail Page",
+        "shopAllPage": "Progressive Leasing Lease-to-Own | Progleasing - Category Page",
+        "productDetailsPage": "Product Detail",
+        "electronicsAndGamingCategoryPage": "Electronics and Gaming",
+        "furnitureCategoryPage": "Furniture"
+    },
+    "location": {
+        "newYorkCity": {
+            "name": "New York",
+            "zipcode": "10006"
+        },
+        "chicagoCity": {
+            "name": "Chicago",
+            "zipcode": "60007"
+        }
+    },
     "shopCategories": {
         "electronicsAndGaming": "Electronics & Gaming",
         "computerAndTablets": "Computer & Tablets",
         "jewelry": "Jewelry",
         "furniture": "Furniture"
     },
+    "filterCategories": {
+        "laptopsFilter": "Laptops",
+        "televisionsFilter": "Televisions"
+    },
+    "leaseToOwnOptionsFilter": {
+        "onlineFilter": "Online",
+        "inStoreFilter": "In Store"
+    },
+    "retailerFilter": {
+        "amazonFilter": "Amazon",
+        "bestBuyFilter": "Best Buy"
+    },
+    "brandFilter": {
+        "dellFilter": "Dell",
+        "asusFilter": "ASUS"
+    },
     "featuredRetailers": {
         "bestBuy": "Best Buy",
         "amazon": "Amazon"
     },
-    "product": [
-        {
-            "name": "Best Buy",
-            "key": "bestbuy",
-            "type": "Retailer",
-            "description": "Best Buy"
+    "search": {
+        "products": {
+            "laptops": "Laptops",
+            "jewellery": "Jewellery"
         },
-        {
-            "name": "Amazon",
-            "key": "amazon",
-            "type": "Retailer",
-            "description": "Amazon"
+        "retailers": {
+            "bestBuy": "Best Buy",
+            "amazon": "Amazon"
         }
-    ]
+    }
 }

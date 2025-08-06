@@ -1,18 +1,28 @@
 import { type Page, type Locator, expect } from "@playwright/test"
 import testData from '../../data/d2c.marketplace/testdata.json'
+import { RETAILERS } from "$utils/d2cmarketplace.utils/retailers"
+import { BRANDS } from "$utils/d2cmarketplace.utils/brands"
+import { CATEGORIES } from "$utils/d2cmarketplace.utils/categories"
 
 export class F_ShopAllList {
 
     private readonly page: Page
     private readonly shopAllBreadCrumb: Locator
+    private readonly electronicsAndGamingBreadCrumb: Locator
     private readonly cityOrZipInputBox: Locator
     private readonly firstValueInLocationDropdown: Locator
     private readonly continueBtnForLocation: Locator
     private readonly shopAllHeader: Locator
+    private readonly shopElectronicsAndGamingHeader: Locator
+    private readonly shopFurnitureHeader: Locator
     private readonly locationUpdateLink: Locator
+    private readonly searchResultsHeader: Locator
+    private readonly productSearchInputBoxWithProductName: Locator
     private readonly filtersBtn: Locator
+    private readonly productFiltersBtn: Locator
     private readonly filtersHeader: Locator
     private readonly laptopsCategory: Locator
+    private readonly televisionsCategory: Locator
     private readonly retailerInputBoxOnFilterScreen: Locator
     private readonly bestBuyRetailerOptionOnFilterScreen: Locator
     private readonly amazonRetailerOptionOnFilterScreen: Locator
@@ -22,6 +32,7 @@ export class F_ShopAllList {
     private readonly applyFiltersBtn: Locator
     private readonly clearFiltersBtn: Locator
     private readonly laptopsCategoryFilterApplied: Locator
+    private readonly televisionsCategoryFilterApplied: Locator
     private readonly bestBuyRetailerFilterApplied: Locator
     private readonly amazonRetailerFilterApplied: Locator
     private readonly dellBrandFilterApplied: Locator
@@ -30,6 +41,7 @@ export class F_ShopAllList {
     private readonly listOfRetailerNamesForProducts: Locator
     private readonly listOfProductDesc: Locator
     private readonly productSortByOption: Locator
+    private readonly globalProductSortByOption: Locator
     private readonly lowToHighProductSort: Locator
     private readonly applySorting: Locator
     private readonly listOfProductPrice: Locator
@@ -39,15 +51,22 @@ export class F_ShopAllList {
 
     constructor(page: Page) {
         this.page = page
-        this.shopAllBreadCrumb = page.locator('li a', { hasText: testData.pageTexts.shopAllListPage.shopAllBreadcrumbText })
+        this.shopAllBreadCrumb = page.locator('li', { hasText: testData.pageTexts.shopAllListPage.shopAllBreadcrumbText })
+        this.electronicsAndGamingBreadCrumb = page.locator('li span', { hasText: testData.pageTexts.shopAllListPage.electronicsAndGamingBreadcrumbText })
         this.cityOrZipInputBox = page.getByPlaceholder(testData.pageTexts.shopAllListPage.locationInputBoxPlaceholderText)
         this.firstValueInLocationDropdown = page.locator('ul[role="listbox"] li').first()
         this.continueBtnForLocation = page.locator('button', { hasText: testData.pageTexts.shopAllListPage.continueBtnText })
         this.shopAllHeader = page.locator('h1', { hasText: testData.pageTexts.shopAllListPage.shopAllHeaderText })
+        this.shopElectronicsAndGamingHeader = page.locator('h1', { hasText: testData.pageTexts.shopAllListPage.shopElectronicsAndGamingHeaderText })
+        this.shopFurnitureHeader = page.locator('h1', { hasText: testData.pageTexts.shopAllListPage.shopFurnitureHeaderText })
         this.locationUpdateLink = page.locator('div[class="flex items-center gap-5"] button').first()
+        this.searchResultsHeader = page.locator('h1', { hasText: testData.pageTexts.shopAllListPage.searchResultsHeaderText })
+        this.productSearchInputBoxWithProductName = page.locator('//div[contains(@class,"MuiContainer-root")]/div/button')
         this.filtersBtn = page.locator('span', { hasText: testData.pageTexts.shopAllListPage.filtersBtnText })
+        this.productFiltersBtn = this.filtersBtn.last()
         this.filtersHeader = page.locator('span[class="global-text-sm-semi-degular text-primary"]', { hasText: testData.pageTexts.shopAllListPage.filtersHeaderText })
         this.laptopsCategory = page.locator('span', { hasText: testData.pageTexts.shopAllListPage.laptopsCategoryFilterText })
+        this.televisionsCategory = page.locator('span', { hasText: testData.pageTexts.shopAllListPage.televisionsCategoryFilterText })
         this.retailerInputBoxOnFilterScreen = page.locator('input[placeholder="Search Retailers"]')
         this.bestBuyRetailerOptionOnFilterScreen = page.locator('input[type="radio"][value="Best Buy"]')
         this.amazonRetailerOptionOnFilterScreen = page.locator('input[type="radio"][value="Amazon"]')
@@ -57,17 +76,19 @@ export class F_ShopAllList {
         this.applyFiltersBtn = page.locator('button', { hasText: testData.pageTexts.shopAllListPage.applyFiltersBtnText })
         this.clearFiltersBtn = page.locator('button', { hasText: testData.pageTexts.shopAllListPage.clearFiltersBtnText })
         this.laptopsCategoryFilterApplied = page.locator('//span[contains(@class, "MuiChip-label")]/span[text()="Laptops"]')
+        this.televisionsCategoryFilterApplied = page.locator('//span[contains(@class, "MuiChip-label")]/span[text()="Televisions"]')
         this.bestBuyRetailerFilterApplied = page.locator('//span[contains(@class, "MuiChip-label")]/span[text()="Best Buy"]')
         this.amazonRetailerFilterApplied = page.locator('//span[contains(@class, "MuiChip-label")]/span[text()="Amazon"]')
         this.dellBrandFilterApplied = page.locator('//span[contains(@class, "MuiChip-label")]/span[text()="Dell"]')
         this.asusBrandFilterApplied = page.locator('//span[contains(@class, "MuiChip-label")]/span[text()="ASUS"]')
         this.productLoadMoreBtn = page.locator('button[aria-label="Load more products"]', { hasText: testData.pageTexts.shopAllListPage.loadMoreBtnText })
-        this.listOfRetailerNamesForProducts = page.locator('a div div h1')
-        this.listOfProductDesc = page.locator('//a/div/div/p')
+        this.listOfRetailerNamesForProducts = page.locator('xpath=//div[@class="component--filter-products"]/descendant::a/div/div/p[contains(@class, "global-text-xs-bold")]')
+        this.listOfProductDesc = page.locator('xpath=//div[@class="component--filter-products"]/descendant::a/div/div/p[contains(@class, "global-text-xs-bold")]/following-sibling::p')
         this.productSortByOption = page.getByRole('button', { name: testData.pageTexts.shopAllListPage.productSortByOptionText })
+        this.globalProductSortByOption = page.getByRole('button', { name: testData.pageTexts.shopAllListPage.globalProductSortByOptionText })
         this.lowToHighProductSort = page.locator('input[value="lowToHigh"]')
         this.applySorting = page.locator('button', { hasText: /^Apply$/ })
-        this.listOfProductPrice = page.locator('//a/div/div/div/p[contains(@aria-label, "Price")]')
+        this.listOfProductPrice = page.locator('xpath=//div[@class="component--filter-products"]/descendant::a/div/div/div/p[contains(@aria-label, "rice")]')
         this.firstProductTilePrice = this.listOfProductPrice.first()
         this.firstProductTileDesc = this.listOfProductDesc.first()
         this.firstProductTileRetailer = this.listOfRetailerNamesForProducts.first()
@@ -75,6 +96,14 @@ export class F_ShopAllList {
 
     async verifyPresenceOfBreadCrumb() {
         await expect(this.shopAllBreadCrumb).toBeVisible({ timeout: 50000 })
+    }
+
+    async verifyPresenceOfCategoryInBreadCrumb(category: string) {
+        if (category === testData.pageTexts.shopAllListPage.electronicsAndGamingBreadcrumbText) {
+            await expect(this.electronicsAndGamingBreadCrumb).toBeVisible()
+        } else {
+            throw new Error(`Test failed: Category mismatch`)
+        }
     }
 
     async enterCityInLocationModalView(city: string) {
@@ -94,8 +123,26 @@ export class F_ShopAllList {
         await this.continueBtnForLocation.click()
     }
 
+    async verifySearchResultsHeader() {
+        await expect(this.searchResultsHeader).toBeVisible({ timeout: 8000 })
+    }
+
+    async verifyProductNameInInputBoxAfterSearch(productname: string) {
+        expect(await this.productSearchInputBoxWithProductName.innerText()).toBe(productname)
+    }
+
     async verifyPresenceOfShopAllHeader() {
         await expect(this.shopAllHeader).toBeVisible()
+    }
+
+    async verifyPresenceOfShopCategoryHeader(category: string) {
+        if (testData.pageTexts.shopAllListPage.shopElectronicsAndGamingHeaderText.includes(category)) {
+            await expect(this.shopElectronicsAndGamingHeader).toBeVisible()
+        } else if (testData.pageTexts.shopAllListPage.shopFurnitureHeaderText.includes(category)) {
+            await expect(this.shopFurnitureHeader).toBeVisible()
+        } else {
+            throw new Error(`Test failed: Category mismatch`)
+        }
     }
 
     async verifyLocationSelectedOnProductIndexPage(city: string) {
@@ -108,9 +155,19 @@ export class F_ShopAllList {
         await expect(this.filtersHeader).toBeVisible()
     }
 
+    async clickOnProductFilterBtn() {
+        await this.productFiltersBtn.scrollIntoViewIfNeeded()
+        await this.productFiltersBtn.click()
+        await expect(this.filtersHeader).toBeVisible()
+    }
+
     async selectCategoryFilter(category: string) {
-        if (category === 'Laptops') {
+        if (category === CATEGORIES.LAPTOPS) {
             await this.laptopsCategory.click()
+        } else if (category === CATEGORIES.TELEVISIONS) {
+            await this.televisionsCategory.click()
+        } else {
+            throw new Error(`Test failed: Category mismatch`)
         }
     }
 
@@ -118,10 +175,10 @@ export class F_ShopAllList {
         await this.retailerInputBoxOnFilterScreen.scrollIntoViewIfNeeded()
         await this.retailerInputBoxOnFilterScreen.fill(retailer)
         expect(await this.retailerInputBoxOnFilterScreen.getAttribute('value')).toContain(retailer)
-        if (retailer === 'Best Buy') {
+        if (retailer === RETAILERS.BEST_BUY) {
             await this.bestBuyRetailerOptionOnFilterScreen.check()
             expect(await this.bestBuyRetailerOptionOnFilterScreen.isChecked()).toBeTruthy()
-        } else if (retailer === 'Amazon') {
+        } else if (retailer === RETAILERS.AMAZON) {
             await this.amazonRetailerOptionOnFilterScreen.check()
             expect(await this.amazonRetailerOptionOnFilterScreen.isChecked()).toBeTruthy()
         }
@@ -131,12 +188,14 @@ export class F_ShopAllList {
         await this.brandInputBoxOnFilterScreen.scrollIntoViewIfNeeded()
         await this.brandInputBoxOnFilterScreen.fill(brand)
         expect(await this.brandInputBoxOnFilterScreen.getAttribute('value')).toContain(brand)
-        if (brand === 'Dell') {
+        if (brand === BRANDS.DELL) {
             await this.dellBrandOptionOnFilterScreen.check()
             expect(await this.dellBrandOptionOnFilterScreen.isChecked()).toBeTruthy()
-        } else if (brand === 'ASUS') {
+        } else if (brand === BRANDS.ASUS) {
             await this.asusBrandOptionOnFilterScreen.check()
             expect(await this.asusBrandOptionOnFilterScreen.isChecked()).toBeTruthy()
+        } else {
+            throw new Error(`Test failed: Brands mismatch`)
         }
     }
 
@@ -149,34 +208,44 @@ export class F_ShopAllList {
     }
 
     async verifyCategoryFilterIsApplied(categoryFilter: string) {
-        if (categoryFilter === 'Laptops') {
+        if (categoryFilter === CATEGORIES.LAPTOPS) {
             await expect(this.laptopsCategoryFilterApplied).toBeVisible()
+        } else if (categoryFilter === CATEGORIES.TELEVISIONS) {
+            await expect(this.televisionsCategoryFilterApplied).toBeVisible()
+        } else {
+            throw new Error(`Test failed: Category mismatch`)
         }
     }
 
     async verifyRetailerFilterIsApplied(retailerFilter: string) {
-        if (retailerFilter === 'Best Buy') {
+        if (retailerFilter === RETAILERS.BEST_BUY) {
             await expect(this.bestBuyRetailerFilterApplied).toBeVisible()
             const listOfRetailerName = await this.listOfRetailerNamesForProducts.allTextContents()
+            expect(listOfRetailerName.length).toBeGreaterThan(0);
             expect(listOfRetailerName.every(retailer => retailer === retailerFilter)).toBeTruthy()
-        } else if (retailerFilter === 'Amazon') {
+        } else if (retailerFilter === RETAILERS.AMAZON) {
             await expect(this.amazonRetailerFilterApplied).toBeVisible()
             const listOfRetailerName = await this.listOfRetailerNamesForProducts.allTextContents()
+            expect(listOfRetailerName.length).toBeGreaterThan(0);
             expect(listOfRetailerName.every(retailer => retailer === retailerFilter)).toBeTruthy()
+        } else {
+            throw new Error(`Test failed: Retailer mismatch`)
         }
     }
 
     async verifyBrandFilterIsApplied(brandFilter: string) {
-        if (brandFilter === 'Dell') {
+        if (brandFilter === BRANDS.DELL) {
             await expect(this.dellBrandFilterApplied).toBeVisible()
             const listOfProductDecription = await this.listOfProductDesc.evaluateAll((elements) =>
                 elements.map(el => (el as HTMLElement).innerText))
             expect(listOfProductDecription.every(desc => desc.includes(brandFilter))).toBeTruthy()
-        } else if (brandFilter === 'ASUS') {
+        } else if (brandFilter === BRANDS.ASUS) {
             await expect(this.asusBrandFilterApplied).toBeVisible()
             const listOfProductDecription = await this.listOfProductDesc.evaluateAll((elements) =>
                 elements.map(el => (el as HTMLElement).innerText))
             expect(listOfProductDecription.every(desc => desc.includes(brandFilter))).toBeTruthy()
+        } else {
+            throw new Error(`Test failed: Brands mismatch`)
         }
     }
 
@@ -200,7 +269,23 @@ export class F_ShopAllList {
         await this.lowToHighProductSort.check()
         expect(await this.lowToHighProductSort.isChecked()).toBeTruthy()
         await this.applySorting.click()
+        await this.clickOnLoadMoreForProductIfApplicable(3)
         const listOfPriceText = await this.listOfProductPrice.allTextContents()
+        expect(listOfPriceText.length).toBeGreaterThan(0);
+        const prices = listOfPriceText.map(price => parseFloat(price.replace(/[^0-9.]/g, '')))
+        const isSorted = prices.every((val, i, arr) => i === 0 || arr[i - 1] <= val);
+        expect(isSorted).toBe(true);
+    }
+
+    async applyLowToHighPriceSortingOnSearchPage() {
+        await this.globalProductSortByOption.scrollIntoViewIfNeeded()
+        await this.globalProductSortByOption.click()
+        await this.lowToHighProductSort.check()
+        expect(await this.lowToHighProductSort.isChecked()).toBeTruthy()
+        await this.applySorting.click()
+        await this.clickOnLoadMoreForProductIfApplicable(3)
+        const listOfPriceText = await this.listOfProductPrice.allTextContents()
+        expect(listOfPriceText.length).toBeGreaterThan(0);
         const prices = listOfPriceText.map(price => parseFloat(price.replace(/[^0-9.]/g, '')))
         const isSorted = prices.every((val, i, arr) => i === 0 || arr[i - 1] <= val);
         expect(isSorted).toBe(true);
@@ -208,7 +293,7 @@ export class F_ShopAllList {
 
     async clickOnFirstProductTile() {
         await this.firstProductTilePrice.click()
-        await expect(this.page).toHaveTitle('Product Detail', { timeout: 10000 });
+        await expect(this.page).toHaveTitle(testData.pageTitle.productDetailsPage, { timeout: 10000 });
     }
 
     async getProductDescOnPLP() {

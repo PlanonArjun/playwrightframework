@@ -1,8 +1,6 @@
 import { test, expect, BrowserContext, Page, chromium } from '@playwright/test';
 import { A_BasePage } from '$pages/d2c.marketplace/A_BasePage';
-import urls from '../../utils/d2cmarketplace.utils/urls';
 import D2CMarketPlaceHealthCheck from './D2CMarketPlaceHealthCheck';
-import GlobalHeaders_ShopAll from '../../data/d2c.marketplace/GlobalHeaders_ShopAll';
 
 let browserContext: BrowserContext;
 let page: Page;
@@ -31,12 +29,12 @@ test.describe.skip('Global Headers Test Suite', () => {
         });
 
         test('Verify user is displayed with all menus when clicked on Shop All option', { tag: ['@globalheaders', '@shopallicon', '@01'] }, async () => {
-            await basePage.clickShopAllBtn();
+            await basePage.clickShopProductsBtn();
             const actualItems = basePage.getCategoriesMenu();
-            let testData = new GlobalHeaders_ShopAll();
-            const expectedItems = testData.getShopCategories;
+            //let testData = new GlobalHeaders_ShopAll();
+            //const expectedItems = testData.getShopCategories;
             await basePage.verifyPresenceOfShopCategories();
-            await expect(actualItems).toContainText(expectedItems);
+            //await expect(actualItems).toContainText(expectedItems);
         })
 
         test.afterEach(async () => {

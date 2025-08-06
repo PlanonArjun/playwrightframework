@@ -18,10 +18,10 @@ export class D_RetailersDetailPage {
         this.breadCrumbNavigationBar = page.locator('ol')
         this.retailerHeader = page.locator('h2[class="global-text-lg-semi-degular"]')
         this.retailerDesc = page.locator('span[class="global-text-xxs-degular"]')
-        this.otherOptionsHeader = page.locator('h1', {hasText: /Looking for another option besides/})
-        this.otherOptionsDesc = page.locator('p', {hasText: testData.pageTexts.retailersDetailPage.otherOptionsDescText})
+        this.otherOptionsHeader = page.locator('h2', {hasText: testData.pageTexts.retailersDetailPage.otherOptionsHeaderText})
+        this.otherOptionsDesc = page.locator('p', {hasText: new RegExp(testData.pageTexts.retailersDetailPage.otherOptionsDescPartialText)})
         this.allRetailersLink = page.getByRole("link", {name: testData.pageTexts.retailersDetailPage.allRetailersLinkText})
-        this.leaseOnlineBtnOnGrandParentDetailPage = page.getByRole("button", {name: /Apply Now with/})
+        this.leaseOnlineBtnOnGrandParentDetailPage = page.getByRole("button", {name: new RegExp(testData.pageTexts.retailersDetailPage.applyNowBtnPartialText)})
         this.estimateLeasingCostBtnOnGrandParentDetailPage = page.getByRole("button",{name: testData.pageTexts.retailersDetailPage.estimateLeasingCostBtnText})
     }
 
@@ -40,7 +40,7 @@ export class D_RetailersDetailPage {
     async verifyOtherOptionsHeaderAndDesc(retailerProduct: string) {
         await expect(this.otherOptionsHeader).toBeVisible()
         await expect(this.otherOptionsDesc).toBeVisible()
-        expect(await this.otherOptionsHeader.innerText()).toContain(retailerProduct)
+        expect(await this.otherOptionsDesc.innerText()).toContain(retailerProduct)
     }
 
     async clickOnLeaseOnlineBtn(retailerProduct: string) {

@@ -1,8 +1,8 @@
 import { type Page, type Locator, expect } from "@playwright/test"
-import urls from '../../utils/d2cmarketplace.utils/urls'
 import { LANGUAGE } from "$utils/d2cmarketplace.utils/language"
 import { PL } from "$utils/d2cmarketplace.utils/pl"
 import testData from '../../data/d2c.marketplace/testdata.json'
+import { SHOP_CATEGORIES } from "$utils/d2cmarketplace.utils/shopCategories"
 
 export class A_BasePage {
 
@@ -12,6 +12,8 @@ export class A_BasePage {
     private readonly locationPopUpHeader: Locator
     private readonly shopAllIcon: Locator
     private readonly shopAllLink: Locator
+    private readonly electronicsAndGamingShopCategory: Locator
+    private readonly furnitureShopCategory: Locator
     private readonly shopCategoriesHeader: Locator
     private readonly shopCategoriesItems: Locator
     private readonly learnMoreBtn: Locator
@@ -61,8 +63,10 @@ export class A_BasePage {
         this.progLeasingLogo = page.locator('img[alt="B2C Retail Store"]')
         this.shopRetailersIcon = page.locator('a', { hasText: testData.pageTexts.basePage.shopRetailersBtnText })
         this.locationPopUpHeader = page.locator('span', { hasText: testData.pageTexts.basePage.locationHeaderText })
-        this.shopAllIcon = page.getByRole('button', { name: testData.pageTexts.basePage.shopAllBtnAndLinkText, exact: true })
-        this.shopAllLink = page.getByRole('link', { name: testData.pageTexts.basePage.shopAllBtnAndLinkText })
+        this.shopAllIcon = page.locator('button', { hasText: testData.pageTexts.basePage.shopProductsBtnText })
+        this.electronicsAndGamingShopCategory = page.getByRole('link', {name: testData.pageTexts.basePage.electronicsAndGamingCategoryText})
+        this.furnitureShopCategory = page.getByRole('link', {name: testData.pageTexts.basePage.furnitureCategoryText})
+        this.shopAllLink = page.getByRole('link', { name: testData.pageTexts.basePage.shopAllLinkText })
         this.shopCategoriesHeader = page.locator('p', { hasText: testData.pageTexts.basePage.shopCategoriesHeaderText })
         this.shopCategoriesItems = page.locator('div[class="flex flex-col items-center justify-center gap-[0.5rem]"] p')
         this.learnMoreBtn = page.locator('button', { hasText: testData.pageTexts.basePage.learnMoreBtnAndHeaderText })
@@ -74,7 +78,7 @@ export class A_BasePage {
         this.startALeaseBtn_LearnMore = page.locator('button', { hasText: testData.pageTexts.basePage.startALeaseBtnText })
         this.languageIcon = page.locator('div button', { hasText: /^E/ })
         this.globalSearch = page.locator('button[aria-label="search"]')
-        this.searchProductAndRetailerInput = page.getByPlaceholder('Search Retailers and products')
+        this.searchProductAndRetailerInput = page.getByPlaceholder(testData.pageTexts.basePage.globalSearchInputBoxPlaceholderText)
         this.progLeasingLogoFooter = page.locator('img[alt="progressive leasing"]')
         this.forRetailersHeader = page.locator('h2', { hasText: testData.pageTexts.basePage.forRetailersHeaderText })
         this.partnerSignUpLink = page.getByRole('link', { name: testData.pageTexts.basePage.partnerSignUpLinkText })
@@ -109,7 +113,7 @@ export class A_BasePage {
     }
 
     async onBasePage() {
-        await this.page.goto(urls.HOME_PAGE_URL.HOME_PAGE_URL)
+        await this.page.goto(testData.urls.marketplace.endpoints.englishLanguage)
         await this.page.waitForTimeout(2000);
         await expect(this.progLeasingLogo).toBeVisible()
     }
@@ -127,13 +131,23 @@ export class A_BasePage {
         await this.shopRetailersIcon.click()
     }
 
+    async clickOnCategoryImg(category: string) {
+        if (category === SHOP_CATEGORIES.ELECTRONICS_AND_GAMING) {
+            await this.electronicsAndGamingShopCategory.click()
+        } else if (category === SHOP_CATEGORIES.FURNITURE) {
+            await this.furnitureShopCategory.click()
+        } else {
+            throw new Error(`Test failed: Category mismatch`);
+        }
+    }
+
     //CSS validation of header to be added
     async verifyLocationPopUpVisibility() {
         await expect(this.locationPopUpHeader).toBeVisible()
     }
 
     //CSS validation of header to be added
-    async clickShopAllBtn() {
+    async clickShopProductsBtn() {
         await this.shopAllIcon.click({ timeout: 10000 })
     }
 
@@ -203,6 +217,12 @@ export class A_BasePage {
     async clickGlobalSearch() {
         await this.globalSearch.click()
         await expect(this.searchProductAndRetailerInput).toBeVisible()
+    }
+
+    async enterProductInGlobalSearchInputBox(product: string) {
+        await this.searchProductAndRetailerInput.fill(product)
+        await this.searchProductAndRetailerInput.press('Enter')
+        
     }
 
     async clickPLLogoInFooter() {

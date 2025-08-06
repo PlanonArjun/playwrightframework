@@ -1,5 +1,4 @@
 import { type Page, type Locator, expect } from "@playwright/test"
-import { getStoreTypeByName } from "data/d2c.marketplace/ProductMapping"
 import testData from '../../data/d2c.marketplace/testdata.json'
 
 export class E_ProductDetailsPage {
@@ -13,6 +12,8 @@ export class E_ProductDetailsPage {
     private readonly plDisclaimerOnPDPPage: Locator
     private readonly onlineRetailerAppDesc: Locator
     private readonly qrImg: Locator
+    private readonly applyNowBtnOnPDPPage: Locator
+    private readonly estimateLeasingCostOnPDPPage: Locator
 
     constructor(page: Page) {
         this.page = page
@@ -24,6 +25,8 @@ export class E_ProductDetailsPage {
         this.plDisclaimerOnPDPPage = page.getByRole('paragraph').filter({ hasText: testData.pageTexts.productDetailsPage.plDisclaimerText })
         this.onlineRetailerAppDesc = page.getByRole('paragraph').filter({ hasText: testData.pageTexts.productDetailsPage.onlineRetailerAppDescText })
         this.qrImg = this.onlineRetailerAppDesc.locator('xpath=following-sibling::div[1]/img[@alt="Scan QR to download the app"]')
+        this.applyNowBtnOnPDPPage = page.getByRole("button", { name: new RegExp(testData.pageTexts.productDetailsPage.applyNowBtnPartialText) })
+        this.estimateLeasingCostOnPDPPage = page.getByRole("button", { name: testData.pageTexts.productDetailsPage.estimateCostBtnText })
     }
 
     async getProductDescription() {
@@ -51,27 +54,20 @@ export class E_ProductDetailsPage {
         return await this.productPrice.innerHTML()
     }
 
-    async clickOnLeaseOnlineIfNotOnlineRetailerElseVerifyAppDownloadLink(retailer: string) {
-        if (getStoreTypeByName(retailer) === 'Online') {
-            await this.verifyAppDownloadLinkForOnlineRetailer(retailer)
-        } else {
-            await this.verifyLeaseOnlineButtonOnPDPPage()
-        }
-    }
-
-    private async verifyAppDownloadLinkForOnlineRetailer(retailer: string) {
+    async verifyAppDownloadLinkForOnlineRetailer(retailer: string) {
         await expect(this.availableInTheAppText).toBeVisible()
         await expect(this.plDisclaimerOnPDPPage).toBeVisible()
         expect(await this.onlineRetailerAppDesc.innerText()).toContain(retailer)
         await expect(this.qrImg).toBeVisible()
     }
 
-    private async verifyLeaseOnlineButtonOnPDPPage() {
-
+    async clickOnApplyNowBtnOnPDPPageForInStoreRetailer(retailer: string) {
+        expect(await this.applyNowBtnOnPDPPage.innerText()).toContain(retailer)
+        await this.applyNowBtnOnPDPPage.click()
     }
 
-    private async verifyEstimateCostButtonOnPDPPage() {
-
+    async clickOnEstimateCostBtnOnPDPPageForInStoreRetailer() {
+        await this.estimateLeasingCostOnPDPPage.click()
     }
 
 }

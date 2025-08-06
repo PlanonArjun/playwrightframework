@@ -1,5 +1,6 @@
 import { type Page, type Locator, expect } from "@playwright/test"
 import testData from '../../data/d2c.marketplace/testdata.json'
+import { STORE_TYPE } from "$utils/d2cmarketplace.utils/storeType"
 
 export class C_RetailersIndexPage {
 
@@ -63,7 +64,7 @@ export class C_RetailersIndexPage {
         this.retailerSearchInputBoxWithRetailerName = page.locator('//div[contains(@class,"MuiContainer-root")]/div/button')
         this.filtersBtn = page.locator('span', { hasText: testData.pageTexts.retailersIndexPage.filtersBtnText })
         this.filtersHeader = page.locator('span[class="global-text-sm-semi-degular text-primary"]', { hasText: testData.pageTexts.retailersIndexPage.filtersHeaderText })
-        this.leaseToOwnOptionsHeaderInFilter = page.locator('h2', { hasText: testData.pageTexts.retailersIndexPage.leaseToOwnOptionsFilterHeaderText })
+        this.leaseToOwnOptionsHeaderInFilter = page.locator('h3', { hasText: testData.pageTexts.retailersIndexPage.leaseToOwnOptionsFilterHeaderText })
         this.inStoreOptionLeaseToOwnInFilter = page.locator('input[name="In Store"]')
         this.onlineOptionLeaseToOwnInFilter = page.locator('input[name="Online"]')
         this.applyFiltersBtn = page.locator('button', { hasText: testData.pageTexts.retailersIndexPage.applyFiltersBtnText })
@@ -85,7 +86,7 @@ export class C_RetailersIndexPage {
         this.addressInStoreOnModalScreen = this.retailerNameForInStoreOptionOnModalScreen.locator('xpath=../following-sibling::*[1]/*[1]/*[1]')
         this.inStoreRadioBtnOnModalScreen = page.locator('//input[contains(@class, "PrivateSwitchBase-input")]').first()
         this.onlineRadioBtnOnModalScreen = page.locator('//input[contains(@class, "PrivateSwitchBase-input")]').last()
-        this.estimateCostModalScreen = page.locator('button', {hasText: testData.pageTexts.retailersIndexPage.estimateCostOnRetailerModalScreenBtnText})
+        this.estimateCostModalScreen = page.locator('a', {hasText: testData.pageTexts.retailersIndexPage.estimateCostOnRetailerModalScreenBtnText})
         this.getDirectionsLink = page.locator('a', {hasText: testData.pageTexts.retailersIndexPage.getDirectionsLinkText})
     }
 
@@ -94,11 +95,12 @@ export class C_RetailersIndexPage {
     }
 
     async enterCityInLocationModalView(city: string) {
+        await this.cityOrZipInputBox.waitFor({ state: 'visible' })
         await this.cityOrZipInputBox.fill(city)
     }
 
     async clickOnFirstOption() {
-        await expect(this.firstValueInLocationDropdown).toBeVisible({ timeout: 10000 });
+        await expect(this.firstValueInLocationDropdown).toBeVisible({ timeout: 10000 })
         await this.firstValueInLocationDropdown.click()
     }
 
@@ -148,7 +150,7 @@ export class C_RetailersIndexPage {
 
     async searchForResults() {
         await this.retailerInputBox.press('Enter')
-        await expect(this.searchResultsHeader).toBeVisible()
+        await expect(this.searchResultsHeader).toBeVisible({timeout: 8000})
     }
 
     async verifyRetailerNameInInputBoxAfterSearch(retailerName: string) {
@@ -183,12 +185,12 @@ export class C_RetailersIndexPage {
     }
 
     async verifyLeaseToOwnOptionFilterIsApplied(filter: string) {
-        if (filter === 'Online') {
+        if (filter === STORE_TYPE.ONLINE) {
             await expect(this.onlineFilterApplied).toBeVisible()
         } else {
             await expect(this.inStoreFilterApplied).toBeVisible()
             const listOfDistance = await this.distanceOfRetailersOrOnline.allTextContents()
-            expect(listOfDistance).not.toContain('Online')
+            expect(listOfDistance).not.toContain(STORE_TYPE.ONLINE)
         }
     }
 

@@ -3,9 +3,9 @@ import { A_BasePage } from '$pages/d2c.marketplace/A_BasePage';
 import D2CMarketPlaceHealthCheck from './D2CMarketPlaceHealthCheck';
 import { F_ShopAllList } from '$pages/d2c.marketplace/F_ShopAllList';
 import E_ProductDetailsPage from '$pages/d2c.marketplace/E_ProductDetailsPage';
+import testData from '../../data/d2c.marketplace/testdata.json';
 import { getStoreTypeByName } from "data/d2c.marketplace/ProductMapping";
 import { STORE_TYPE } from '$utils/d2cmarketplace.utils/storeType';
-import testData from '../../data/d2c.marketplace/testdata.json';
 
 let browserContext: BrowserContext;
 let page: Page;
@@ -21,12 +21,12 @@ test.describe('Regression Suite', () => {
     test.beforeAll(async () => {
         let browserTemp = await chromium.launch({ headless: true });
         let pageTemp = await browserTemp.newPage();
-        isHealthyLocal = await new D2CMarketPlaceHealthCheck(pageTemp).isHealthy();
+        isHealthyLocal = await new D2CMarketPlaceHealthCheck(pageTemp).isHealthy()
         await pageTemp.close();
         await browserTemp.close();
     });
 
-    test.describe('Key Customer Journey 3', () => {
+    test.describe('Key Customer Journey 4', () => {
         test.beforeEach(async ({ browser }) => {
             if (!isHealthyLocal) {
                 test.skip(true, 'health check FAILED; skipping tests');
@@ -37,16 +37,19 @@ test.describe('Regression Suite', () => {
             await basePage.onBasePage();
         });
 
-        test('Verify QR for a product offered by online Retailer using Shop All navigation', { tag: ['@regression', '@kcj3'] }, async () => {
-            //user lands on home page and click on Shop All icon
+        test('Lease online for a product using Shop Categories list', { tag: ['@regression', '@kcj4'] }, async () => {
+            //user lands on home page and click on Shop Products button
             shopAllListPage = new F_ShopAllList(page);
             await basePage.clickShopProductsBtn();
             await basePage.verifyPresenceOfShopCategories();
-            await basePage.clickShopAllLink();
+
+            //User clicks on Electronics & Gaming category
+            await basePage.clickOnCategoryImg(testData.shopCategories.electronicsAndGaming);
             await shopAllListPage.verifyPresenceOfBreadCrumb();
+            await shopAllListPage.verifyPresenceOfCategoryInBreadCrumb(testData.shopCategories.electronicsAndGaming);
             await basePage.verifyLocationPopUpVisibility();
             const langEndpoint = testData.urls.marketplace.endpoints.englishLanguage;
-            expect(page).toHaveURL(langEndpoint + testData.urls.marketplace.endpoints.shopAll);
+            expect(page).toHaveURL(langEndpoint + testData.urls.marketplace.endpoints.shopCategories.shopElectronics);
 
             //provide a zipcode for location 
             await shopAllListPage.enterCityInLocationModalView(testData.location.newYorkCity.zipcode);
@@ -54,19 +57,19 @@ test.describe('Regression Suite', () => {
             await shopAllListPage.verifyLocationOptionSelected(testData.location.newYorkCity.zipcode);
             await shopAllListPage.clickOnContinueBtn();
 
-            //land on shop all page and perform basic assertions like url header and location
-            expect(page).toHaveURL(langEndpoint + testData.urls.marketplace.endpoints.shopAll);
-            await shopAllListPage.verifyPresenceOfShopAllHeader();
+            //land on category list page and perform basic assertions like url header and location
+            expect(page).toHaveURL(langEndpoint + testData.urls.marketplace.endpoints.shopCategories.shopElectronics);
+            await shopAllListPage.verifyPresenceOfShopCategoryHeader(testData.shopCategories.electronicsAndGaming);
             await shopAllListPage.verifyLocationSelectedOnProductIndexPage(testData.location.newYorkCity.name);
 
             //Click on fliters button and apply filters for retailer and categories
             await shopAllListPage.clickOnFilterBtn();
-            await shopAllListPage.selectCategoryFilter(testData.filterCategories.laptopsFilter);
-            await shopAllListPage.selectRetailerFilter(testData.featuredRetailers.amazon);
+            await shopAllListPage.selectCategoryFilter(testData.filterCategories.televisionsFilter);
+            await shopAllListPage.selectRetailerFilter(testData.featuredRetailers.bestBuy);
             await shopAllListPage.applyFilter();
             await shopAllListPage.clickOnLoadMoreForProductIfApplicable(3);
-            await shopAllListPage.verifyCategoryFilterIsApplied(testData.filterCategories.laptopsFilter);
-            await shopAllListPage.verifyRetailerFilterIsApplied(testData.featuredRetailers.amazon);
+            await shopAllListPage.verifyCategoryFilterIsApplied(testData.filterCategories.televisionsFilter);
+            await shopAllListPage.verifyRetailerFilterIsApplied(testData.featuredRetailers.bestBuy);
 
             //Sort the products by Price low to high
             await shopAllListPage.applyLowToHighPriceSorting();
@@ -87,10 +90,14 @@ test.describe('Regression Suite', () => {
             expect(actualProductDetails).toEqual(expectedProductDescription);
             expect(actualProductPrice).toEqual(expectedProductPrice);
 
+            //User clicks on Apply Now Button to proceed with leasing process
             const isOnlineRetailer: boolean = getStoreTypeByName(expectedProductRetailer) === STORE_TYPE.ONLINE;
-
-            if (isOnlineRetailer) {
-                await productDetailPage.verifyAppDownloadLinkForOnlineRetailer(expectedProductRetailer);
+            if (!isOnlineRetailer) {
+                await Promise.all([
+                    page.waitForNavigation({ waitUntil: 'load' }),
+                    productDetailPage.clickOnApplyNowBtnOnPDPPageForInStoreRetailer(expectedProductRetailer),
+                ]);
+                await expect(page).toHaveURL(new RegExp(testData.urls.external.pl.leaseOnlinePartial), { timeout: 10000 });
             } else {
                 throw new Error(`Test failed: Store Type mismatch`)
             }
