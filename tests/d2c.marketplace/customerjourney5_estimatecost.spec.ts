@@ -55,7 +55,7 @@ test.describe('Regression Suite', () => {
             await shopAllListPage.verifyRetailerFilterIsApplied(testData.featuredRetailers.bestBuy);
 
             //Sort the products by Price low to high
-            await shopAllListPage.applyLowToHighPriceSorting();
+            await shopAllListPage.applyLowToHighPriceSortingOnSearchPage();
             const expectedProductDescription = await shopAllListPage.getProductDescOnPLP();
             const expectedProductPrice = await shopAllListPage.getProductPriceOnPLP();
             const expectedProductRetailer = await shopAllListPage.getProductRetailerNameOnPLP();

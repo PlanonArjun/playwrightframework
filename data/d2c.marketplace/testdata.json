@@ -95,20 +95,23 @@
             "applyFiltersBtnText": "Apply Filters",
             "clearFiltersBtnText": "Clear Filters",
             "loadMoreBtnText": "Load more",
-            "productSortByOptionText": "Sort By: Default"
+            "productSortByOptionText": "Sort By: Default",
+            "globalProductSortByOptionText": "Sort By: A to Z"
         }
     },
     "urls": {
         "marketplace": {
             "environments": {
                 "qa": {
-                    "baseUrl": "https://marketplace01-progleasing.frontend.site/en/"
+                    "baseUrl": "https://marketplace01-progleasing.frontend.site/"
                 },
                 "staging": {
-                    "baseUrl": "https://www.stage.progleasing.com/en/"
+                    "baseUrl": "https://www.stage.progleasing.com/"
                 }
             },
             "endpoints": {
+                "englishLanguage": "en/",
+                "spanishLanguage": "es/",
                 "shopRetailers": "retailers/",
                 "shopAll": "shop/shop/",
                 "shopCategories": {

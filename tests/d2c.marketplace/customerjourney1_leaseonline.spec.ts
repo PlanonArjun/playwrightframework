@@ -44,7 +44,8 @@ test.describe('Regression Suite', () => {
             await basePage.clickShopRetailersLink();
             await retailerIndexPage.verifyPresenceOfBreadCrumb();
             await basePage.verifyLocationPopUpVisibility();
-            expect(page).toHaveURL(testData.urls.marketplace.endpoints.shopRetailers);
+            const langEndpoint = testData.urls.marketplace.endpoints.englishLanguage;
+            expect(page).toHaveURL(langEndpoint + testData.urls.marketplace.endpoints.shopRetailers);
 
             //provide a city for location 
             await retailerIndexPage.enterCityInLocationModalView(testData.location.chicagoCity.name);
@@ -53,7 +54,7 @@ test.describe('Regression Suite', () => {
             await retailerIndexPage.clickOnContinueBtn();
 
             //land on retailers page and perform basic assertions like url header and location
-            expect(page).toHaveURL(testData.urls.marketplace.endpoints.shopRetailers);
+            expect(page).toHaveURL(langEndpoint + testData.urls.marketplace.endpoints.shopRetailers);
             await retailerIndexPage.verifyPresenceOfShopRetailersHeader();
             await retailerIndexPage.verifyLocationSelectedOnRetailersIndexPage(testData.location.chicagoCity.name);
 
@@ -74,7 +75,7 @@ test.describe('Regression Suite', () => {
 
             //User lands on grand parent retailer detail page and verifies relevant information
             retailerDetailPage = new D_RetailersDetailPage(page);
-            let expectedRetailerDetailURL = `${testData.urls.marketplace.endpoints.shopRetailers}${getProductKeyByName(testData.featuredRetailers.bestBuy)}/`;
+            let expectedRetailerDetailURL = `${langEndpoint + testData.urls.marketplace.endpoints.shopRetailers}${getProductKeyByName(testData.featuredRetailers.bestBuy)}/`;
             await expect(page).toHaveURL(expectedRetailerDetailURL);
             await retailerDetailPage.verifyProductKeyInBreadCrumb(Formatter.formatProductName(getProductKeyByName(testData.featuredRetailers.bestBuy)));
             await retailerDetailPage.verifyPresenceOfRetailerHeader(testData.featuredRetailers.bestBuy);

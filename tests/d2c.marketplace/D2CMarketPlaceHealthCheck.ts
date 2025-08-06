@@ -14,7 +14,7 @@ class D2CMarketPlaceHealthCheck {
   }
 
   async _navigate() {
-    await this.page.goto('/');
+    await this.page.goto(testData.urls.marketplace.endpoints.englishLanguage);
   }
 
   async isHealthy() {

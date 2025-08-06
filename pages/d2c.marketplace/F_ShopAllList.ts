@@ -41,6 +41,7 @@ export class F_ShopAllList {
     private readonly listOfRetailerNamesForProducts: Locator
     private readonly listOfProductDesc: Locator
     private readonly productSortByOption: Locator
+    private readonly globalProductSortByOption: Locator
     private readonly lowToHighProductSort: Locator
     private readonly applySorting: Locator
     private readonly listOfProductPrice: Locator
@@ -84,6 +85,7 @@ export class F_ShopAllList {
         this.listOfRetailerNamesForProducts = page.locator('xpath=//div[@class="component--filter-products"]/descendant::a/div/div/p[contains(@class, "global-text-xs-bold")]')
         this.listOfProductDesc = page.locator('xpath=//div[@class="component--filter-products"]/descendant::a/div/div/p[contains(@class, "global-text-xs-bold")]/following-sibling::p')
         this.productSortByOption = page.getByRole('button', { name: testData.pageTexts.shopAllListPage.productSortByOptionText })
+        this.globalProductSortByOption = page.getByRole('button', { name: testData.pageTexts.shopAllListPage.globalProductSortByOptionText })
         this.lowToHighProductSort = page.locator('input[value="lowToHigh"]')
         this.applySorting = page.locator('button', { hasText: /^Apply$/ })
         this.listOfProductPrice = page.locator('xpath=//div[@class="component--filter-products"]/descendant::a/div/div/div/p[contains(@aria-label, "rice")]')
@@ -264,6 +266,20 @@ export class F_ShopAllList {
     async applyLowToHighPriceSorting() {
         await this.productSortByOption.scrollIntoViewIfNeeded()
         await this.productSortByOption.click()
+        await this.lowToHighProductSort.check()
+        expect(await this.lowToHighProductSort.isChecked()).toBeTruthy()
+        await this.applySorting.click()
+        await this.clickOnLoadMoreForProductIfApplicable(3)
+        const listOfPriceText = await this.listOfProductPrice.allTextContents()
+        expect(listOfPriceText.length).toBeGreaterThan(0);
+        const prices = listOfPriceText.map(price => parseFloat(price.replace(/[^0-9.]/g, '')))
+        const isSorted = prices.every((val, i, arr) => i === 0 || arr[i - 1] <= val);
+        expect(isSorted).toBe(true);
+    }
+
+    async applyLowToHighPriceSortingOnSearchPage() {
+        await this.globalProductSortByOption.scrollIntoViewIfNeeded()
+        await this.globalProductSortByOption.click()
         await this.lowToHighProductSort.check()
         expect(await this.lowToHighProductSort.isChecked()).toBeTruthy()
         await this.applySorting.click()

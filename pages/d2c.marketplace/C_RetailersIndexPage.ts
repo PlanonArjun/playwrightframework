@@ -95,11 +95,12 @@ export class C_RetailersIndexPage {
     }
 
     async enterCityInLocationModalView(city: string) {
+        await this.cityOrZipInputBox.waitFor({ state: 'visible' })
         await this.cityOrZipInputBox.fill(city)
     }
 
     async clickOnFirstOption() {
-        await expect(this.firstValueInLocationDropdown).toBeVisible({ timeout: 10000 });
+        await expect(this.firstValueInLocationDropdown).toBeVisible({ timeout: 10000 })
         await this.firstValueInLocationDropdown.click()
     }
 
