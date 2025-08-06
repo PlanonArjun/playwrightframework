@@ -25,7 +25,7 @@ platforms:
     browserVersion: '131'
   # - os: Windows
   #   osVersion: '11'
-  #   browserName: Playwright-firefox
+  #   browserName: playwright-firefox
   #   browserVersion: '132'
   # - os: Windows
   #   osVersion: '10'

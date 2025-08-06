@@ -18,12 +18,12 @@ test.describe('Regression Suite', () => {
     test.describe.configure({ retries: 0 });
     test.describe.configure({ mode: 'serial' });
 
-    test.beforeAll(async () => {
-        let browserTemp = await chromium.launch({ headless: true });
-        let pageTemp = await browserTemp.newPage();
-        isHealthyLocal = await new D2CMarketPlaceHealthCheck(pageTemp).isHealthy()
+    test.beforeAll(async ({browser}) => {
+        const browserContextTemp = await browser.newContext();
+        const pageTemp = await browserContextTemp.newPage();
+        isHealthyLocal = await new D2CMarketPlaceHealthCheck(pageTemp).isHealthy();
         await pageTemp.close();
-        await browserTemp.close();
+        await browserContextTemp.close();
     });
 
     test.describe('Key Customer Journey 5', () => {

@@ -18,12 +18,12 @@ test.describe('Regression Suite', () => {
     test.describe.configure({ retries: 0 });
     test.describe.configure({ mode: 'serial' });
 
-    test.beforeAll(async () => {
-        let browserTemp = await chromium.launch({ headless: true });
-        let pageTemp = await browserTemp.newPage();
-        isHealthyLocal = await new D2CMarketPlaceHealthCheck(pageTemp).isHealthy()
+    test.beforeAll(async ({browser}) => {
+        const browserContextTemp = await browser.newContext();
+        const pageTemp = await browserContextTemp.newPage();
+        isHealthyLocal = await new D2CMarketPlaceHealthCheck(pageTemp).isHealthy();
         await pageTemp.close();
-        await browserTemp.close();
+        await browserContextTemp.close();
     });
 
     test.describe('Key Customer Journey 4', () => {
@@ -49,7 +49,7 @@ test.describe('Regression Suite', () => {
             await shopAllListPage.verifyPresenceOfCategoryInBreadCrumb(testData.shopCategories.electronicsAndGaming);
             await basePage.verifyLocationPopUpVisibility();
             const langEndpoint = testData.urls.marketplace.endpoints.englishLanguage;
-            expect(page).toHaveURL(langEndpoint + testData.urls.marketplace.endpoints.shopCategories.shopElectronics);
+            expect(page).toHaveURL(new RegExp(`${langEndpoint}${testData.urls.marketplace.endpoints.shopCategories.shopElectronics}$`));
 
             //provide a zipcode for location 
             await shopAllListPage.enterCityInLocationModalView(testData.location.newYorkCity.zipcode);
@@ -58,7 +58,7 @@ test.describe('Regression Suite', () => {
             await shopAllListPage.clickOnContinueBtn();
 
             //land on category list page and perform basic assertions like url header and location
-            expect(page).toHaveURL(langEndpoint + testData.urls.marketplace.endpoints.shopCategories.shopElectronics);
+            expect(page).toHaveURL(new RegExp(`${langEndpoint}${testData.urls.marketplace.endpoints.shopCategories.shopElectronics}$`));
             await shopAllListPage.verifyPresenceOfShopCategoryHeader(testData.shopCategories.electronicsAndGaming);
             await shopAllListPage.verifyLocationSelectedOnProductIndexPage(testData.location.newYorkCity.name);
 
