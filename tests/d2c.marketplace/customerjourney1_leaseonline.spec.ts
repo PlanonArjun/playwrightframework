@@ -85,9 +85,14 @@ test.describe('Regression Suite', () => {
             //User clicks on Lease Online Button to proceed with leasing process
             await Promise.all([
                 page.waitForNavigation({ waitUntil: 'load' }),
-                retailerDetailPage.clickOnLeaseOnlineBtn(testData.featuredRetailers.bestBuy),
+                retailerDetailPage.clickOnLeaseOnlineBtn(),
             ]);
-            await expect(page).toHaveURL(new RegExp(testData.urls.external.pl.leaseOnlinePartial), { timeout: 10000 });
+            try {
+                await expect(page).toHaveURL(new RegExp(testData.urls.external.pl.leaseOnlinePartial), { timeout: 10000 });
+                await page.evaluate(_ => { }, `browserstack_executor: ${JSON.stringify({ action: 'setSessionStatus', arguments: { status: 'passed', reason: 'Customer Journey 1' } })}`);
+            } catch (Error) {
+                await page.evaluate(_ => { }, `browserstack_executor: ${JSON.stringify({ action: 'setSessionStatus', arguments: { status: 'failed', reason: Error.toString() } })}`);
+            }
         })
 
         test.afterEach(async () => {

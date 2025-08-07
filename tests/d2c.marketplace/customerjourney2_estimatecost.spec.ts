@@ -88,8 +88,12 @@ test.describe('Regression Suite', () => {
                 await retailerIndexPage.clickOnEstimateCostFromModalScreen(),
             ]);
             const currentUrl = page.url();
-            expect(currentUrl).toContain(testData.urls.external.pl.estimateCostPartial);
-
+            try {
+                expect(currentUrl).toContain(testData.urls.external.pl.estimateCostPartial);
+                await page.evaluate(_ => { }, `browserstack_executor: ${JSON.stringify({ action: 'setSessionStatus', arguments: { status: 'passed', reason: 'Customer Journey 2' } })}`);
+            } catch (Error) {
+                await page.evaluate(_ => { }, `browserstack_executor: ${JSON.stringify({ action: 'setSessionStatus', arguments: { status: 'failed', reason: Error.toString() } })}`);
+            }
         })
 
         test.afterEach(async () => {

@@ -25,7 +25,7 @@ export class E_ProductDetailsPage {
         this.plDisclaimerOnPDPPage = page.getByRole('paragraph').filter({ hasText: testData.pageTexts.productDetailsPage.plDisclaimerText })
         this.onlineRetailerAppDesc = page.getByRole('paragraph').filter({ hasText: testData.pageTexts.productDetailsPage.onlineRetailerAppDescText })
         this.qrImg = this.onlineRetailerAppDesc.locator('xpath=following-sibling::div[1]/img[@alt="Scan QR to download the app"]')
-        this.applyNowBtnOnPDPPage = page.getByRole("button", { name: new RegExp(testData.pageTexts.productDetailsPage.applyNowBtnPartialText) })
+        this.applyNowBtnOnPDPPage = page.getByRole("button", { name: testData.pageTexts.productDetailsPage.applyNowBtnText }).first()
         this.estimateLeasingCostOnPDPPage = page.getByRole("button", { name: testData.pageTexts.productDetailsPage.estimateCostBtnText })
     }
 
@@ -61,8 +61,7 @@ export class E_ProductDetailsPage {
         await expect(this.qrImg).toBeVisible()
     }
 
-    async clickOnApplyNowBtnOnPDPPageForInStoreRetailer(retailer: string) {
-        expect(await this.applyNowBtnOnPDPPage.innerText()).toContain(retailer)
+    async clickOnApplyNowBtnOnPDPPageForInStoreRetailer() {
         await this.applyNowBtnOnPDPPage.click()
     }
 

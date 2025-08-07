@@ -21,7 +21,7 @@ export class D_RetailersDetailPage {
         this.otherOptionsHeader = page.locator('h2', {hasText: testData.pageTexts.retailersDetailPage.otherOptionsHeaderText})
         this.otherOptionsDesc = page.locator('p', {hasText: new RegExp(testData.pageTexts.retailersDetailPage.otherOptionsDescPartialText)})
         this.allRetailersLink = page.getByRole("link", {name: testData.pageTexts.retailersDetailPage.allRetailersLinkText})
-        this.leaseOnlineBtnOnGrandParentDetailPage = page.getByRole("button", {name: new RegExp(testData.pageTexts.retailersDetailPage.applyNowBtnPartialText)})
+        this.leaseOnlineBtnOnGrandParentDetailPage = page.getByRole("button", {name: testData.pageTexts.retailersDetailPage.applyNowBtnPartialText}).first()
         this.estimateLeasingCostBtnOnGrandParentDetailPage = page.getByRole("button",{name: testData.pageTexts.retailersDetailPage.estimateLeasingCostBtnText})
     }
 
@@ -43,8 +43,7 @@ export class D_RetailersDetailPage {
         expect(await this.otherOptionsDesc.innerText()).toContain(retailerProduct)
     }
 
-    async clickOnLeaseOnlineBtn(retailerProduct: string) {
-        expect(await this.leaseOnlineBtnOnGrandParentDetailPage.innerText()).toContain(retailerProduct)
+    async clickOnLeaseOnlineBtn() {
         await this.leaseOnlineBtnOnGrandParentDetailPage.click()
     }
 

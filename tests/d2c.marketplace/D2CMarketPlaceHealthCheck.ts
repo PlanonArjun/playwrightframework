@@ -18,7 +18,11 @@ class D2CMarketPlaceHealthCheck {
   }
 
   async isHealthy() {
-    await this._navigate();
+    try {
+      await this._navigate();
+    } catch (Error) {
+      console.log(Error.toString())
+    }
     if (!(await this.progLeasingLogo.isVisible({ timeout: 5000 }))) {
       this.statusHealthy = false;
     }

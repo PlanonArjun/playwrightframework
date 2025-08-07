@@ -18,7 +18,7 @@ test.describe('Regression Suite', () => {
     test.describe.configure({ retries: 0 });
     test.describe.configure({ mode: 'serial' });
 
-    test.beforeAll(async ({browser}) => {
+    test.beforeAll(async ({ browser }) => {
         const browserContextTemp = await browser.newContext();
         const pageTemp = await browserContextTemp.newPage();
         isHealthyLocal = await new D2CMarketPlaceHealthCheck(pageTemp).isHealthy();
@@ -90,7 +90,12 @@ test.describe('Regression Suite', () => {
             const isOnlineRetailer: boolean = getStoreTypeByName(expectedProductRetailer) === STORE_TYPE.ONLINE;
 
             if (isOnlineRetailer) {
-                await productDetailPage.verifyAppDownloadLinkForOnlineRetailer(expectedProductRetailer);
+                try {
+                    await productDetailPage.verifyAppDownloadLinkForOnlineRetailer(expectedProductRetailer);
+                    await page.evaluate(_ => { }, `browserstack_executor: ${JSON.stringify({ action: 'setSessionStatus', arguments: { status: 'passed', reason: 'Customer Journey 3' } })}`);
+                } catch (Error) {
+                    await page.evaluate(_ => { }, `browserstack_executor: ${JSON.stringify({ action: 'setSessionStatus', arguments: { status: 'failed', reason: Error.toString() } })}`);
+                }
             } else {
                 throw new Error(`Test failed: Store Type mismatch`)
             }

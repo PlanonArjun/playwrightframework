@@ -69,14 +69,14 @@
             "otherOptionsHeaderText": "Need more ways to shop with lease-to-own?",
             "otherOptionsDescPartialText": "is a great option—and if they don’t have exactly what you’re looking for, we’ve got plenty more. Click here to explore other retailers where you can lease-to-own.",
             "allRetailersLinkText": "All retailers",
-            "applyNowBtnPartialText": "Apply Now with",
+            "applyNowBtnPartialText": "Apply Now",
             "estimateLeasingCostBtnText": "Estimate Leasing cost"
         },
         "productDetailsPage": {
             "availableInTheAppHeaderText": "Available in the App!",
             "plDisclaimerText": "As an affiliate, Progressive Leasing earns from qualifying purchases.",
             "onlineRetailerAppDescText": "Use our app to start your lease",
-            "applyNowBtnPartialText": "Apply Now with",
+            "applyNowBtnText": "Apply Now",
             "estimateCostBtnText": "Estimate leasing cost"
         },
         "shopAllListPage": {
