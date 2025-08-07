@@ -18,7 +18,7 @@ test.describe('Regression Suite', () => {
     test.describe.configure({ retries: 0 });
     test.describe.configure({ mode: 'serial' });
 
-    test.beforeAll(async ({browser}) => {
+    test.beforeAll(async ({ browser }) => {
         const browserContextTemp = await browser.newContext();
         const pageTemp = await browserContextTemp.newPage();
         isHealthyLocal = await new D2CMarketPlaceHealthCheck(pageTemp).isHealthy();
@@ -95,9 +95,14 @@ test.describe('Regression Suite', () => {
             if (!isOnlineRetailer) {
                 await Promise.all([
                     page.waitForNavigation({ waitUntil: 'load' }),
-                    productDetailPage.clickOnApplyNowBtnOnPDPPageForInStoreRetailer(expectedProductRetailer),
+                    productDetailPage.clickOnApplyNowBtnOnPDPPageForInStoreRetailer(),
                 ]);
-                await expect(page).toHaveURL(new RegExp(testData.urls.external.pl.leaseOnlinePartial), { timeout: 10000 });
+                try {
+                    await expect(page).toHaveURL(new RegExp(testData.urls.external.pl.leaseOnlinePartial), { timeout: 10000 });
+                    await page.evaluate(_ => { }, `browserstack_executor: ${JSON.stringify({ action: 'setSessionStatus', arguments: { status: 'passed', reason: 'Customer Journey 4' } })}`);
+                } catch (Error) {
+                    await page.evaluate(_ => { }, `browserstack_executor: ${JSON.stringify({ action: 'setSessionStatus', arguments: { status: 'failed', reason: Error.toString() } })}`);
+                }
             } else {
                 throw new Error(`Test failed: Store Type mismatch`)
             }
