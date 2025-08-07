@@ -107,6 +107,9 @@
                 },
                 "staging": {
                     "baseUrl": "https://www.stage.progleasing.com/"
+                },
+                "production": {
+                    "baseUrl": "https://www.progleasing.com/"
                 }
             },
             "endpoints": {
