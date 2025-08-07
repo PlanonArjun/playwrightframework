@@ -4,11 +4,11 @@
   "description": "Contains all the component level and customer journey UI tests for D2C marketplace application",
   "main": "index.js",
   "scripts": {
-    "test:customerjourney1:leaseonline:desktop": "npx browserstack-node-sdk playwright test --workers=5 -g d2c.marketplace/customerjourney1_leaseonline.spec.ts --browserstack.config=./browserstack.desktop.yml --config=./playwright.config.ts",
-    "test:customerjourney2:estimatecost:desktop": "npx browserstack-node-sdk playwright test --workers=5 -g d2c.marketplace/customerjourney2_estimatecost.spec.ts --browserstack.config=./browserstack.desktop.yml --config=./playwright.config.ts",
-    "test:customerjourney3:availableonapp:desktop": "npx browserstack-node-sdk playwright test --workers=5 -g d2c.marketplace/customerjourney3_availableonapp.spec.ts --browserstack.config=./browserstack.desktop.yml --config=./playwright.config.ts",
-    "test:customerjourney4:leaseonline:desktop": "npx browserstack-node-sdk playwright test --workers=5 -g d2c.marketplace/customerjourney4_leaseonline.spec.ts --browserstack.config=./browserstack.desktop.yml --config=./playwright.config.ts",
-    "test:customerjourney5:estimatecost:desktop": "npx browserstack-node-sdk playwright test --workers=5 -g d2c.marketplace/customerjourney5_estimatecost.spec.ts --browserstack.config=./browserstack.desktop.yml --config=./playwright.config.ts"
+    "test:customerjourney1:leaseonline:desktop": "npx browserstack-node-sdk playwright test d2c.marketplace/customerjourney1_leaseonline.spec.ts --workers=1 --browserstack.config=./browserstack.desktop.yml --config=./playwright.config.ts",
+    "test:customerjourney2:estimatecost:desktop": "npx browserstack-node-sdk playwright test d2c.marketplace/customerjourney2_estimatecost.spec.ts --workers=1 --browserstack.config=./browserstack.desktop.yml --config=./playwright.config.ts",
+    "test:customerjourney3:availableonapp:desktop": "npx browserstack-node-sdk playwright test d2c.marketplace/customerjourney3_availableonapp.spec.ts --workers=1 --browserstack.config=./browserstack.desktop.yml --config=./playwright.config.ts",
+    "test:customerjourney4:leaseonline:desktop": "npx browserstack-node-sdk playwright test d2c.marketplace/customerjourney4_leaseonline.spec.ts --workers=1 --browserstack.config=./browserstack.desktop.yml --config=./playwright.config.ts",
+    "test:customerjourney5:estimatecost:desktop": "npx browserstack-node-sdk playwright test d2c.marketplace/customerjourney5_estimatecost.spec.ts --workers=1 --browserstack.config=./browserstack.desktop.yml --config=./playwright.config.ts"
      },
   "repository": {
     "type": "git",

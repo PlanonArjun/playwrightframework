@@ -19,12 +19,12 @@ test.describe('Regression Suite', () => {
     test.describe.configure({ retries: 0 });
     test.describe.configure({ mode: 'serial' });
 
-    test.beforeAll(async () => {
-        let browserTemp = await chromium.launch({ headless: true });
-        let pageTemp = await browserTemp.newPage();
+    test.beforeAll(async ({ browser }) => {
+        const browserContextTemp = await browser.newContext();
+        const pageTemp = await browserContextTemp.newPage();
         isHealthyLocal = await new D2CMarketPlaceHealthCheck(pageTemp).isHealthy();
         await pageTemp.close();
-        await browserTemp.close();
+        await browserContextTemp.close();
     });
 
     test.describe('Key Customer Journey 1', () => {
@@ -45,7 +45,7 @@ test.describe('Regression Suite', () => {
             await retailerIndexPage.verifyPresenceOfBreadCrumb();
             await basePage.verifyLocationPopUpVisibility();
             const langEndpoint = testData.urls.marketplace.endpoints.englishLanguage;
-            expect(page).toHaveURL(langEndpoint + testData.urls.marketplace.endpoints.shopRetailers);
+            await expect(page).toHaveURL(new RegExp(`${langEndpoint}${testData.urls.marketplace.endpoints.shopRetailers}$`));
 
             //provide a city for location 
             await retailerIndexPage.enterCityInLocationModalView(testData.location.chicagoCity.name);
@@ -54,7 +54,7 @@ test.describe('Regression Suite', () => {
             await retailerIndexPage.clickOnContinueBtn();
 
             //land on retailers page and perform basic assertions like url header and location
-            expect(page).toHaveURL(langEndpoint + testData.urls.marketplace.endpoints.shopRetailers);
+            await expect(page).toHaveURL(new RegExp(`${langEndpoint}${testData.urls.marketplace.endpoints.shopRetailers}$`));
             await retailerIndexPage.verifyPresenceOfShopRetailersHeader();
             await retailerIndexPage.verifyLocationSelectedOnRetailersIndexPage(testData.location.chicagoCity.name);
 
@@ -76,7 +76,7 @@ test.describe('Regression Suite', () => {
             //User lands on grand parent retailer detail page and verifies relevant information
             retailerDetailPage = new D_RetailersDetailPage(page);
             let expectedRetailerDetailURL = `${langEndpoint + testData.urls.marketplace.endpoints.shopRetailers}${getProductKeyByName(testData.featuredRetailers.bestBuy)}/`;
-            await expect(page).toHaveURL(expectedRetailerDetailURL);
+            await expect(page).toHaveURL(new RegExp(expectedRetailerDetailURL));
             await retailerDetailPage.verifyProductKeyInBreadCrumb(Formatter.formatProductName(getProductKeyByName(testData.featuredRetailers.bestBuy)));
             await retailerDetailPage.verifyPresenceOfRetailerHeader(testData.featuredRetailers.bestBuy);
             await retailerDetailPage.verifyPresenceOfRetailerDesc(getProductDescriptionByName(testData.featuredRetailers.bestBuy));

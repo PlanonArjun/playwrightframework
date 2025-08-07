@@ -14,12 +14,12 @@ test.describe('Regression Suite', () => {
     test.describe.configure({ retries: 0 });
     test.describe.configure({ mode: 'serial' });
 
-    test.beforeAll(async () => {
-        let browserTemp = await chromium.launch({ headless: true });
-        let pageTemp = await browserTemp.newPage();
+    test.beforeAll(async ({browser}) => {
+        const browserContextTemp = await browser.newContext();
+        const pageTemp = await browserContextTemp.newPage();
         isHealthyLocal = await new D2CMarketPlaceHealthCheck(pageTemp).isHealthy();
         await pageTemp.close();
-        await browserTemp.close();
+        await browserContextTemp.close();
     });
 
     test.describe('Key Customer Journey 2', () => {
@@ -40,7 +40,7 @@ test.describe('Regression Suite', () => {
             await retailerIndexPage.verifyPresenceOfBreadCrumb();
             await basePage.verifyLocationPopUpVisibility();
             const langEndpoint = testData.urls.marketplace.endpoints.englishLanguage;
-            expect(page).toHaveURL(langEndpoint + testData.urls.marketplace.endpoints.shopRetailers);
+            expect(page).toHaveURL(new RegExp(`${langEndpoint}${testData.urls.marketplace.endpoints.shopRetailers}$`));
 
             //provide a zipcode for location 
             await retailerIndexPage.enterCityInLocationModalView(testData.location.newYorkCity.zipcode);
@@ -49,7 +49,7 @@ test.describe('Regression Suite', () => {
             await retailerIndexPage.clickOnContinueBtn();
 
             //land on retailers page and perform basic assertions like url header and location
-            expect(page).toHaveURL(langEndpoint + testData.urls.marketplace.endpoints.shopRetailers);
+            expect(page).toHaveURL(new RegExp(`${langEndpoint}${testData.urls.marketplace.endpoints.shopRetailers}$`));
             await retailerIndexPage.verifyPresenceOfShopRetailersHeader();
             await retailerIndexPage.verifyLocationSelectedOnRetailersIndexPage(testData.location.newYorkCity.name);
 
