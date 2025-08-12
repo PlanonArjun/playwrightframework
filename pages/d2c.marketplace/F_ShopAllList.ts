@@ -107,6 +107,7 @@ export class F_ShopAllList {
     }
 
     async enterCityInLocationModalView(city: string) {
+        await this.cityOrZipInputBox.waitFor({ state: 'visible' })
         await this.cityOrZipInputBox.fill(city)
     }
 
