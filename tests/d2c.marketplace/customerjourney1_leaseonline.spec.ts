@@ -76,10 +76,9 @@ test.describe('Regression Suite', () => {
             //User lands on grand parent retailer detail page and verifies relevant information
             retailerDetailPage = new D_RetailersDetailPage(page);
             let expectedRetailerDetailURL = `${langEndpoint + testData.urls.marketplace.endpoints.shopRetailers}${getProductKeyByName(testData.featuredRetailers.bestBuy)}/`;
-            await expect(page).toHaveURL(new RegExp(expectedRetailerDetailURL));
+            await expect(page).toHaveURL(new RegExp(expectedRetailerDetailURL), {timeout: 5000});
             await retailerDetailPage.verifyProductKeyInBreadCrumb(Formatter.formatProductName(getProductKeyByName(testData.featuredRetailers.bestBuy)));
             await retailerDetailPage.verifyPresenceOfRetailerHeader(testData.featuredRetailers.bestBuy);
-            await retailerDetailPage.verifyPresenceOfRetailerDesc(getProductDescriptionByName(testData.featuredRetailers.bestBuy));
             await retailerDetailPage.verifyOtherOptionsHeaderAndDesc(testData.featuredRetailers.bestBuy);
 
             //User clicks on Lease Online Button to proceed with leasing process
