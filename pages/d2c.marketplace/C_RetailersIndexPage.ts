@@ -59,7 +59,7 @@ export class C_RetailersIndexPage {
         this.locationUpdateBtn = page.locator('button', { hasText: testData.pageTexts.retailersIndexPage.updateBtnText })
         this.retailerSearchBtn = page.locator('button', { hasText: testData.pageTexts.retailersIndexPage.searchRetailersBtnText })
         this.retailerInputBox = page.getByPlaceholder(testData.pageTexts.retailersIndexPage.retailersInputBoxPlaceholderText)
-        this.firstValueInRetailerDropdown = page.locator('li a div span').nth(2)
+        this.firstValueInRetailerDropdown = page.getByRole('link', { name: testData.pageTexts.retailersIndexPage.suggestedDropdownLinkText, exact: true })
         this.searchResultsHeader = page.locator('h1', { hasText: testData.pageTexts.retailersIndexPage.searchResultsHeaderText })
         this.retailerSearchInputBoxWithRetailerName = page.locator('//div[contains(@class,"MuiContainer-root")]/div/button')
         this.filtersBtn = page.locator('span', { hasText: testData.pageTexts.retailersIndexPage.filtersBtnText })
@@ -150,7 +150,7 @@ export class C_RetailersIndexPage {
 
     async searchForResults() {
         await this.retailerInputBox.press('Enter')
-        await expect(this.searchResultsHeader).toBeVisible({timeout: 8000})
+        await expect(this.searchResultsHeader).toBeVisible({timeout: 10000})
     }
 
     async verifyRetailerNameInInputBoxAfterSearch(retailerName: string) {

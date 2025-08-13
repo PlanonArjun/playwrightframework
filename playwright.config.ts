@@ -2,7 +2,7 @@ import { defineConfig, devices } from '@playwright/test';
 import testData from './data/d2c.marketplace/testdata.json';
 
 // Get env from CLI or default to QA
-const envName = process.env.TEST_ENV || 'staging';
+const envName = process.env.TEST_ENV || 'production';
 const baseUrl = testData.urls.marketplace.environments[envName].baseUrl;
 
 if (!baseUrl) {
