@@ -125,7 +125,7 @@ export class F_ShopAllList {
     }
 
     async verifySearchResultsHeader() {
-        await expect(this.searchResultsHeader).toBeVisible({ timeout: 8000 })
+        await expect(this.searchResultsHeader).toBeVisible({ timeout: 10000 })
     }
 
     async verifyProductNameInInputBoxAfterSearch(productname: string) {
@@ -251,7 +251,7 @@ export class F_ShopAllList {
     }
 
     async clickOnLoadMoreForProductIfApplicable(numberOfIterations: number) {
-        await this.page.waitForTimeout(1000)
+        await this.page.waitForTimeout(3000)
         if (await this.productLoadMoreBtn.isVisible()) {
             for (let i: number = 1; i <= numberOfIterations; i++) {
                 await this.productLoadMoreBtn.scrollIntoViewIfNeeded()

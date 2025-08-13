@@ -52,6 +52,7 @@
             "updateBtnText": "Update",
             "searchRetailersBtnText": "Search Retailers",
             "retailersInputBoxPlaceholderText": "Search Retailers",
+            "suggestedDropdownLinkText": "Best Buy",
             "searchResultsHeaderText": "Search Results",
             "filtersBtnText": "Filters",
             "filtersHeaderText": "Filters",
@@ -203,7 +204,7 @@
     },
     "search": {
         "products": {
-            "laptops": "Laptops",
+            "laptop": "Laptop",
             "jewellery": "Jewellery"
         },
         "retailers": {

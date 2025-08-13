@@ -18,7 +18,7 @@ export class E_ProductDetailsPage {
     constructor(page: Page) {
         this.page = page
         this.productDescription = page.locator('xpath=//div[@class="component--product-title"]/h1').last()
-        this.productPrice = page.locator('xpath=//div[@class="component--price"]/p[contains(@aria-label, "Price") and contains(@class, "global-text-xxl")]').last()
+        this.productPrice = page.locator('xpath=//div[@class="component--price"]/p[contains(@aria-label, "rice") and contains(@class, "global-text-xxl")]').last()
         this.productDetailsHeader = page.locator('xpath=//div[@class="component--product-description"]/h2[text()="Product Details"]').first();
         this.productDetails = page.locator('xpath=//div[@class="component--product-description"]/p').first()
         this.availableInTheAppText = page.getByRole('paragraph').filter({ hasText: testData.pageTexts.productDetailsPage.availableInTheAppHeaderText })

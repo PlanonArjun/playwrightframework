@@ -43,9 +43,9 @@ test.describe('Regression Suite', () => {
 
             //user search for the product and hits enter
             shopAllListPage = new F_ShopAllList(page);
-            await basePage.enterProductInGlobalSearchInputBox(testData.search.products.laptops);
+            await basePage.enterProductInGlobalSearchInputBox(testData.search.products.laptop);
             await shopAllListPage.verifySearchResultsHeader();
-            await shopAllListPage.verifyProductNameInInputBoxAfterSearch(testData.search.products.laptops);
+            await shopAllListPage.verifyProductNameInInputBoxAfterSearch(testData.search.products.laptop);
 
             //Click on fliters button and apply filters for retailer
             await shopAllListPage.clickOnProductFilterBtn();
