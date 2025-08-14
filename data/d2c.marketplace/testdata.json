@@ -97,7 +97,7 @@
             "clearFiltersBtnText": "Clear Filters",
             "loadMoreBtnText": "Load more",
             "productSortByOptionText": "Sort By: Default",
-            "globalProductSortByOptionText": "Sort By: A to Z"
+            "globalProductSortByOptionText": "Sort By: Default"
         }
     },
     "urls": {
