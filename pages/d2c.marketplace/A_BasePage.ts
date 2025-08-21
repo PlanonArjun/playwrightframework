@@ -64,9 +64,9 @@ export class A_BasePage {
         this.shopRetailersIcon = page.locator('a', { hasText: testData.pageTexts.basePage.shopRetailersBtnText })
         this.locationPopUpHeader = page.locator('span', { hasText: testData.pageTexts.basePage.locationHeaderText })
         this.shopAllIcon = page.locator('button', { hasText: testData.pageTexts.basePage.shopProductsBtnText })
-        this.electronicsAndGamingShopCategory = page.getByRole('link', {name: testData.pageTexts.basePage.electronicsAndGamingCategoryText})
-        this.furnitureShopCategory = page.getByRole('link', {name: testData.pageTexts.basePage.furnitureCategoryText})
-        this.shopAllLink = page.getByRole('link', { name: testData.pageTexts.basePage.shopAllLinkText })
+        this.electronicsAndGamingShopCategory = page.getByRole('link', { name: testData.pageTexts.basePage.electronicsAndGamingCategoryText })
+        this.furnitureShopCategory = page.getByRole('link', { name: testData.pageTexts.basePage.furnitureCategoryText })
+        this.shopAllLink = page.locator('(//a/span[text()="Shop Products"])[1]')
         this.shopCategoriesHeader = page.locator('p', { hasText: testData.pageTexts.basePage.shopCategoriesHeaderText })
         this.shopCategoriesItems = page.locator('div[class="flex flex-col items-center justify-center gap-[0.5rem]"] p')
         this.learnMoreBtn = page.locator('button', { hasText: testData.pageTexts.basePage.learnMoreBtnAndHeaderText })
@@ -103,12 +103,12 @@ export class A_BasePage {
         this.igLink = page.getByRole('link', { name: testData.pageTexts.basePage.igLinkText })
         this.plDeclarationText = page.getByText(testData.pageTexts.basePage.plDeclarationText)
         this.plCopyrightText = page.getByText(testData.pageTexts.basePage.plCopyrightText)
-        this.termsOfUseLink = page.getByRole('link', {name: testData.pageTexts.basePage.termsOfUseLinkText})
+        this.termsOfUseLink = page.getByRole('link', { name: testData.pageTexts.basePage.termsOfUseLinkText })
         this.privacyLink = page.getByRole('link', { name: testData.pageTexts.basePage.privacyLinkText })
-        this.trustCentreLink = page.getByRole('link', {name: testData.pageTexts.basePage.trustCentreLinkText})
-        this.dataSubjectRequestsLink = page.getByRole('link', {name: testData.pageTexts.basePage.dataSubjectsRequestLinkText})
-        this.bipaLink = page.getByRole('link', {name: testData.pageTexts.basePage.bipaLinkText})
-        this.yourPrivacyChoicesLink = page.getByRole('link', {name: testData.pageTexts.basePage.yourPrivacyChoicesLinkText})
+        this.trustCentreLink = page.getByRole('link', { name: testData.pageTexts.basePage.trustCentreLinkText })
+        this.dataSubjectRequestsLink = page.getByRole('link', { name: testData.pageTexts.basePage.dataSubjectsRequestLinkText })
+        this.bipaLink = page.getByRole('link', { name: testData.pageTexts.basePage.bipaLinkText })
+        this.yourPrivacyChoicesLink = page.getByRole('link', { name: testData.pageTexts.basePage.yourPrivacyChoicesLinkText })
         this.languageFooter = page.locator('span[class="global-text-sm-medium ml-1 text-primary focus:outline-none focus:outline-2 focus:outline-black"]')
     }
 
@@ -222,7 +222,7 @@ export class A_BasePage {
     async enterProductInGlobalSearchInputBox(product: string) {
         await this.searchProductAndRetailerInput.fill(product)
         await this.searchProductAndRetailerInput.press('Enter')
-        
+
     }
 
     async clickPLLogoInFooter() {
@@ -365,7 +365,7 @@ export class A_BasePage {
     }
 
     async getTheLanguageSelectedInFooter() {
-       return await this.languageFooter.innerText()
+        return await this.languageFooter.innerText()
     }
 
 }

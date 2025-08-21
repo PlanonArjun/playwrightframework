@@ -251,7 +251,7 @@ export class F_ShopAllList {
     }
 
     async clickOnLoadMoreForProductIfApplicable(numberOfIterations: number) {
-        await this.page.waitForTimeout(3000)
+        await this.page.waitForTimeout(6000)
         if (await this.productLoadMoreBtn.isVisible()) {
             for (let i: number = 1; i <= numberOfIterations; i++) {
                 await this.productLoadMoreBtn.scrollIntoViewIfNeeded()
@@ -292,9 +292,9 @@ export class F_ShopAllList {
         expect(isSorted).toBe(true);
     }
 
-    async clickOnFirstProductTile() {
+    async clickOnFirstProductTile(productDetail: string) {
         await this.firstProductTilePrice.click()
-        await expect(this.page).toHaveTitle(testData.pageTitle.productDetailsPage, { timeout: 10000 });
+        await expect(this.page).toHaveTitle(productDetail, { timeout: 10000 });
     }
 
     async getProductDescOnPLP() {

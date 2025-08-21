@@ -61,7 +61,7 @@ test.describe('Regression Suite', () => {
             const expectedProductRetailer = await shopAllListPage.getProductRetailerNameOnPLP();
 
             //Click on first product tile
-            await shopAllListPage.clickOnFirstProductTile();
+            await shopAllListPage.clickOnFirstProductTile(expectedProductDescription);
 
             //provide a zipcode for location 
             await basePage.verifyLocationPopUpVisibility();
