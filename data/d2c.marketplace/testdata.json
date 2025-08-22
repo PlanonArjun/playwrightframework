@@ -111,6 +111,12 @@
                 },
                 "production": {
                     "baseUrl": "https://www.progleasing.com/"
+                },
+                "stagingWithoutwww": {
+                    "baseUrl": "https://stage.progleasing.com/"
+                },
+                "productionWithoutwww": {
+                    "baseUrl": "https://progleasing.com/"
                 }
             },
             "endpoints": {
@@ -152,8 +158,8 @@
                 "trust": "https://progleasing.com/prog-force-trust-center",
                 "cookiesPreference": "https://progleasing.com/CookiePreferences",
                 "bipa": "https://progleasing.com/bipa",
-                "leaseOnlinePartial": "https://cic-preview.progleasing.com/u/login/",
-                "estimateCostPartial": "https://www.stage.progleasing.com/myaccount/"
+                "leaseOnlinePartial": "/u/login/",
+                "estimateCostPartial": "/myaccount/"
             }
         }
     },
