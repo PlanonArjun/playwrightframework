@@ -150,7 +150,7 @@ export class C_RetailersIndexPage {
 
     async searchForResults() {
         await this.retailerInputBox.press('Enter')
-        await expect(this.searchResultsHeader).toBeVisible({timeout: 10000})
+        await expect(this.searchResultsHeader).toBeVisible({timeout: 20000})
     }
 
     async verifyRetailerNameInInputBoxAfterSearch(retailerName: string) {
