@@ -193,8 +193,8 @@
     "filterCategories": {
         "laptopsFilter": "Laptops",
         "televisionsFilter": "Televisions",
-         "computersFilters": "Computers & Tablets",
-        "LargeAppliancesFilter": "Large & Small Appliances"
+         "computersFilter": "Computers & Tablets",
+        "largeAppliancesFilter": "Large & Small Appliances"
 
     },
     "leaseToOwnOptionsFilter": {
