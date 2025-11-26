@@ -65,7 +65,7 @@ export class F_ShopAllList {
         this.filtersBtn = page.locator('span', { hasText: testData.pageTexts.shopAllListPage.filtersBtnText })
         this.productFiltersBtn = this.filtersBtn.last()
         this.filtersHeader = page.locator('span[class="global-text-sm-semi-degular text-primary"]', { hasText: testData.pageTexts.shopAllListPage.filtersHeaderText })
-        this.laptopsCategory = page.locator('span', { hasText: testData.pageTexts.shopAllListPage.laptopsCategoryFilterText })
+        this.laptopsCategory = page.locator('span', { hasText: testData.pageTexts.shopAllListPage.computerCategoryFilterText })
         this.televisionsCategory = page.locator('span', { hasText: testData.pageTexts.shopAllListPage.televisionsCategoryFilterText })
         this.retailerInputBoxOnFilterScreen = page.locator('input[placeholder="Search Retailers"]')
         this.bestBuyRetailerOptionOnFilterScreen = page.locator('input[type="radio"][value="Best Buy"]')
@@ -75,7 +75,7 @@ export class F_ShopAllList {
         this.asusBrandOptionOnFilterScreen = page.locator('input[type="radio"][value="ASUS"]')
         this.applyFiltersBtn = page.locator('button', { hasText: testData.pageTexts.shopAllListPage.applyFiltersBtnText })
         this.clearFiltersBtn = page.locator('button', { hasText: testData.pageTexts.shopAllListPage.clearFiltersBtnText })
-        this.laptopsCategoryFilterApplied = page.locator('//span[contains(@class, "MuiChip-label")]/span[text()="Laptops"]')
+        this.laptopsCategoryFilterApplied = page.locator('//span[contains(@class, "MuiChip-label")]/span[text()="Computers & Tablets"]')
         this.televisionsCategoryFilterApplied = page.locator('//span[contains(@class, "MuiChip-label")]/span[text()="Televisions"]')
         this.bestBuyRetailerFilterApplied = page.locator('//span[contains(@class, "MuiChip-label")]/span[text()="Best Buy"]')
         this.amazonRetailerFilterApplied = page.locator('//span[contains(@class, "MuiChip-label")]/span[text()="Amazon"]')
@@ -163,7 +163,7 @@ export class F_ShopAllList {
     }
 
     async selectCategoryFilter(category: string) {
-        if (category === CATEGORIES.LAPTOPS) {
+        if (category === CATEGORIES.COMPUTERS) {
             await this.laptopsCategory.click()
         } else if (category === CATEGORIES.TELEVISIONS) {
             await this.televisionsCategory.click()
@@ -209,7 +209,7 @@ export class F_ShopAllList {
     }
 
     async verifyCategoryFilterIsApplied(categoryFilter: string) {
-        if (categoryFilter === CATEGORIES.LAPTOPS) {
+        if (categoryFilter === CATEGORIES.COMPUTERS) {
             await expect(this.laptopsCategoryFilterApplied).toBeVisible()
         } else if (categoryFilter === CATEGORIES.TELEVISIONS) {
             await expect(this.televisionsCategoryFilterApplied).toBeVisible()
