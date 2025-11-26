@@ -61,11 +61,11 @@ test.describe('Regression Suite', () => {
 
             //Click on fliters button and apply filters for retailer and categories
             await shopAllListPage.clickOnFilterBtn();
-            await shopAllListPage.selectCategoryFilter(testData.filterCategories.laptopsFilter);
+            await shopAllListPage.selectCategoryFilter(testData.filterCategories.computersFilters);
             await shopAllListPage.selectRetailerFilter(testData.featuredRetailers.amazon);
             await shopAllListPage.applyFilter();
             await shopAllListPage.clickOnLoadMoreForProductIfApplicable(3);
-            await shopAllListPage.verifyCategoryFilterIsApplied(testData.filterCategories.laptopsFilter);
+            await shopAllListPage.verifyCategoryFilterIsApplied(testData.filterCategories.computersFilters);
             await shopAllListPage.verifyRetailerFilterIsApplied(testData.featuredRetailers.amazon);
 
             //Sort the products by Price low to high

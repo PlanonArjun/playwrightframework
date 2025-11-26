@@ -1,4 +1,6 @@
 export enum CATEGORIES {
-  LAPTOPS = 'Laptops',
-  TELEVISIONS = 'Televisions'
+  LAPTOPS = 'Computers & Tablets',
+  TELEVISIONS = 'Televisions',
+  COMPUTERS = 'Computers & Tablets',
+  LARGE_APPLIANCES = 'Large & Small Appliances',
 }

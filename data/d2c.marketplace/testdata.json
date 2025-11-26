@@ -93,6 +93,8 @@
             "filtersHeaderText": "Filters",
             "laptopsCategoryFilterText": "Laptops",
             "televisionsCategoryFilterText": "Televisions",
+            "computerCategoryFilterText": "Computers & Tablets",
+            "appliancesCategoryFilterText": "Large & Small Appliances",
             "applyFiltersBtnText": "Apply Filters",
             "clearFiltersBtnText": "Clear Filters",
             "loadMoreBtnText": "Load more",
@@ -190,7 +192,10 @@
     },
     "filterCategories": {
         "laptopsFilter": "Laptops",
-        "televisionsFilter": "Televisions"
+        "televisionsFilter": "Televisions",
+         "computersFilters": "Computers & Tablets",
+        "LargeAppliancesFilter": "Large & Small Appliances"
+
     },
     "leaseToOwnOptionsFilter": {
         "onlineFilter": "Online",

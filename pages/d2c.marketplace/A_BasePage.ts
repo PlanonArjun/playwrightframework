@@ -66,7 +66,7 @@ export class A_BasePage {
         this.shopAllIcon = page.locator('button', { hasText: testData.pageTexts.basePage.shopProductsBtnText })
         this.electronicsAndGamingShopCategory = page.getByRole('link', { name: testData.pageTexts.basePage.electronicsAndGamingCategoryText })
         this.furnitureShopCategory = page.getByRole('link', { name: testData.pageTexts.basePage.furnitureCategoryText })
-        this.shopAllLink = page.locator('(//a/span[text()="Shop Products"])[1]')
+        this.shopAllLink = page.locator('(//span[text()="Shop Products"])[1]')
         this.shopCategoriesHeader = page.locator('p', { hasText: testData.pageTexts.basePage.shopCategoriesHeaderText })
         this.shopCategoriesItems = page.locator('div[class="flex flex-col items-center justify-center gap-[0.5rem]"] p')
         this.learnMoreBtn = page.locator('button', { hasText: testData.pageTexts.basePage.learnMoreBtnAndHeaderText })
