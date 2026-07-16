@@ -1,0 +1,735 @@
+MARKETPLACE E2E TESTS - AUTOMATION FRAMEWORK DOCUMENTATION
+===========================================================
+
+Project Name: marketplace-e2e-tests
+Technology: Playwright, TypeScript, BrowserStack, Node.js
+Purpose: End-to-end UI automation for the Prog Leasing Marketplace website
+Audience: QA Engineers, SDETs, Developers and Reviewers
+
+-----------------------------------------------------------
+1. OVERVIEW
+-----------------------------------------------------------
+
+The marketplace-e2e-tests project automates end-to-end UI testing for the Prog Leasing Marketplace website using Playwright and TypeScript.
+
+This project is a specialised implementation of the Playwright E2E test framework where Marketplace-specific tests are maintained. It supports execution across multiple environments such as QA, Staging and Production-style environments, and can be executed locally or on BrowserStack cloud infrastructure.
+
+Currently, the framework focuses on desktop browser execution and follows common automation practices such as Page Object Model, externalised test data, environment-driven configuration, health checks, structured reporting and BrowserStack integration.
+
+Key points:
+- Supports execution across QA, Staging and Production-style environments.
+- Supports local execution and BrowserStack cloud execution.
+- Focuses on desktop browser automation for customer journey validation.
+- Uses Page Object Model, structured test data and reusable utilities.
+- Provides Playwright HTML reports and BrowserStack execution evidence.
+
+-----------------------------------------------------------
+2. OBJECTIVES
+-----------------------------------------------------------
+
+The framework has been designed to achieve the following objectives:
+
+1. Validate Core Customer Journeys
+   Automatically verify important user workflows across key Marketplace scenarios.
+
+2. Support Regression Testing
+   Run repeatable tests to confirm existing functionality remains stable after product or code changes.
+
+3. Provide Cross-Browser Coverage
+   Execute tests across desktop browsers locally or through BrowserStack cloud infrastructure.
+
+4. Enable Rapid Feedback
+   Generate useful execution results, logs, reports and BrowserStack session evidence.
+
+5. Reduce Test Maintenance Effort
+   Use JSON-driven configuration for URLs, page text, input data and locator text wherever possible.
+
+-----------------------------------------------------------
+3. TECHNOLOGY STACK
+-----------------------------------------------------------
+
+Component              Description
+---------              -----------
+Playwright             Automation framework for UI testing across Chromium, Firefox and WebKit.
+TypeScript             Typed JavaScript language used for readability and maintainability.
+BrowserStack SDK       Integration layer for running Playwright tests on cloud browsers.
+Node.js                JavaScript runtime used to execute Playwright tests and tooling.
+VS Code                Recommended IDE for development and debugging.
+Git and GitHub         Version control system and source repository management.
+
+-----------------------------------------------------------
+4. PROJECT STRUCTURE
+-----------------------------------------------------------
+
+marketplace-e2e-tests/
+|
+|-- data/d2c.marketplace/              Test data JSON config and product mapping
+|-- pages/d2c.marketplace/             Page Object Model classes
+|-- tests/d2c.marketplace/             Test specs and health check files
+|-- utils/d2c.marketplace/             Enums, constants and helper classes
+|
+|-- .eslintrc                          Linting configuration
+|-- .gitignore                         Git ignore rules
+|-- .prettierrc                        Prettier formatting configuration
+|
+|-- browserstack.android.yml           BrowserStack Android config
+|-- browserstack.api.yml               BrowserStack API config
+|-- browserstack.desktop.yml           BrowserStack desktop config
+|-- browserstack.ios.yml               BrowserStack iOS config
+|
+|-- global-setup.ts                    Global setup script
+|-- package.json                       Project metadata and npm scripts
+|-- package-lock.json                  Exact dependency versions
+|
+|-- playwright.config.ts               Main Playwright configuration
+|-- playwright.api.config.ts           API test configuration
+|-- playwright.browserstack.config.ts  BrowserStack test configuration
+|-- playwright.ios.config.ts           iOS test configuration
+|
+|-- README.md                          Project documentation
+|-- tsconfig.json                      TypeScript compiler configuration
+
+-----------------------------------------------------------
+5. FRAMEWORK FEATURES
+-----------------------------------------------------------
+
+1. Environment-Driven Execution
+   Tests can run against QA, Staging or other environments using CLI commands or environment variables.
+
+2. Configurable Locators
+   Text-based or regex-based UI text values are maintained through JSON configuration.
+
+3. Cross-Browser Support
+   Tests can run locally or on BrowserStack across multiple desktop browser configurations.
+
+4. Serial and Headed/Headless Execution
+   Execution can be controlled using Playwright configuration and CLI flags.
+
+5. Health Check Before Tests
+   beforeAll validates application health before customer journeys are executed.
+
+6. Structured Reporting
+   Playwright HTML reports and BrowserStack logs/videos can be shared with stakeholders.
+
+7. Config-Driven Execution
+   Script changes are minimised by centralising page text, URLs and test data.
+
+-----------------------------------------------------------
+6. TEST STRUCTURE
+-----------------------------------------------------------
+
+6.1 Test Files
+--------------
+
+Location:
+/tests/d2c.marketplace
+
+Purpose:
+- Stores test scenarios.
+- Stores spec files.
+- Stores health check implementation.
+
+Current test coverage includes five key customer journey scenarios involving:
+- Lease Online
+- Estimate Cost
+- Available on App
+
+6.2 Naming Convention
+---------------------
+
+Each test file follows this naming pattern:
+
+customerjourney<scenarioNumber>_<actionType>.spec.ts
+
+Examples:
+customerjourney1_leaseonline.spec.ts
+customerjourney2_estimatecost.spec.ts
+customerjourney3_availableonapp.spec.ts
+customerjourney4_leaseonline.spec.ts
+customerjourney5_estimatecost.spec.ts
+
+6.3 Standard Spec File Structure
+--------------------------------
+
+test.describe('Regression Suite', () => {
+
+  test.beforeAll(async ({ browser }) => {
+    // Health check execution
+  });
+
+  test.describe('Key Customer Journey 1', () => {
+
+    test.beforeEach(async ({ browser }) => {
+      // Create context, initialise page and open application
+    });
+
+    test('Lease Online from Grand Parent Retailer Page', { tag: ['@regression', '@kcj1'] }, async () => {
+      // Customer journey steps and assertions
+    });
+
+    test.afterEach(async () => {
+      // Close page/context and clear resources
+    });
+  });
+});
+
+6.4 Hook Responsibilities
+-------------------------
+
+beforeAll()
+- Runs application health check in an isolated session before executing scenarios.
+
+beforeEach()
+- Initialises browser context.
+- Creates page object instances.
+- Navigates to the Marketplace home page.
+
+Test block
+- Contains the actual customer journey steps and validations.
+
+afterEach()
+- Performs cleanup.
+- Closes page and browser context resources.
+
+Important BrowserStack Note:
+Avoid using chromium.launch() when executing tests on BrowserStack. Prefer the Playwright browser fixture provided by the test runner.
+
+-----------------------------------------------------------
+7. PAGE OBJECT MODEL
+-----------------------------------------------------------
+
+Page Object classes encapsulate selectors, reusable page actions and assertions. This improves readability, reduces duplication and makes UI changes easier to manage.
+
+Current Page Classes:
+
+A_BasePage
+- Common base functionality shared across pages.
+
+B_HomePage
+- Home page interactions and validations.
+
+C_RetailersIndexPage
+- Retailers listing page interactions.
+
+D_RetailersDetailPage
+- Retailer detail page actions and assertions.
+
+E_ProductDetailsPage
+- Product detail page validations and user actions.
+
+F_ShopAllListPage
+- Shop All listing page interactions.
+
+Naming Convention:
+AlphabeticalSerialPrefix_PascalCase
+
+Examples:
+A_BasePage
+B_HomePage
+C_RetailersIndexPage
+
+-----------------------------------------------------------
+8. UTILITIES AND TEST DATA
+-----------------------------------------------------------
+
+8.1 Utilities
+-------------
+
+Location:
+/utils/d2c.marketplace
+
+Purpose:
+- Stores enums.
+- Stores constants.
+- Stores formatter helpers.
+- Stores reusable support functions.
+- Can be extended with additional reusable helper classes in future.
+
+8.2 Test Data
+-------------
+
+Location:
+/data/d2c.marketplace
+
+Purpose:
+- Maintains page texts.
+- Maintains environment URLs.
+- Maintains endpoints.
+- Maintains external URLs.
+- Maintains input test data.
+- Supports easier updates when UI text, URLs or product mappings change.
+
+Sample Test Data Structure:
+
+{
+  "pageTexts": {
+    "basePage": {},
+    "homePage": {},
+    "retailersIndexPage": {},
+    "retailersDetailPage": {},
+    "productDetailsPage": {},
+    "shopAllListPage": {}
+  },
+  "urls": {
+    "marketplace": {
+      "environments": {
+        "qa": {
+          "baseUrl": "BASE_URL"
+        },
+        "staging": {
+          "baseUrl": "BASE_URL"
+        },
+        "production": {
+          "baseUrl": "BASE_URL"
+        }
+      },
+      "endpoints": {}
+    },
+    "social": {},
+    "mobileApps": {},
+    "external": {
+      "pl": {}
+    }
+  },
+  "pageTitle": {},
+  "location": {},
+  "shopCategories": {},
+  "filterCategories": {},
+  "leaseToOwnOptionsFilter": {},
+  "retailerFilter": {},
+  "brandFilter": {},
+  "featuredRetailers": {},
+  "search": {
+    "products": {},
+    "retailers": {}
+  }
+}
+
+-----------------------------------------------------------
+9. CONFIGURATION FILES
+-----------------------------------------------------------
+
+playwright.config.ts
+- Main Playwright configuration file.
+- Contains baseURL, retries, reporter, browser projects and timeout settings.
+
+browserstack.*.yml
+- Contains BrowserStack platform, browser and capability configuration.
+
+package.json
+- Contains project metadata, dependencies and npm scripts.
+
+tsconfig.json
+- Contains TypeScript compiler configuration.
+
+-----------------------------------------------------------
+10. PROJECT SETUP
+-----------------------------------------------------------
+
+10.1 Prerequisites
+------------------
+
+Required software:
+- Node.js 20.x or higher
+- NPM 9.x or higher
+- Git
+- Git Bash
+- VS Code
+
+Required access:
+- Prog Leasing GitHub Enterprise repository access
+- Prog Leasing Artifactory/JFrog repository access
+- BrowserStack account access
+
+10.2 Installation Steps
+-----------------------
+
+Step 1: Clone the repository
+
+git clone https://github.com/Prog-Leasing-LLC-Legacy/marketplace-e2e-tests.git
+cd marketplace-e2e-tests
+
+Step 2: Configure npm registry
+
+npm config set registry https://progleasing.jfrog.io/artifactory/api/npm/npmjs/
+
+Step 3: Install dependencies
+
+npm install
+
+10.3 Handling SELF_SIGNED_CERT_IN_CHAIN Error
+---------------------------------------------
+
+If npm install fails with SELF_SIGNED_CERT_IN_CHAIN, run:
+
+npm config set strict-ssl false
+npm config set registry https://progleasing.jfrog.io/artifactory/api/npm/npmjs/
+npm install
+
+10.4 Installing playwright-qe-core
+----------------------------------
+
+As per the project setup approach:
+
+1. Remove playwright-qe-core dependency from package.json temporarily.
+2. Run npm install.
+3. Set the npm registry for npm-release.
+4. Add playwright-qe-core dependency back into package.json.
+5. Run npm install again.
+6. Run a test and confirm successful execution.
+
+Registry command for npm-release:
+
+npm config set registry https://progleasing.jfrog.io/artifactory/api/npm/npm-release/
+
+-----------------------------------------------------------
+11. ENVIRONMENT CONFIGURATION
+-----------------------------------------------------------
+
+Environment URLs are handled through the JSON test data file and playwright.config.ts.
+
+Example:
+
+const envName = process.env.TEST_ENV || 'staging';
+const baseUrl = testData.urls.marketplace.environments[envName].baseUrl;
+
+const config = {
+  use: {
+    baseURL: baseUrl
+  }
+};
+
+If TEST_ENV is not passed in the command, the default environment value is used from the configuration.
+
+Windows PowerShell:
+
+$env:TEST_ENV="qa"
+npx playwright test
+
+Mac/Linux:
+
+TEST_ENV=qa npx playwright test
+
+-----------------------------------------------------------
+12. VALIDATIONS AND MATCHERS
+-----------------------------------------------------------
+
+Use Playwright await expect() assertions for most validations. Assertions should be meaningful and aligned with the expected business outcome.
+
+Common examples:
+
+await expect(locator).toBeVisible();
+await expect(page).toHaveURL(/expected-url/);
+await expect(input).toHaveValue('value');
+expect(await this.cityOrZipInputBox.getAttribute('value')).toContain(city);
+
+-----------------------------------------------------------
+13. FIXTURES AND HOOKS
+-----------------------------------------------------------
+
+beforeAll, beforeEach, afterEach and other Playwright hooks can be used inside the test files.
+
+Important guidance:
+- Use the browser fixture provided by Playwright.
+- Avoid chromium.launch() in BrowserStack execution.
+- Keep setup and teardown logic clean and reusable.
+- Use beforeAll for health checks.
+- Use beforeEach for test-specific setup.
+- Use afterEach for cleanup.
+
+-----------------------------------------------------------
+14. BROWSERSTACK INTEGRATION
+-----------------------------------------------------------
+
+14.1 Prerequisites
+------------------
+
+- Access to Prog Leasing BrowserStack account.
+- BROWSERSTACK_USERNAME and BROWSERSTACK_ACCESS_KEY configured.
+- Credentials should preferably be set as environment variables.
+
+14.2 Desktop Platform Configuration Example
+-------------------------------------------
+
+platforms:
+  - os: Windows
+    osVersion: '11'
+    browserName: playwright-chromium
+    browserVersion: '131'
+
+14.3 BrowserStack Status Reporting
+----------------------------------
+
+The last assertion step should be wrapped inside a try/catch block so that BrowserStack session status can be updated.
+
+Example:
+
+try {
+  await expect(page).toHaveURL(new RegExp(testData.urls.external.pl.leaseOnlinePartial), { timeout: 10000 });
+
+  await page.evaluate(() => {}, `browserstack_executor: ${JSON.stringify({
+    action: 'setSessionStatus',
+    arguments: {
+      status: 'passed',
+      reason: 'Customer Journey 4'
+    }
+  })}`);
+
+} catch (error) {
+
+  await page.evaluate(() => {}, `browserstack_executor: ${JSON.stringify({
+    action: 'setSessionStatus',
+    arguments: {
+      status: 'failed',
+      reason: error.toString()
+    }
+  })}`);
+}
+
+This updates the BrowserStack Automate dashboard with:
+- Passed status when the assertion succeeds.
+- Failed status when the assertion fails.
+
+-----------------------------------------------------------
+15. TEST EXECUTION
+-----------------------------------------------------------
+
+15.1 Local Execution
+--------------------
+
+Command:
+
+npx playwright test d2c.marketplace/customerjourney1_leaseonline.spec.ts --project=chrome --workers=1 --headed
+
+Parameter Explanation:
+
+npx playwright test
+- Runs Playwright tests using npx.
+
+Spec file path
+- Specifies the relative path to the test file or folder.
+
+--project=chrome
+- Runs the test using the chrome project defined in playwright.config.ts.
+
+--workers=1
+- Runs tests serially using one worker.
+
+--headed
+- Runs the browser in visible mode for debugging.
+
+15.2 Sample Local Test Commands
+-------------------------------
+
+npx playwright test d2c.marketplace/customerjourney1_leaseonline.spec.ts --project=chrome --workers=1 --headed
+npx playwright test d2c.marketplace/customerjourney2_estimatecost.spec.ts --project=chrome --workers=1 --headed
+npx playwright test d2c.marketplace/customerjourney3_availableonapp.spec.ts --project=chrome --workers=1 --headed
+npx playwright test d2c.marketplace/customerjourney4_leaseonline.spec.ts --project=chrome --workers=1 --headed
+npx playwright test d2c.marketplace/customerjourney5_estimatecost.spec.ts --project=chrome --workers=1 --headed
+
+15.3 BrowserStack Execution
+---------------------------
+
+Command:
+
+npx browserstack-node-sdk playwright test d2c.marketplace/customerjourney1_leaseonline.spec.ts --workers=1 --browserstack.config=./browserstack.desktop.yml --config=./playwright.config.ts
+
+Parameter Explanation:
+
+npx browserstack-node-sdk
+- Invokes BrowserStack Node.js SDK wrapper.
+
+playwright test
+- Triggers Playwright test execution.
+
+Spec file path
+- Specifies the scenario test file to execute.
+
+--workers=1
+- Forces single-worker execution.
+
+--browserstack.config=./browserstack.desktop.yml
+- Points to the BrowserStack configuration file.
+
+--config=./playwright.config.ts
+- Uses the local Playwright configuration file.
+
+15.4 NPM Script Alias
+---------------------
+
+The package.json file can include aliases such as:
+
+"scripts": {
+  "test:customerjourney1:leaseonline:desktop": "npx browserstack-node-sdk playwright test d2c.marketplace/customerjourney1_leaseonline.spec.ts --workers=1 --browserstack.config=./browserstack.desktop.yml --config=./playwright.config.ts"
+}
+
+Run using:
+
+npm run test:customerjourney1:leaseonline:desktop
+
+-----------------------------------------------------------
+16. TROUBLESHOOTING
+-----------------------------------------------------------
+
+16.1 TypeScript Command Not Recognised
+--------------------------------------
+
+Issue:
+tsc : The term 'tsc' is not recognized as the name of a cmdlet, function, script file, or operable program.
+
+Reason:
+TypeScript is not installed globally or the executable is not available in PATH.
+
+Recommended fix:
+
+npm install --save-dev typescript
+npx tsc -v
+
+Use npx tsc instead of tsc when TypeScript is installed locally.
+
+16.2 Promise Constructor or ES5 Error
+-------------------------------------
+
+Issue:
+An async function or method in ES5 requires the Promise constructor.
+
+Reason:
+TypeScript is compiling with ES5 settings but Promise support is missing.
+
+Recommended tsconfig.json update:
+
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "strict": false,
+    "lib": ["ES2020", "DOM"],
+    "types": ["node", "@playwright/test"]
+  }
+}
+
+16.3 BrowserStack Local Cache Issue
+-----------------------------------
+
+Issue examples:
+- bootstrap: failed to bootstrap=Error: spawn EBUSY
+- bootstrap: failed to bootstrap=TypeError: The file argument must be of type string. Received null
+
+Recommended fix:
+
+taskkill /IM binary-win-x64.exe /F
+Remove-Item "$env:USERPROFILE\.browserstack" -Recurse -Force -ErrorAction SilentlyContinue
+
+After this, rerun the BrowserStack execution command.
+
+16.4 _bidiChromium Expected Channel BrowserType
+-----------------------------------------------
+
+Possible cause:
+BrowserStack browser capability and Playwright version compatibility issue.
+
+Recommended fix:
+- Ensure the browser capability is one of the supported BrowserStack values.
+- Check compatibility between @playwright/test and browserstack-node-sdk.
+- Install compatible versions if required.
+
+-----------------------------------------------------------
+17. REPORTS
+-----------------------------------------------------------
+
+17.1 Local Playwright Report
+----------------------------
+
+After test execution, open the Playwright report using:
+
+npx playwright show-report
+
+The report can be zipped and shared with stakeholders if needed.
+
+17.2 BrowserStack Reports
+-------------------------
+
+BrowserStack Automate dashboard provides:
+- Video recording
+- Console logs
+- Text logs
+- Execution status
+- Individual session details
+- Session links for sharing
+
+To identify specific executions, use buildName or projectName in the BrowserStack desktop configuration file.
+
+-----------------------------------------------------------
+18. APPROACH FOR SCRIPT UPDATES
+-----------------------------------------------------------
+
+Keeping test scripts updated with product changes is important for automation reliability. Follow this structured approach:
+
+Step 1: Understand the Scope of Change
+- Review the feature update, bug fix or new requirement.
+- Refer to Jira stories, bug tickets and UI/UX designs.
+
+Step 2: Perform Impact Assessment
+- Identify affected test specs.
+- Identify affected Page Object files.
+- Identify impacted utilities, constants and test data.
+- Check if reusable components can be updated instead of duplicating logic.
+
+Step 3: Update Test Data
+- Update testData.json where required.
+- Add new selector text, endpoint paths, URLs or test inputs.
+- Update environment-specific values if needed.
+
+Step 4: Update or Create Page Object Methods
+- Modify existing methods to match new UI behaviour.
+- Create reusable methods when new functionality is introduced.
+
+Step 5: Update Test Scripts
+- Modify existing tests to reflect the updated flow.
+- Add new tests if functionality is expanded.
+
+Step 6: Add or Update Assertions
+- Add meaningful assertions.
+- Validate business outcomes clearly.
+
+Step 7: Test Locally
+- Run affected tests locally.
+- Validate across configured desktop browsers wherever required.
+
+Step 8: Test on BrowserStack
+- Run updated scripts on BrowserStack.
+- Validate cloud execution and cross-browser behaviour.
+
+Step 9: Code Review and Merge
+- Raise a pull request.
+- Address review comments.
+- Obtain approvals.
+- Merge into the main branch.
+
+-----------------------------------------------------------
+19. BEST PRACTICES
+-----------------------------------------------------------
+
+- Prefer user-facing locators wherever possible.
+- Avoid unnecessary XPath usage unless no reliable user-facing locator is available.
+- Keep test data externalised in JSON files.
+- Use browser fixture instead of manual chromium.launch() for BrowserStack compatibility.
+- Keep test scripts readable by placing reusable logic inside Page Objects and utilities.
+- Add meaningful assertions that validate the expected business result.
+- Run affected tests locally before raising a pull request.
+- Attach execution evidence when requesting sign-off or review.
+- Keep npm registry configuration aligned with the current Prog Leasing JFrog/Artifactory setup.
+- Validate BrowserStack SDK and Playwright version compatibility when cloud execution issues occur.
+
+-----------------------------------------------------------
+20. CONCLUSION
+-----------------------------------------------------------
+
+The Marketplace E2E Automation Framework provides a scalable and maintainable solution for validating key customer journeys across the Prog Leasing Marketplace application.
+
+By combining Playwright, TypeScript, BrowserStack, Page Object Model design and JSON-driven configuration, the framework supports faster feedback, better regression confidence and consistent QA execution across environments.
+
+This document can be used as a framework overview, onboarding reference and QA automation guide for maintaining and enhancing the marketplace-e2e-tests project.
